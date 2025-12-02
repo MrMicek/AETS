@@ -1,0 +1,3 @@
+../Core/user_src/commands.c:61:15:GetInfoCb	40	static
+../Core/user_src/commands.c:72:15:GetHelpCb	16	static
+../Core/user_src/commands.c:269:6:cmd_Handle	136	static

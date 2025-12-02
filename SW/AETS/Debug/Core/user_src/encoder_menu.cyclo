@@ -1,0 +1,2 @@
+../Core/user_src/encoder_menu.c:20:6:HAL_GPIO_EXTI_Callback	3
+../Core/user_src/encoder_menu.c:31:6:menu_poll	17

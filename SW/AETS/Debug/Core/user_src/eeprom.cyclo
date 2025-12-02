@@ -1,0 +1,5 @@
+../Core/user_src/eeprom.c:16:26:eeprom_wait_ready	3
+../Core/user_src/eeprom.c:27:6:EEPROM_Init	1
+../Core/user_src/eeprom.c:33:19:EEPROM_Write	4
+../Core/user_src/eeprom.c:63:19:EEPROM_Read	3
+../Core/user_src/eeprom.c:82:19:EEPROM_WriteTimeout	5

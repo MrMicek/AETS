@@ -1,0 +1,5 @@
+../Core/user_src/trigger.c:13:20:DWT_Init	4	static
+../Core/user_src/trigger.c:18:20:delay_us	24	static
+../Core/user_src/trigger.c:25:6:Trigger_Init	8	static
+../Core/user_src/trigger.c:32:6:Trigger_Pulse_us	16	static
+../Core/user_src/trigger.c:40:6:Trigger_TestPulse	16	static

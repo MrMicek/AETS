@@ -1,0 +1,11 @@
+../Core/user_src/menu.c:14:6:menu_set_active	16	static
+../Core/user_src/menu.c:15:7:menu_get_active	4	static
+../Core/user_src/menu.c:17:6:menu_set_wrap	16	static
+../Core/user_src/menu.c:22:6:menu_draw_full	80	static
+../Core/user_src/menu.c:73:13:menu_draw_delta	88	static
+../Core/user_src/menu.c:130:6:menu_init	24	static
+../Core/user_src/menu.c:148:6:menu_move_up	16	static
+../Core/user_src/menu.c:167:6:menu_move_down	24	static
+../Core/user_src/menu.c:191:6:menu_enter	16	static
+../Core/user_src/menu.c:206:6:menu_back	16	static
+../Core/user_src/menu.c:216:6:menu_select	88	static

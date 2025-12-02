@@ -1,0 +1,5 @@
+../Core/user_src/canfd.c:66:13:InsertBits	40	static
+../Core/user_src/canfd.c:78:6:cfd_Init	8	static
+../Core/user_src/canfd.c:93:6:UpdateTxBufferForCan_Msg1	8	static
+../Core/user_src/canfd.c:111:6:UpdateTxBufferForCan_Msg2	8	static
+../Core/user_src/canfd.c:129:6:cfd_HandleCommunication	16	static

@@ -1,0 +1,6 @@
+../Core/user_src/utility.c:19:6:ut_CalculateOnlineMeanStdev	24	static
+../Core/user_src/utility.c:36:6:ut_InitializeOnlineMeanStdev	24	static
+../Core/user_src/utility.c:56:7:util_ExpMovAvg	24	static
+../Core/user_src/utility.c:61:7:util_CalculateAlpha	24	static
+../Core/user_src/utility.c:66:7:util_CalculateAlpha1	16	static
+../Core/user_src/utility.c:71:7:util_CalculateCutOff	24	static

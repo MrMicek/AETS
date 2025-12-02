@@ -1,0 +1,4 @@
+../Core/user_src/power.c:11:8:Power_InitBrownout	6
+../Core/user_src/power.c:59:6:HAL_ADC_LevelOutOfWindowCallback	2
+../Core/user_src/power.c:66:13:Power_OnBrownout	1
+../Core/user_src/power.c:72:6:Power_TestBrownout	1

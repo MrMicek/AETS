@@ -1,0 +1,5 @@
+../Core/user_src/error.c:20:6:er_SetErrors	1
+../Core/user_src/error.c:28:10:er_GetErrors	1
+../Core/user_src/error.c:36:9:er_IsError	1
+../Core/user_src/error.c:44:6:er_Reset	1
+../Core/user_src/error.c:52:6:er_SaveToFlashMem	1

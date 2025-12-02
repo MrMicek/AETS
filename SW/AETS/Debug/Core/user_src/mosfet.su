@@ -1,0 +1,3 @@
+../Core/user_src/mosfet.c:16:6:MOSFET_Init	16	static
+../Core/user_src/mosfet.c:23:6:MOSFET_Set	16	static
+../Core/user_src/mosfet.c:29:6:MOSFET_TestToggle	16	static

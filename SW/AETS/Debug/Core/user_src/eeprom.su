@@ -1,0 +1,5 @@
+../Core/user_src/eeprom.c:16:26:eeprom_wait_ready	24	static
+../Core/user_src/eeprom.c:27:6:EEPROM_Init	4	static
+../Core/user_src/eeprom.c:33:19:EEPROM_Write	168	static
+../Core/user_src/eeprom.c:63:19:EEPROM_Read	40	static
+../Core/user_src/eeprom.c:82:19:EEPROM_WriteTimeout	176	static

@@ -1,0 +1,6 @@
+../Core/user_src/comuser.c:53:6:comu_Init	8	static
+../Core/user_src/comuser.c:63:8:comu_SendF	16	static
+../Core/user_src/comuser.c:89:8:comu_Receive	24	static
+../Core/user_src/comuser.c:116:13:HandleRecCmd	16	static
+../Core/user_src/comuser.c:139:13:TransmitTxBuffer	8	static
+../Core/user_src/comuser.c:167:6:comu_HandleCommunication	8	static

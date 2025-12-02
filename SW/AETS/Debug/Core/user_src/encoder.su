@@ -1,0 +1,2 @@
+../Core/user_src/encoder.c:27:6:Encoder_init_once	4	static
+../Core/user_src/encoder.c:40:21:Encoder_read	16	static
