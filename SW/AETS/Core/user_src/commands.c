@@ -11,12 +11,20 @@
 #include "utility.h"
 #include "stdio.h"
 #include <stdint.h>
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include "crc.h"
 #include "appinfo.h"
 #include "kvstore.h"
 #include "eeprom.h"
+#include "app_sm.h"
+#include "io_control.h"
+#include "relay_counter.h"
+#include "relay.h"
+#include "mosfet.h"
+#include "mux.h"
+#include "current.h"
 
 
 
@@ -95,6 +103,214 @@ static err_Td GetHelpCb(char *cmdName, int32_t cmdId){
 	comu_SendF(HELP_LINE_13_4);
 	comu_SendF(HELP_LINE_14);
 	return err_Td_Ok;
+}
+
+
+static const char* app_state_to_str(app_state_t st)
+{
+        switch (st) {
+        case APP_STATE_BOOT: return "BOOT";
+        case APP_STATE_INIT: return "INIT";
+        case APP_STATE_MANUAL: return "MANUAL";
+        case APP_STATE_REMOTE: return "REMOTE";
+        case APP_STATE_TEST: return "TEST";
+        case APP_STATE_FAULT: return "FAULT";
+        default: return "?";
+        }
+}
+
+static err_Td ModeCmdCb(char *cmdName, int32_t cmdId)
+{
+        char *action = strtok(0, " \r");
+        if (!action) return err_Td_Param;
+
+        if (strcmp(action, "get") == 0) {
+                app_status_t st = app_get_status();
+                comu_SendF("0 cmd %s %d %s\r\n", cmdName, cmdId, app_state_to_str(st.state));
+                return err_Td_Ok;
+        }
+
+        if (strcmp(action, "set") == 0) {
+                char *mode = strtok(0, " \r");
+                if (!mode) return err_Td_Param;
+                app_event_t evt = {0};
+                if (strcmp(mode, "manual") == 0) {
+                        evt.type = APP_EVT_CMD_MODE_MANUAL;
+                } else if (strcmp(mode, "remote") == 0) {
+                        evt.type = APP_EVT_CMD_MODE_REMOTE;
+                } else if (strcmp(mode, "test") == 0) {
+                        evt.type = APP_EVT_CMD_MODE_TEST;
+                } else {
+                        return err_Td_NotValid;
+                }
+                return app_post_event(evt) ? err_Td_Ok : err_Td_Busy;
+        }
+
+        return err_Td_NotValid;
+}
+
+static err_Td RelayCmdCb(char *cmdName, int32_t cmdId)
+{
+        char *action = strtok(0, " \r");
+        if (!action) return err_Td_Param;
+
+        const io_state_t *cur = io_get();
+        io_state_t next = *cur;
+
+        if (strcmp(action, "set") == 0) {
+                char *idx_s = strtok(0, " \r");
+                char *val_s = strtok(0, " \r");
+                if (!idx_s || !val_s) return err_Td_Param;
+                int idx = atoi(idx_s);
+                if (idx < 1 || idx > 4) return err_Td_Range;
+                next.relays[idx - 1] = (atoi(val_s) != 0);
+                io_apply(&next);
+                return err_Td_Ok;
+        } else if (strcmp(action, "get") == 0) {
+                char *idx_s = strtok(0, " \r");
+                if (idx_s) {
+                        int idx = atoi(idx_s);
+                        if (idx < 1 || idx > 4) return err_Td_Range;
+                        comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, idx, cur->relays[idx - 1] ? 1 : 0);
+                } else {
+                        comu_SendF("0 cmd %s %d %d %d %d %d\r\n", cmdName, cmdId,
+                                        cur->relays[0] ? 1 : 0,
+                                        cur->relays[1] ? 1 : 0,
+                                        cur->relays[2] ? 1 : 0,
+                                        cur->relays[3] ? 1 : 0);
+                }
+                return err_Td_Ok;
+        } else if (strcmp(action, "all") == 0) {
+                for (int i = 0; i < 4; ++i) {
+                        char *val_s = strtok(0, " \r");
+                        if (!val_s) return err_Td_Param;
+                        next.relays[i] = (atoi(val_s) != 0);
+                }
+                io_apply(&next);
+                return err_Td_Ok;
+        }
+
+        return err_Td_NotValid;
+}
+
+static err_Td MosfetCmdCb(char *cmdName, int32_t cmdId)
+{
+        char *action = strtok(0, " \r");
+        if (!action) return err_Td_Param;
+
+        const io_state_t *cur = io_get();
+        io_state_t next = *cur;
+
+        if (strcmp(action, "set") == 0) {
+                char *idx_s = strtok(0, " \r");
+                char *val_s = strtok(0, " \r");
+                if (!idx_s || !val_s) return err_Td_Param;
+                int idx = atoi(idx_s);
+                if (idx < 1 || idx > 2) return err_Td_Range;
+                next.mosfet[idx - 1] = (atoi(val_s) != 0);
+                io_apply(&next);
+                return err_Td_Ok;
+        } else if (strcmp(action, "get") == 0) {
+                comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, cur->mosfet[0] ? 1 : 0, cur->mosfet[1] ? 1 : 0);
+                return err_Td_Ok;
+        }
+        return err_Td_NotValid;
+}
+
+static err_Td MuxCmdCb(char *cmdName, int32_t cmdId)
+{
+        char *action = strtok(0, " \r");
+        if (!action) return err_Td_Param;
+
+        const io_state_t *cur = io_get();
+        io_state_t next = *cur;
+
+        if (strcmp(action, "set") == 0) {
+                char *sel_s = strtok(0, " \r");
+                if (!sel_s) return err_Td_Param;
+                if (strcmp(sel_s, "int") == 0) {
+                        next.mux = MUX_INT;
+                } else if (strcmp(sel_s, "ext") == 0) {
+                        next.mux = MUX_EXT;
+                } else {
+                        int val = atoi(sel_s);
+                        if (val == 0) next.mux = MUX_EXT;
+                        else if (val == 1) next.mux = MUX_INT;
+                        else return err_Td_Range;
+                }
+                io_apply(&next);
+                return err_Td_Ok;
+        } else if (strcmp(action, "get") == 0) {
+                comu_SendF("0 cmd %s %d %d\r\n", cmdName, cmdId, (cur->mux == MUX_INT) ? 1 : 0);
+                return err_Td_Ok;
+        }
+        return err_Td_NotValid;
+}
+
+static err_Td CurrentCmdCb(char *cmdName, int32_t cmdId)
+{
+        char *mode = strtok(0, " \r");
+        char *ch_s = strtok(0, " \r");
+        if (!mode || !ch_s) return err_Td_Param;
+        int idx = atoi(ch_s);
+        if (idx < 1 || idx > 4) return err_Td_Range;
+        current_chTd ch = (current_chTd)(idx - 1);
+
+        if (strcmp(mode, "raw") == 0) {
+                uint16_t raw = Current_ReadRaw(ch);
+                comu_SendF("0 cmd %s %d %d %u\r\n", cmdName, cmdId, idx, (unsigned)raw);
+                return (raw == 0xFFFFU) ? err_Td_General : err_Td_Ok;
+        } else if (strcmp(mode, "ma") == 0) {
+                uint32_t ma = Current_Read_mA(ch);
+                comu_SendF("0 cmd %s %d %d %lu\r\n", cmdName, cmdId, idx, (unsigned long)ma);
+                return err_Td_Ok;
+        }
+        return err_Td_NotValid;
+}
+
+static err_Td RelayCountCmdCb(char *cmdName, int32_t cmdId)
+{
+        char *action = strtok(0, " \r");
+        if (!action) return err_Td_Param;
+
+        if (strcmp(action, "get") == 0) {
+                char *idx_s = strtok(0, " \r");
+                if (idx_s) {
+                        int idx = atoi(idx_s);
+                        if (idx < 1 || idx > 4) return err_Td_Range;
+                        comu_SendF("0 cmd %s %d %d %llu\r\n", cmdName, cmdId, idx, (unsigned long long)relay_counter_get((uint8_t)(idx - 1)));
+                } else {
+                        uint64_t counts[4] = {0};
+                        relay_counter_get_all(counts, 4);
+                        comu_SendF("0 cmd %s %d %llu %llu %llu %llu\r\n", cmdName, cmdId,
+                                        (unsigned long long)counts[0],
+                                        (unsigned long long)counts[1],
+                                        (unsigned long long)counts[2],
+                                        (unsigned long long)counts[3]);
+                }
+                return err_Td_Ok;
+        } else if (strcmp(action, "reset") == 0) {
+                relay_counter_reset();
+                return err_Td_Ok;
+        }
+        return err_Td_NotValid;
+}
+
+static err_Td TestCmdCb(char *cmdName, int32_t cmdId)
+{
+        char *action = strtok(0, " \r");
+        if (!action) return err_Td_Param;
+
+        if (strcmp(action, "start") == 0) {
+                return app_post_event((app_event_t){ .type = APP_EVT_TEST_START }) ? err_Td_Ok : err_Td_Busy;
+        } else if (strcmp(action, "stop") == 0) {
+                return app_post_event((app_event_t){ .type = APP_EVT_TEST_STOP }) ? err_Td_Ok : err_Td_Busy;
+        } else if (strcmp(action, "status") == 0) {
+                app_status_t st = app_get_status();
+                comu_SendF("0 cmd %s %d %s %d %lu\r\n", cmdName, cmdId, app_state_to_str(st.state), (int)st.test_state, (unsigned long)st.fault_code);
+                return err_Td_Ok;
+        }
+        return err_Td_NotValid;
 }
 
 
@@ -256,10 +472,17 @@ static err_Td GetBaudRateCb(char *cmdName, int32_t cmdId){
  * List of all available commands. Syntax is specified in each callback function separately (also in toltip).
  */
 static CmdTd CmdList[] = {
-	{"gi", GetInfoCb},
-	{"gh", GetHelpCb},
-	//{"dbg", DbgCb},
-	//{"gr", GetBaudRateCb},
+        {"gi", GetInfoCb},
+        {"gh", GetHelpCb},
+        {"mode", ModeCmdCb},
+        {"relay", RelayCmdCb},
+        {"mosfet", MosfetCmdCb},
+        {"mux", MuxCmdCb},
+        {"curr", CurrentCmdCb},
+        {"rcnt", RelayCountCmdCb},
+        {"test", TestCmdCb},
+        //{"dbg", DbgCb},
+        //{"gr", GetBaudRateCb},
 };
 
 

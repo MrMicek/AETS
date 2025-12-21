@@ -44,6 +44,9 @@
 #include "kvstore.h"  // <- added
 #include "menu.h"
 #include "app_menu.h"
+#include "app_sm.h"
+#include "io_control.h"
+#include "relay_counter.h"
 
 /* USER CODE END Includes */
 
@@ -132,13 +135,16 @@ int main(void)
   Relay_Init();
   MOSFET_Init();
   MUX_Init();
+  io_init();
   Current_Init();
   Power_InitBrownout();
   Buzzer_Init();
   Trigger_Init();
   cfd_Init();
   KV_Init();
+  relay_counter_init();
   app_menu_init();
+  app_init();
 
 
   // Relay_TestToggleAll(1000); WORKS
@@ -163,25 +169,19 @@ int main(void)
   while (1)
   {
 
+    uint32_t now = HAL_GetTick();
+    app_menu_task();
+    comu_HandleCommunication();
+    app_tick(now);
+    relay_counter_periodic_flush(now);
 
+//    uint32_t a_ma[4];
+//    a_ma[0] = Current_Read_mA(current_ch1);
+//    a_ma[1] = Current_Read_mA(current_ch2);
+//    a_ma[2] = Current_Read_mA(current_ch3);
+//    a_ma[3] = Current_Read_mA(current_ch4);
 
-//	  uint32_t a_ma[4];
-//	  a_ma[0] = Current_Read_mA(current_ch1);
-//	  a_ma[1] = Current_Read_mA(current_ch2);
-//	  a_ma[2] = Current_Read_mA(current_ch3);
-//	  a_ma[3] = Current_Read_mA(current_ch4);
-	  app_menu_task();
-	  HAL_Delay(10);
-
-
-
-	comu_HandleCommunication();
-	//KV_HandlePending();
-	//cfd_HandleCommunication();
-	//comu_SendF("encoder status %d\r\n", Encoder_read());
-
-	//KV_IncCounter();
-	// Save every increment to maximize persistence chance
+    HAL_Delay(1);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
