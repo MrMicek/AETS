@@ -251,22 +251,43 @@ if (!action) return err_Td_Param;
         io_state_t next = *cur;
 
 if (strcmp(action, "set") == 0) {
-char *sel_s = cmd_next_token();
-                if (!sel_s) return err_Td_Param;
+                char *idx_s = cmd_next_token();
+                char *sel_s = cmd_next_token();
+                mux_sel_t sel = MUX_EXT;
+
+                if (!idx_s || !sel_s) return err_Td_Param;
+
                 if (strcmp(sel_s, "int") == 0) {
-                        next.mux = MUX_INT;
+                        sel = MUX_INT;
                 } else if (strcmp(sel_s, "ext") == 0) {
-                        next.mux = MUX_EXT;
+                        sel = MUX_EXT;
                 } else {
                         int val = atoi(sel_s);
-                        if (val == 0) next.mux = MUX_EXT;
-                        else if (val == 1) next.mux = MUX_INT;
+                        if (val == 0) sel = MUX_EXT;
+                        else if (val == 1) sel = MUX_INT;
                         else return err_Td_Range;
                 }
+
+                if (strcmp(idx_s, "all") == 0 || strcmp(idx_s, "0") == 0) {
+                        next.mux[0] = sel;
+                        next.mux[1] = sel;
+                } else {
+                        int idx = atoi(idx_s);
+                        if (idx < 1 || idx > 2) return err_Td_Range;
+                        next.mux[idx - 1] = sel;
+                }
+
                 io_apply(&next);
                 return err_Td_Ok;
         } else if (strcmp(action, "get") == 0) {
-                comu_SendF("0 cmd %s %d %d\r\n", cmdName, cmdId, (cur->mux == MUX_INT) ? 1 : 0);
+                char *idx_s = cmd_next_token();
+                if (idx_s) {
+                        int idx = atoi(idx_s);
+                        if (idx < 1 || idx > 2) return err_Td_Range;
+                        comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, idx, (cur->mux[idx - 1] == MUX_INT) ? 1 : 0);
+                } else {
+                        comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, (cur->mux[0] == MUX_INT) ? 1 : 0, (cur->mux[1] == MUX_INT) ? 1 : 0);
+                }
                 return err_Td_Ok;
         }
         return err_Td_NotValid;

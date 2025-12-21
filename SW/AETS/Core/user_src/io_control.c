@@ -10,7 +10,8 @@ static io_state_t s_state;
 void io_init(void)
 {
     io_state_t safe = {0};
-    safe.mux = MUX_INT;
+    safe.mux[0] = MUX_EXT;
+    safe.mux[1] = MUX_EXT;
     io_apply(&safe);
 }
 
@@ -38,9 +39,12 @@ void io_apply(const io_state_t *desired)
         }
     }
 
-    if (desired->mux != s_state.mux) {
-        MUX_Set(desired->mux);
-        s_state.mux = desired->mux;
+    for (uint8_t i = 0; i < 2; ++i) {
+        mux_sel_t new_sel = desired->mux[i];
+        if (s_state.mux[i] != new_sel) {
+            MUX_Set((mux_channel_t)i, new_sel);
+            s_state.mux[i] = new_sel;
+        }
     }
 }
 
@@ -49,7 +53,8 @@ void io_safe_off(void)
     io_state_t safe = s_state;
     memset(&safe.relays[0], 0, sizeof(safe.relays));
     memset(&safe.mosfet[0], 0, sizeof(safe.mosfet));
-    safe.mux = MUX_INT;
+    safe.mux[0] = MUX_EXT;
+    safe.mux[1] = MUX_EXT;
     io_apply(&safe);
 }
 

@@ -149,7 +149,7 @@ int main(void)
 
   // Relay_TestToggleAll(1000); WORKS
 
-  //MUX_Set(1); MOSFET_TestToggle(1000); WORKS
+  //MUX_Set(MUX_CH1, MUX_INT); MOSFET_TestToggle(1000); WORKS
    //MUX_Test(); WORKS
   //adc_Read_Current_mA(current_ch1); //SOMEWHAT WORKS
   //Power_TestBrownout(); WORKS

@@ -8,7 +8,7 @@
 typedef struct {
     bool relays[4];
     bool mosfet[2];
-    mux_sel_t mux;
+    mux_sel_t mux[2];
 } io_state_t;
 
 void io_init(void);
