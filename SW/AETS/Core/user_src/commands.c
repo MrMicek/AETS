@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "crc.h"
 #include "appinfo.h"
 #include "kvstore.h"
@@ -56,9 +57,32 @@
 
 
 typedef struct{
-	char* Name;
-	err_Td (*CallbackFn)(char *cmdName, int32_t cmdId);
+        char* Name;
+        err_Td (*CallbackFn)(char *cmdName, int32_t cmdId);
 }CmdTd;
+
+static const char CMD_DELIMS[] = " \r\n\t";
+
+static char *cmd_saveptr = NULL;
+static bool cmd_seed_first = false;
+
+static void cmd_prepare_tokens(char *seed, char *continuation, bool include_seed)
+{
+        cmd_saveptr = include_seed ? seed : continuation;
+        cmd_seed_first = include_seed;
+}
+
+static char *cmd_next_token(void)
+{
+        if (cmd_saveptr == NULL) {
+                return NULL;
+        }
+        if (cmd_seed_first) {
+                cmd_seed_first = false;
+                return strtok_r(cmd_saveptr, CMD_DELIMS, &cmd_saveptr);
+        }
+        return strtok_r(NULL, CMD_DELIMS, &cmd_saveptr);
+}
 
 
 /*
@@ -121,19 +145,19 @@ static const char* app_state_to_str(app_state_t st)
 
 static err_Td ModeCmdCb(char *cmdName, int32_t cmdId)
 {
-        char *action = strtok(0, " \r");
-        if (!action) return err_Td_Param;
+char *action = cmd_next_token();
+if (!action) return err_Td_Param;
 
-        if (strcmp(action, "get") == 0) {
-                app_status_t st = app_get_status();
-                comu_SendF("0 cmd %s %d %s\r\n", cmdName, cmdId, app_state_to_str(st.state));
+if (strcmp(action, "get") == 0) {
+app_status_t st = app_get_status();
+comu_SendF("0 cmd %s %d %s\r\n", cmdName, cmdId, app_state_to_str(st.state));
                 return err_Td_Ok;
         }
 
-        if (strcmp(action, "set") == 0) {
-                char *mode = strtok(0, " \r");
-                if (!mode) return err_Td_Param;
-                app_event_t evt = {0};
+if (strcmp(action, "set") == 0) {
+char *mode = cmd_next_token();
+if (!mode) return err_Td_Param;
+app_event_t evt = {0};
                 if (strcmp(mode, "manual") == 0) {
                         evt.type = APP_EVT_CMD_MODE_MANUAL;
                 } else if (strcmp(mode, "remote") == 0) {
@@ -151,27 +175,27 @@ static err_Td ModeCmdCb(char *cmdName, int32_t cmdId)
 
 static err_Td RelayCmdCb(char *cmdName, int32_t cmdId)
 {
-        char *action = strtok(0, " \r");
-        if (!action) return err_Td_Param;
+char *action = cmd_next_token();
+if (!action) return err_Td_Param;
 
-        const io_state_t *cur = io_get();
-        io_state_t next = *cur;
+const io_state_t *cur = io_get();
+io_state_t next = *cur;
 
-        if (strcmp(action, "set") == 0) {
-                char *idx_s = strtok(0, " \r");
-                char *val_s = strtok(0, " \r");
-                if (!idx_s || !val_s) return err_Td_Param;
-                int idx = atoi(idx_s);
-                if (idx < 1 || idx > 4) return err_Td_Range;
-                next.relays[idx - 1] = (atoi(val_s) != 0);
-                io_apply(&next);
-                return err_Td_Ok;
-        } else if (strcmp(action, "get") == 0) {
-                char *idx_s = strtok(0, " \r");
-                if (idx_s) {
-                        int idx = atoi(idx_s);
-                        if (idx < 1 || idx > 4) return err_Td_Range;
-                        comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, idx, cur->relays[idx - 1] ? 1 : 0);
+if (strcmp(action, "set") == 0) {
+char *idx_s = cmd_next_token();
+char *val_s = cmd_next_token();
+if (!idx_s || !val_s) return err_Td_Param;
+int idx = atoi(idx_s);
+if (idx < 1 || idx > 4) return err_Td_Range;
+next.relays[idx - 1] = (atoi(val_s) != 0);
+io_apply(&next);
+return err_Td_Ok;
+} else if (strcmp(action, "get") == 0) {
+char *idx_s = cmd_next_token();
+if (idx_s) {
+int idx = atoi(idx_s);
+if (idx < 1 || idx > 4) return err_Td_Range;
+comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, idx, cur->relays[idx - 1] ? 1 : 0);
                 } else {
                         comu_SendF("0 cmd %s %d %d %d %d %d\r\n", cmdName, cmdId,
                                         cur->relays[0] ? 1 : 0,
@@ -179,14 +203,14 @@ static err_Td RelayCmdCb(char *cmdName, int32_t cmdId)
                                         cur->relays[2] ? 1 : 0,
                                         cur->relays[3] ? 1 : 0);
                 }
-                return err_Td_Ok;
-        } else if (strcmp(action, "all") == 0) {
-                for (int i = 0; i < 4; ++i) {
-                        char *val_s = strtok(0, " \r");
-                        if (!val_s) return err_Td_Param;
-                        next.relays[i] = (atoi(val_s) != 0);
-                }
-                io_apply(&next);
+return err_Td_Ok;
+} else if (strcmp(action, "all") == 0) {
+for (int i = 0; i < 4; ++i) {
+char *val_s = cmd_next_token();
+if (!val_s) return err_Td_Param;
+next.relays[i] = (atoi(val_s) != 0);
+}
+io_apply(&next);
                 return err_Td_Ok;
         }
 
@@ -195,15 +219,15 @@ static err_Td RelayCmdCb(char *cmdName, int32_t cmdId)
 
 static err_Td MosfetCmdCb(char *cmdName, int32_t cmdId)
 {
-        char *action = strtok(0, " \r");
-        if (!action) return err_Td_Param;
+char *action = cmd_next_token();
+if (!action) return err_Td_Param;
 
-        const io_state_t *cur = io_get();
-        io_state_t next = *cur;
+const io_state_t *cur = io_get();
+io_state_t next = *cur;
 
-        if (strcmp(action, "set") == 0) {
-                char *idx_s = strtok(0, " \r");
-                char *val_s = strtok(0, " \r");
+if (strcmp(action, "set") == 0) {
+char *idx_s = cmd_next_token();
+char *val_s = cmd_next_token();
                 if (!idx_s || !val_s) return err_Td_Param;
                 int idx = atoi(idx_s);
                 if (idx < 1 || idx > 2) return err_Td_Range;
@@ -219,14 +243,14 @@ static err_Td MosfetCmdCb(char *cmdName, int32_t cmdId)
 
 static err_Td MuxCmdCb(char *cmdName, int32_t cmdId)
 {
-        char *action = strtok(0, " \r");
-        if (!action) return err_Td_Param;
+char *action = cmd_next_token();
+if (!action) return err_Td_Param;
 
         const io_state_t *cur = io_get();
         io_state_t next = *cur;
 
-        if (strcmp(action, "set") == 0) {
-                char *sel_s = strtok(0, " \r");
+if (strcmp(action, "set") == 0) {
+char *sel_s = cmd_next_token();
                 if (!sel_s) return err_Td_Param;
                 if (strcmp(sel_s, "int") == 0) {
                         next.mux = MUX_INT;
@@ -249,8 +273,8 @@ static err_Td MuxCmdCb(char *cmdName, int32_t cmdId)
 
 static err_Td CurrentCmdCb(char *cmdName, int32_t cmdId)
 {
-        char *mode = strtok(0, " \r");
-        char *ch_s = strtok(0, " \r");
+char *mode = cmd_next_token();
+char *ch_s = cmd_next_token();
         if (!mode || !ch_s) return err_Td_Param;
         int idx = atoi(ch_s);
         if (idx < 1 || idx > 4) return err_Td_Range;
@@ -270,11 +294,11 @@ static err_Td CurrentCmdCb(char *cmdName, int32_t cmdId)
 
 static err_Td RelayCountCmdCb(char *cmdName, int32_t cmdId)
 {
-        char *action = strtok(0, " \r");
-        if (!action) return err_Td_Param;
+char *action = cmd_next_token();
+if (!action) return err_Td_Param;
 
         if (strcmp(action, "get") == 0) {
-                char *idx_s = strtok(0, " \r");
+char *idx_s = cmd_next_token();
                 if (idx_s) {
                         int idx = atoi(idx_s);
                         if (idx < 1 || idx > 4) return err_Td_Range;
@@ -298,8 +322,8 @@ static err_Td RelayCountCmdCb(char *cmdName, int32_t cmdId)
 
 static err_Td TestCmdCb(char *cmdName, int32_t cmdId)
 {
-        char *action = strtok(0, " \r");
-        if (!action) return err_Td_Param;
+char *action = cmd_next_token();
+if (!action) return err_Td_Param;
 
         if (strcmp(action, "start") == 0) {
                 return app_post_event((app_event_t){ .type = APP_EVT_TEST_START }) ? err_Td_Ok : err_Td_Busy;
@@ -490,46 +514,79 @@ static CmdTd CmdList[] = {
  *	CRC Name Id Param1 Param2 ... ParamN\r\n
  */
 void cmd_Handle(char *str){
-	char *Name, AckStr[64];
-	uint32_t i = 0, RecCRC = 0, CalCRC = 0, Id = 0, ErrNo = err_Td_Ok, IsNumber;
+        char *Name, AckStr[64];
+        uint32_t i = 0, RecCRC = 0, CalCRC = 0, Id = 0, ErrNo = err_Td_Ok;
+        bool IsNumber;
+        char *save = NULL;
 
-	Name = strtok(str, " \r");																		//Read name from beginning of command (or it could be CRC if it is number)
-	RecCRC = atoi(Name);																			//Try to convert cmd name to number
+        Name = strtok_r(str, CMD_DELIMS, &save);                                                        // Read name from beginning of command (or it could be CRC if it is number)
+        if (Name == NULL) {
+                return;                                                                         // Empty line
+        }
+        RecCRC = atoi(Name);                                                               // Try to convert cmd name to number
 
-	IsNumber = 1;																					//Here we need to check whether returned zero is because CRC is zero or because CRC is not used and we tried to convert cmd name to number
-	for( i=0; i<strlen(Name); i++ ){																//Check whole command name (or it could be CRC)
-		if( Name[i] < '0' || Name[i] > '9' ){														//If any letter does not contain number
-			IsNumber = 0;																			//Set flag that we have command name and not CRC number
-			break;																					//No need to continue check
-		}
-	}
+        IsNumber = true;                                                                   // Here we need to check whether returned zero is because CRC is zero or because CRC is not used and we tried to convert cmd name to number
+        for( i=0; i<strlen(Name); i++ ){                                                   // Check whole command name (or it could be CRC)
+                if(!isdigit((unsigned char)Name[i])){                                   // If any letter does not contain number
+                        IsNumber = false;                                                    // Set flag that we have command name and not CRC number
+                        break;                                                               // No need to continue check
+                }
+        }
 
-	if( IsNumber ){																					//If IsNumber flag is set we have found RecCRC and name will follow in next token.
-		i = strlen(Name);																			//Length of CRC
-		CalCRC = HAL_CRC_Calculate(&hcrc, (uint32_t*)(Name + i + 1), strlen(Name + i + 1));			//Calculate CRC starting with CmdName and ending with \n
-		CalCRC = ~CalCRC;
-		Name = strtok(0, " \r");																	//Get command name
-		if( RecCRC != (CalCRC & 0xFFFF)){																		//Compare received and calculated CRCs
-			ErrNo = err_Td_CRC;																		//If it doesnt match return error
-		}
-	}
+        if( IsNumber ){                                                                    // If IsNumber flag is set we have found RecCRC and name will follow in next token.
+                i = strlen(Name);                                                          // Length of CRC
+                CalCRC = HAL_CRC_Calculate(&hcrc, (uint32_t*)(Name + i + 1), strlen(Name + i + 1)); //Calculate CRC starting with CmdName and ending with \n
+                CalCRC = ~CalCRC;
+                Name = strtok_r(NULL, CMD_DELIMS, &save);                                      // Get command name
+                if( Name == NULL){
+                        ErrNo = err_Td_Param;                                                 // Command missing after CRC
+                }
+                else if( RecCRC != (CalCRC & 0xFFFF)){                                     // Compare received and calculated CRCs
+                        ErrNo = err_Td_CRC;                                                   // If it doesnt match return error
+                }
+        }
 
-	Id = atoi(strtok(0, " \r"));																	//Get command ID
+        char *IdToken = strtok_r(NULL, CMD_DELIMS, &save);
+        if (IdToken && IdToken[0] != '\0') {
+                bool id_is_number = true;
+                for (i = 0; i < strlen(IdToken); i++){
+                        if(!isdigit((unsigned char)IdToken[i])){
+                                id_is_number = false;
+                                break;
+                        }
+                }
+                if (id_is_number){
+                        Id = atoi(IdToken);                                                  // Get command ID
+                        cmd_prepare_tokens(NULL, save, false);                               // Continue from remaining buffer
+                } else {
+                        Id = 0;                                                              // Default ID when omitted
+                        cmd_prepare_tokens(IdToken, save, true);                             // Treat token as first parameter
+                }
+        } else {
+                Id = 0;                                                                // Default ID when omitted completely
+                cmd_prepare_tokens(NULL, save, false);
+        }
 
-	if( ErrNo == err_Td_Ok ){																		//If there is no error in CRC, parse rest of command
-		ErrNo = err_Td_NotExist;
-		for( i=0; i<UT_SIZEOFARRAY(CmdList); i++ ){													//Repeat through whole list of defined commands
-			if( strcmp(CmdList[i].Name, Name ) == 0 ){												//If command name from defined list is equal to current command name
-				if( CmdList[i].CallbackFn != 0 ){
-					ErrNo = CmdList[i].CallbackFn(Name, Id);										//Call callback function to parse remaining data
-				}
-				break;																				//Break lookup cycle if command has been found
-			}
-		}
-	}
+        if( ErrNo == err_Td_Ok && Name != NULL ){                                  // If there is no error in CRC, parse rest of command
+                ErrNo = err_Td_NotExist;
+                for( i=0; i<UT_SIZEOFARRAY(CmdList); i++ ){                             // Repeat through whole list of defined commands
+                        if( strcmp(CmdList[i].Name, Name ) == 0 ){                      // If command name from defined list is equal to current command name
+                                if( CmdList[i].CallbackFn != 0 ){
+                                        ErrNo = CmdList[i].CallbackFn(Name, Id);             // Call callback function to parse remaining data
+                                }
+                                break;                                                       // Break lookup cycle if command has been found
+                        }
+                }
+        }
 
-	i = snprintf(AckStr, sizeof(AckStr), "ack %s %u %u %u\r\n", Name, (unsigned)Id, (unsigned)ErrNo, (unsigned)HAL_GetTick());	//Send ack with errorcode
-	CalCRC = HAL_CRC_Calculate(&hcrc, (uint32_t*)(AckStr), i);
-	CalCRC = ~CalCRC;
-	comu_SendF("%05d %s", CalCRC & 0xFFFF, AckStr);
+        if (Name == NULL){
+                Name = "?";
+        }
+
+        i = snprintf(AckStr, sizeof(AckStr), "ack %s %u %u %u\r\n", Name, (unsigned)Id, (unsigned)ErrNo, (unsigned)HAL_GetTick());      //Send ack with errorcode
+        CalCRC = HAL_CRC_Calculate(&hcrc, (uint32_t*)(AckStr), i);
+        CalCRC = ~CalCRC;
+        comu_SendF("%05d %s", CalCRC & 0xFFFF, AckStr);
 }
+
+
