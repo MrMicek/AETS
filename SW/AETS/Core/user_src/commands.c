@@ -64,24 +64,25 @@ typedef struct{
 static const char CMD_DELIMS[] = " \r\n\t";
 
 static char *cmd_saveptr = NULL;
-static bool cmd_seed_first = false;
+static char *cmd_seed = NULL;
 
 static void cmd_prepare_tokens(char *seed, char *continuation, bool include_seed)
 {
-        cmd_saveptr = include_seed ? seed : continuation;
-        cmd_seed_first = include_seed;
+	cmd_seed = include_seed ? seed : NULL;
+	cmd_saveptr = continuation;
 }
 
 static char *cmd_next_token(void)
 {
-        if (cmd_saveptr == NULL) {
-                return NULL;
-        }
-        if (cmd_seed_first) {
-                cmd_seed_first = false;
-                return strtok_r(cmd_saveptr, CMD_DELIMS, &cmd_saveptr);
-        }
-        return strtok_r(NULL, CMD_DELIMS, &cmd_saveptr);
+	if (cmd_seed != NULL) {
+		char *first = cmd_seed;
+		cmd_seed = NULL;
+		return first;
+}
+	if (cmd_saveptr == NULL) {
+		return NULL;
+}
+	return strtok_r(NULL, CMD_DELIMS, &cmd_saveptr);
 }
 
 
