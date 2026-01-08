@@ -1,0 +1,5 @@
+../Core/user_src/io_control.c:11:6:io_init	1
+../Core/user_src/io_control.c:21:6:io_apply	8
+../Core/user_src/io_control.c:54:6:io_safe_off	1
+../Core/user_src/io_control.c:64:19:io_get	1
+../Core/user_src/io_control.c:69:6:resetUSB	1

@@ -61,11 +61,8 @@ static HAL_StatusTypeDef relay_counter_save(uint32_t timeout_ms)
     return st;
 }
 
-void relay_counter_init(void)
+static HAL_StatusTypeDef relay_counter_load_internal(void)
 {
-    EEPROM_Init();
-    memset(s_counts, 0, sizeof(s_counts));
-
     uint32_t best_seq = 0;
     relay_counter_record_t rec;
     int found = 0;
@@ -85,10 +82,26 @@ void relay_counter_init(void)
         }
     }
 
-    s_seq = found ? best_seq : 0;
+    if (!found) {
+        return HAL_ERROR;
+    }
+
+    s_seq = best_seq;
+    s_last_flush_ms = HAL_GetTick();
+    s_dirty = 0;
+    return HAL_OK;
+}
+
+void relay_counter_init(void)
+{
+    EEPROM_Init();
+    memset(s_counts, 0, sizeof(s_counts));
+    s_seq = 0;
+    s_dirty = 0;
     s_last_flush_ms = HAL_GetTick();
 
-    if (!found) {
+    if (relay_counter_load_internal() != HAL_OK) {
+        s_dirty = 1;
         relay_counter_save(200U);
     }
 }
@@ -98,7 +111,7 @@ void relay_counter_on_relay_change(uint8_t index, bool old_state, bool new_state
     if (index >= 4U) {
         return;
     }
-    if (!old_state && new_state) {
+    if (old_state != new_state) {
         s_counts[index]++;
         s_dirty++;
     }
@@ -128,6 +141,20 @@ void relay_counter_reset(void)
     memset(s_counts, 0, sizeof(s_counts));
     s_dirty = 1;
     relay_counter_save(200U);
+}
+
+HAL_StatusTypeDef relay_counter_save_now(uint32_t timeout_ms)
+{
+    return relay_counter_save(timeout_ms);
+}
+
+HAL_StatusTypeDef relay_counter_load(void)
+{
+    memset(s_counts, 0, sizeof(s_counts));
+    s_seq = 0;
+    s_dirty = 0;
+    s_last_flush_ms = HAL_GetTick();
+    return relay_counter_load_internal();
 }
 
 void relay_counter_periodic_flush(uint32_t now_ms)

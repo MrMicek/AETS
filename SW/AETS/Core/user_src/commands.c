@@ -324,7 +324,7 @@ char *idx_s = cmd_next_token();
                 if (idx_s) {
                         int idx = atoi(idx_s);
                         if (idx < 1 || idx > 4) return err_Td_Range;
-                        comu_SendF("0 cmd %s %d %d %llu\r\n", cmdName, cmdId, idx, (unsigned long long)relay_counter_get((uint8_t)(idx - 1)));
+                        comu_SendF("0 cmd %s %d %d %lu\r\n", cmdName, cmdId, idx, (unsigned long long)relay_counter_get((uint8_t)(idx - 1)));
                 } else {
                         uint64_t counts[4] = {0};
                         relay_counter_get_all(counts, 4);
@@ -338,6 +338,12 @@ char *idx_s = cmd_next_token();
         } else if (strcmp(action, "reset") == 0) {
                 relay_counter_reset();
                 return err_Td_Ok;
+        } else if (strcmp(action, "save") == 0) {
+                HAL_StatusTypeDef st = relay_counter_save_now(200U);
+                return (st == HAL_OK) ? err_Td_Ok : err_Td_General;
+        } else if (strcmp(action, "load") == 0) {
+                HAL_StatusTypeDef st = relay_counter_load();
+                return (st == HAL_OK) ? err_Td_Ok : err_Td_NotFound;
         }
         return err_Td_NotValid;
 }
@@ -610,5 +616,4 @@ void cmd_Handle(char *str){
         CalCRC = ~CalCRC;
         comu_SendF("%05d %s", CalCRC & 0xFFFF, AckStr);
 }
-
 

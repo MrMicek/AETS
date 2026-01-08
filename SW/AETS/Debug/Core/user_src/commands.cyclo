@@ -8,6 +8,6 @@
 ../Core/user_src/commands.c:221:15:MosfetCmdCb	8
 ../Core/user_src/commands.c:245:15:MuxCmdCb	17
 ../Core/user_src/commands.c:296:15:CurrentCmdCb	7
-../Core/user_src/commands.c:317:15:RelayCountCmdCb	7
-../Core/user_src/commands.c:345:15:TestCmdCb	7
-../Core/user_src/commands.c:538:6:cmd_Handle	18
+../Core/user_src/commands.c:317:15:RelayCountCmdCb	10
+../Core/user_src/commands.c:351:15:TestCmdCb	7
+../Core/user_src/commands.c:544:6:cmd_Handle	18

@@ -4,6 +4,7 @@
 #include "mux.h"
 #include "relay_counter.h"
 #include <string.h>
+#include "main.h" // for USB reset pin
 
 static io_state_t s_state;
 
@@ -13,6 +14,8 @@ void io_init(void)
     safe.mux[0] = MUX_EXT;
     safe.mux[1] = MUX_EXT;
     io_apply(&safe);
+    resetUSB();
+
 }
 
 void io_apply(const io_state_t *desired)
@@ -62,3 +65,10 @@ const io_state_t* io_get(void)
 {
     return &s_state;
 }
+
+void resetUSB(void) {
+	HAL_GPIO_WritePin(USB_DIS_GPIO_Port, USB_DIS_Pin, GPIO_PIN_SET);
+	HAL_Delay(100);
+	HAL_GPIO_WritePin(USB_DIS_GPIO_Port, USB_DIS_Pin, GPIO_PIN_RESET);
+}
+

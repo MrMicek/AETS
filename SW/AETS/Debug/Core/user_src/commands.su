@@ -9,5 +9,5 @@
 ../Core/user_src/commands.c:245:15:MuxCmdCb	72	static
 ../Core/user_src/commands.c:296:15:CurrentCmdCb	48	static
 ../Core/user_src/commands.c:317:15:RelayCountCmdCb	112	static
-../Core/user_src/commands.c:345:15:TestCmdCb	64	static
-../Core/user_src/commands.c:538:6:cmd_Handle	144	static
+../Core/user_src/commands.c:351:15:TestCmdCb	64	static
+../Core/user_src/commands.c:544:6:cmd_Handle	144	static

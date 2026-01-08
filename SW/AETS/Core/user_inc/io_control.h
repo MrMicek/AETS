@@ -15,5 +15,6 @@ void io_init(void);
 void io_apply(const io_state_t *desired);
 void io_safe_off(void);
 const io_state_t* io_get(void);
+void   resetUSB(void);
 
 #endif /* USER_INC_IO_CONTROL_H_ */
