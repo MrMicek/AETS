@@ -1,5 +1,5 @@
 Core/user_src/canfd.o: ../Core/user_src/canfd.c \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/canfd.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/canfd.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -41,10 +41,10 @@ Core/user_src/canfd.o: ../Core/user_src/canfd.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h \
  ../Core/Inc/main.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/comuser.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/error.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/error.h
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/canfd.h:
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/canfd.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h:
@@ -86,6 +86,6 @@ C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h:
 ../Core/Inc/main.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/comuser.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/error.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/error.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h:

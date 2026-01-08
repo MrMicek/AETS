@@ -1,3 +1,13 @@
-../Core/user_src/commands.c:61:15:GetInfoCb	40	static
-../Core/user_src/commands.c:72:15:GetHelpCb	16	static
-../Core/user_src/commands.c:269:6:cmd_Handle	136	static
+../Core/user_src/commands.c:69:13:cmd_prepare_tokens	24	static
+../Core/user_src/commands.c:75:14:cmd_next_token	16	static
+../Core/user_src/commands.c:94:15:GetInfoCb	40	static
+../Core/user_src/commands.c:105:15:GetHelpCb	16	static
+../Core/user_src/commands.c:134:20:app_state_to_str	16	static
+../Core/user_src/commands.c:147:15:ModeCmdCb	48	static
+../Core/user_src/commands.c:177:15:RelayCmdCb	80	static
+../Core/user_src/commands.c:221:15:MosfetCmdCb	56	static
+../Core/user_src/commands.c:245:15:MuxCmdCb	72	static
+../Core/user_src/commands.c:296:15:CurrentCmdCb	48	static
+../Core/user_src/commands.c:317:15:RelayCountCmdCb	112	static
+../Core/user_src/commands.c:345:15:TestCmdCb	64	static
+../Core/user_src/commands.c:538:6:cmd_Handle	144	static

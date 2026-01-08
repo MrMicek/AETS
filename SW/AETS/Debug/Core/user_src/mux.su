@@ -1,3 +1,4 @@
-../Core/user_src/mux.c:13:6:MUX_Init	8	static
-../Core/user_src/mux.c:21:6:MUX_Set	16	static
-../Core/user_src/mux.c:34:6:MUX_Test	8	static
+../Core/user_src/mux.c:13:13:mux_write	24	static
+../Core/user_src/mux.c:31:6:MUX_Init	8	static
+../Core/user_src/mux.c:39:6:MUX_Set	16	static
+../Core/user_src/mux.c:45:6:MUX_Test	8	static

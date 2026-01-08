@@ -1,6 +1,6 @@
 ../Core/user_src/current.c:19:6:Current_Init	8	static
 ../Core/user_src/current.c:26:10:Current_ReadRaw	56	static
 ../Core/user_src/current.c:55:10:Current_Read_mA	24	static
-../Core/user_src/current.c:65:10:Measure_VDDA_mV	24	static
-../Core/user_src/current.c:77:6:Current_Calibrate_All	16	static
-../Core/user_src/current.c:88:10:avg_raw	56	static
+../Core/user_src/current.c:66:10:Measure_VDDA_mV	24	static
+../Core/user_src/current.c:78:6:Current_Calibrate_All	16	static
+../Core/user_src/current.c:89:10:avg_raw	56	static

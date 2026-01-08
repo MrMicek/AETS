@@ -1,9 +1,9 @@
 Core/user_src/commands.o: ../Core/user_src/commands.c \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/commands.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/comuser.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/error.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/error.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/utility.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/commands.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/utility.h \
  ../Core/Inc/crc.h ../Core/Inc/main.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
@@ -45,16 +45,24 @@ Core/user_src/commands.o: ../Core/user_src/commands.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/appinfo.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/kvstore.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/appinfo.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/kvstore.h \
  ../Core/Inc/main.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/eeprom.h \
- C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/eeprom.h
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/commands.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/comuser.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/error.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/error.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/utility.h:
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/eeprom.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/eeprom.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_sm.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/io_control.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_counter.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mosfet.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/current.h
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/commands.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/utility.h:
 ../Core/Inc/crc.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
@@ -97,8 +105,16 @@ C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/appinfo.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/kvstore.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/appinfo.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/kvstore.h:
 ../Core/Inc/main.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/eeprom.h:
-C:/Users/user/Desktop/02.12.25\ AETS/automatedelectrictestingsystem_aets/SW/AETS/Core/user_inc/eeprom.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/eeprom.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/eeprom.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_sm.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/io_control.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_counter.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mosfet.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/current.h:
