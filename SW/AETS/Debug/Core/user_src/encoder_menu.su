@@ -1,2 +1,3 @@
-../Core/user_src/encoder_menu.c:20:6:HAL_GPIO_EXTI_Callback	24	static
-../Core/user_src/encoder_menu.c:31:6:menu_poll	72	static
+../Core/user_src/encoder_menu.c:22:12:menu_digits_to_value	16	static
+../Core/user_src/encoder_menu.c:31:6:HAL_GPIO_EXTI_Callback	24	static
+../Core/user_src/encoder_menu.c:42:6:menu_poll	48	static

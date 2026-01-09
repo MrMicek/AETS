@@ -1,5 +1,4 @@
-../Core/user_src/io_control.c:11:6:io_init	16	static
-../Core/user_src/io_control.c:21:6:io_apply	24	static
-../Core/user_src/io_control.c:54:6:io_safe_off	16	static
-../Core/user_src/io_control.c:64:19:io_get	4	static
-../Core/user_src/io_control.c:69:6:resetUSB	8	static
+../Core/user_src/io_control.c:10:6:io_init	16	static
+../Core/user_src/io_control.c:18:6:io_apply	24	static
+../Core/user_src/io_control.c:51:6:io_safe_off	16	static
+../Core/user_src/io_control.c:61:19:io_get	4	static
