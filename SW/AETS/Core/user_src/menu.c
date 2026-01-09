@@ -121,7 +121,7 @@ void menu_draw_edit_value(const MenuItem *it)
         }
         if (s_edit_digit_index < MENU_EDIT_DIGITS) {
             int cursor_pos = s_edit_digit_index + (s_edit_digit_index >= 3 ? 1 : 0);
-            line3[cursor_pos] = 0xDE; // up arrow
+            line3[cursor_pos] = 0xDE;
         }
     }
 

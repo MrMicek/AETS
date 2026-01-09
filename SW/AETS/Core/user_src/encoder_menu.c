@@ -69,6 +69,7 @@ void menu_poll(Menu *menu) {
             g_encoder_pressed = 0;
             if (it->max == 1 && it->min == 0) {
                 *(it->value_ptr) = s_edit_value;
+                app_menu_on_value_commit(it);
                 s_edit_mode = 0;
                 oled_clear();
                 Buzzer_PlayPattern(BUZZER_INFO);
@@ -82,6 +83,7 @@ void menu_poll(Menu *menu) {
                     if (new_value < it->min) new_value = it->min;
                     if (new_value > it->max) new_value = it->max;
                     *(it->value_ptr) = new_value;
+                    app_menu_on_value_commit(it);
                     s_edit_mode = 0;
                     s_edit_digit_index = 0;
                     oled_clear();

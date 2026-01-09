@@ -61,3 +61,25 @@ Test control
   Expect: ack; "evt state MANUAL" (or previous mode).
 - test status <cmdId>
   Expect: "cmd test <cmdId> <mode> <substate> <fault>" then ack.
+
+Parameter settings
+- param relay get <cmdId> [<1-4>]
+  Expect: one line per relay (or single relay) in the form "cmd param <cmdId> relay <idx> <enable> <ton_ms> <toff_ms> <imax_ma> <sw_count_k>".
+- param relay set <cmdId> <1-4> <enable> <ton_ms> <toff_ms> <imax_ma> <sw_count_k>
+  Expect: ack; relay enable should immediately force OFF if set to 0.
+- param mosfet get <cmdId> [<1-2>]
+  Expect: "cmd param <cmdId> mosfet <idx> <enable> <ext> <ton_ms> <toff_ms> <sw_count>".
+- param mosfet set <cmdId> <1-2> <enable> <ext> <ton_ms> <toff_ms> <sw_count>
+  Expect: ack; ext=1 forces mux to EXT and MOSFET output off.
+- param trigger get <cmdId>
+  Expect: "cmd param <cmdId> trigger <enable> <channel>".
+- param trigger set <cmdId> <enable> <channel>
+  Expect: ack; channel must be 1-4.
+- param conn get <cmdId>
+  Expect: "cmd param <cmdId> conn <remote> <can> <usb>".
+- param conn set <cmdId> <remote> <can> <usb>
+  Expect: ack; settings reflected in menu.
+- param buzzer get <cmdId>
+  Expect: "cmd param <cmdId> buzzer <enable>".
+- param buzzer set <cmdId> <enable>
+  Expect: ack; menu should reflect new value.

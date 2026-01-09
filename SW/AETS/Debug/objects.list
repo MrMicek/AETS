@@ -15,6 +15,7 @@
 "./Core/Startup/startup_stm32g474retx.o"
 "./Core/ThreadSafe/newlib_lock_glue.o"
 "./Core/user_src/app_menu.o"
+"./Core/user_src/app_params.o"
 "./Core/user_src/app_sm.o"
 "./Core/user_src/buzzer.o"
 "./Core/user_src/canfd.o"

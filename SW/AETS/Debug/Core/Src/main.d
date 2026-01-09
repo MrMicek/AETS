@@ -61,10 +61,12 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/eeprom.h \
  C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h \
  C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_menu.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h \
  C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_sm.h \
  C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/io_control.h \
  C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_counter.h
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_counter.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_params.h
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -134,7 +136,9 @@ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Co
 C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/eeprom.h:
 C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h:
 C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_menu.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h:
 C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_sm.h:
 C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/io_control.h:
 C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h:
 C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_counter.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_params.h:
