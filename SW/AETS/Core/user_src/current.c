@@ -56,6 +56,7 @@ uint32_t Current_Read_mA(uint32_t ch){
 
 	uint32_t raw = avg_raw(ch, 64); // light averaging
 	float ma = ((int32_t)raw - (int32_t)offset_counts[ch]) / counts_per_A;
+	ma = fabsf(ma);
 	if(ma < MINIMUM_CURRENT)
 		ma = 0;
 	return ma * 1000;

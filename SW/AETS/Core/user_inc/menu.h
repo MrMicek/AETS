@@ -15,6 +15,8 @@
 typedef struct Menu Menu;
 typedef void (*MenuAction)(void);
 
+#define MENU_EDIT_DIGITS 6
+
 typedef struct MenuItem {
     const char *label;
     MenuAction  on_select;  // Action to run (if not NULL)
@@ -56,6 +58,7 @@ void menu_back(void);                         // go back to parent
 void  menu_set_active(Menu *m);
 Menu* menu_get_active(void);
 void menu_draw_full(Menu *m);
+void menu_draw_edit_value(const MenuItem *it);
 
 
 #endif /* USER_INC_MENU_H_ */
