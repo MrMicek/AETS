@@ -58,22 +58,22 @@ void menu_draw_full(Menu *m) {
                     // Boolean option
                     const char *state = (*(item->value_ptr)) ? "ON" : "OFF";
                     written = snprintf(line, sizeof(line), "%c %-12s %s",
-                                       selected ? '>' : ' ', label, state);
+                                       selected ? 0xDF : ' ', label, state);
                 } else {
                     // Numeric option
                     written = snprintf(line, sizeof(line), "%c %-12s %d",
-                                       selected ? '>' : ' ', label, *(item->value_ptr));
+                                       selected ? 0xDF : ' ', label, *(item->value_ptr));
                 }
             }
             else if(item->readonly_ptr)
 			{
 				// Readonly numeric option
 				written = snprintf(line, sizeof(line), "%c %-12s %d",
-						selected ? '>' : ' ', label, *(item->readonly_ptr));
+						selected ? 0xDF : ' ', label, *(item->readonly_ptr));
 			}
             else {
                 written = snprintf(line, sizeof(line), "%c %s",
-                                   selected ? '>' : ' ', label);
+                                   selected ? 0xDF : ' ', label);
             }
 
 
@@ -157,21 +157,21 @@ static void menu_draw_delta(Menu *m) {
                 // Boolean option
                 const char *state = (*(item->value_ptr)) ? "ON" : "OFF";
                 written = snprintf(line, sizeof(line), "%c %-12s %s",
-                                   selected ? '>' : ' ', label, state);
+                                   selected ? 0xDF : ' ', label, state);
             } else {
                 // Numeric option
                 written = snprintf(line, sizeof(line), "%c %-12s %d",
-                                   selected ? '>' : ' ', label, *(item->value_ptr));
+                                   selected ? 0xDF : ' ', label, *(item->value_ptr));
             }
         }  else if(item->readonly_ptr)
 		{
 			// Readonly numeric option
 			written = snprintf(line, sizeof(line), "%c %-12s %d",
-					selected ? '>' : ' ', label, *(item->readonly_ptr));
+					selected ? 0xDF : ' ', label, *(item->readonly_ptr));
 		}
         else {
             written = snprintf(line, sizeof(line), "%c %s",
-                               selected ? '>' : ' ', label);
+                               selected ? 0xDF : ' ', label);
         }
 
 

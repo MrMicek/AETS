@@ -11649,7 +11649,7 @@ void menu_draw_full(Menu *m) {
  8005056:	6abb      	ldr	r3, [r7, #40]	@ 0x28
  8005058:	2b00      	cmp	r3, #0
  800505a:	d001      	beq.n	8005060 <menu_draw_full+0xa4>
- 800505c:	223e      	movs	r2, #62	@ 0x3e
+ 800505c:	22df      	movs	r2, #223	@ 0xdf
  800505e:	e000      	b.n	8005062 <menu_draw_full+0xa6>
  8005060:	2220      	movs	r2, #32
  8005062:	f107 000c 	add.w	r0, r7, #12
@@ -11664,17 +11664,17 @@ void menu_draw_full(Menu *m) {
  8005078:	63b8      	str	r0, [r7, #56]	@ 0x38
                 if (item->max == 1 && item->min == 0) {
  800507a:	e03d      	b.n	80050f8 <menu_draw_full+0x13c>
-                                       selected ? '>' : ' ', label, state);
+                                       selected ? 0xDF : ' ', label, state);
                 } else {
                     // Numeric option
                     written = snprintf(line, sizeof(line), "%c %-12s %d",
  800507c:	6abb      	ldr	r3, [r7, #40]	@ 0x28
  800507e:	2b00      	cmp	r3, #0
  8005080:	d001      	beq.n	8005086 <menu_draw_full+0xca>
- 8005082:	223e      	movs	r2, #62	@ 0x3e
+ 8005082:	22df      	movs	r2, #223	@ 0xdf
  8005084:	e000      	b.n	8005088 <menu_draw_full+0xcc>
  8005086:	2220      	movs	r2, #32
-                                       selected ? '>' : ' ', label, *(item->value_ptr));
+                                       selected ? 0xDF : ' ', label, *(item->value_ptr));
  8005088:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
  800508a:	68db      	ldr	r3, [r3, #12]
                     written = snprintf(line, sizeof(line), "%c %-12s %d",
@@ -11702,10 +11702,10 @@ void menu_draw_full(Menu *m) {
  80050ae:	6abb      	ldr	r3, [r7, #40]	@ 0x28
  80050b0:	2b00      	cmp	r3, #0
  80050b2:	d001      	beq.n	80050b8 <menu_draw_full+0xfc>
- 80050b4:	223e      	movs	r2, #62	@ 0x3e
+ 80050b4:	22df      	movs	r2, #223	@ 0xdf
  80050b6:	e000      	b.n	80050ba <menu_draw_full+0xfe>
  80050b8:	2220      	movs	r2, #32
-						selected ? '>' : ' ', label, *(item->readonly_ptr));
+						selected ? 0xDF : ' ', label, *(item->readonly_ptr));
  80050ba:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
  80050bc:	699b      	ldr	r3, [r3, #24]
 				written = snprintf(line, sizeof(line), "%c %-12s %d",
@@ -11726,7 +11726,7 @@ void menu_draw_full(Menu *m) {
  80050d8:	6abb      	ldr	r3, [r7, #40]	@ 0x28
  80050da:	2b00      	cmp	r3, #0
  80050dc:	d001      	beq.n	80050e2 <menu_draw_full+0x126>
- 80050de:	223e      	movs	r2, #62	@ 0x3e
+ 80050de:	22df      	movs	r2, #223	@ 0xdf
  80050e0:	e000      	b.n	80050e4 <menu_draw_full+0x128>
  80050e2:	2220      	movs	r2, #32
  80050e4:	f107 000c 	add.w	r0, r7, #12
@@ -11737,7 +11737,7 @@ void menu_draw_full(Menu *m) {
  80050f0:	2115      	movs	r1, #21
  80050f2:	f00e fecd 	bl	8013e90 <sniprintf>
  80050f6:	63b8      	str	r0, [r7, #56]	@ 0x38
-                                   selected ? '>' : ' ', label);
+                                   selected ? 0xDF : ' ', label);
             }
 
 
@@ -12136,7 +12136,7 @@ static void menu_draw_delta(Menu *m) {
  80053da:	6abb      	ldr	r3, [r7, #40]	@ 0x28
  80053dc:	2b00      	cmp	r3, #0
  80053de:	d001      	beq.n	80053e4 <menu_draw_delta+0xf0>
- 80053e0:	223e      	movs	r2, #62	@ 0x3e
+ 80053e0:	22df      	movs	r2, #223	@ 0xdf
  80053e2:	e000      	b.n	80053e6 <menu_draw_delta+0xf2>
  80053e4:	2220      	movs	r2, #32
  80053e6:	f107 000c 	add.w	r0, r7, #12
@@ -12151,17 +12151,17 @@ static void menu_draw_delta(Menu *m) {
  80053fc:	6438      	str	r0, [r7, #64]	@ 0x40
             if (item->max == 1 && item->min == 0) {
  80053fe:	e03d      	b.n	800547c <menu_draw_delta+0x188>
-                                   selected ? '>' : ' ', label, state);
+                                   selected ? 0xDF : ' ', label, state);
             } else {
                 // Numeric option
                 written = snprintf(line, sizeof(line), "%c %-12s %d",
  8005400:	6abb      	ldr	r3, [r7, #40]	@ 0x28
  8005402:	2b00      	cmp	r3, #0
  8005404:	d001      	beq.n	800540a <menu_draw_delta+0x116>
- 8005406:	223e      	movs	r2, #62	@ 0x3e
+ 8005406:	22df      	movs	r2, #223	@ 0xdf
  8005408:	e000      	b.n	800540c <menu_draw_delta+0x118>
  800540a:	2220      	movs	r2, #32
-                                   selected ? '>' : ' ', label, *(item->value_ptr));
+                                   selected ? 0xDF : ' ', label, *(item->value_ptr));
  800540c:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
  800540e:	68db      	ldr	r3, [r3, #12]
                 written = snprintf(line, sizeof(line), "%c %-12s %d",
@@ -12188,10 +12188,10 @@ static void menu_draw_delta(Menu *m) {
  8005432:	6abb      	ldr	r3, [r7, #40]	@ 0x28
  8005434:	2b00      	cmp	r3, #0
  8005436:	d001      	beq.n	800543c <menu_draw_delta+0x148>
- 8005438:	223e      	movs	r2, #62	@ 0x3e
+ 8005438:	22df      	movs	r2, #223	@ 0xdf
  800543a:	e000      	b.n	800543e <menu_draw_delta+0x14a>
  800543c:	2220      	movs	r2, #32
-					selected ? '>' : ' ', label, *(item->readonly_ptr));
+					selected ? 0xDF : ' ', label, *(item->readonly_ptr));
  800543e:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
  8005440:	699b      	ldr	r3, [r3, #24]
 			written = snprintf(line, sizeof(line), "%c %-12s %d",
@@ -12212,7 +12212,7 @@ static void menu_draw_delta(Menu *m) {
  800545c:	6abb      	ldr	r3, [r7, #40]	@ 0x28
  800545e:	2b00      	cmp	r3, #0
  8005460:	d001      	beq.n	8005466 <menu_draw_delta+0x172>
- 8005462:	223e      	movs	r2, #62	@ 0x3e
+ 8005462:	22df      	movs	r2, #223	@ 0xdf
  8005464:	e000      	b.n	8005468 <menu_draw_delta+0x174>
  8005466:	2220      	movs	r2, #32
  8005468:	f107 000c 	add.w	r0, r7, #12
@@ -12223,7 +12223,7 @@ static void menu_draw_delta(Menu *m) {
  8005474:	2115      	movs	r1, #21
  8005476:	f00e fd0b 	bl	8013e90 <sniprintf>
  800547a:	6438      	str	r0, [r7, #64]	@ 0x40
-                               selected ? '>' : ' ', label);
+                               selected ? 0xDF : ' ', label);
         }
 
 
