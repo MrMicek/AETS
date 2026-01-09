@@ -90,11 +90,15 @@ err_Td comu_Receive(uint8_t* buf, uint32_t len){
 	int32_t i;
 	if( buf && len <= COMU_RXBUFSIZE ){
 		for( i=0; i<len; i++ ){
-			comu_RxBuffer[comu_RxHead++] = buf[i];
+			uint8_t ch = buf[i];
+			if (ch == '\r'){
+				ch = '\n';
+			}
+			comu_RxBuffer[comu_RxHead++] = ch;
 			comu_RxHead &= COMU_RXBUFTAILMASK;
-			if( buf[i] == COMU_ENDOFCMDCHAR ){
-				comu_RxCmdCnt++;											//Increment counter of received commands in buffer
-				StatusRegister |= COMU_SIG_CMDRECEIVED;						//Set signal to receiving task
+			if( ch == COMU_ENDOFCMDCHAR ){
+				comu_RxCmdCnt++;                                                                               //Increment counter of received commands in buffer
+				StatusRegister |= COMU_SIG_CMDRECEIVED;                                         //Set signal to receiving task
 			}
 		}
 		return err_Td_Ok;

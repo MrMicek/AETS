@@ -10,6 +10,28 @@ static Menu *s_active = NULL; // currently active menu
 
 uint8_t s_edit_mode = 0; // 0 = normal, 1 = editing
 int s_edit_value = 0;    // temporary value while editing
+uint8_t s_edit_digit_index = 0;
+uint8_t s_edit_digits[MENU_EDIT_DIGITS];
+
+static void menu_edit_digits_from_value(int value)
+{
+    if (value < 0) value = 0;
+    if (value > 999999) value = 999999;
+
+    for (int i = MENU_EDIT_DIGITS - 1; i >= 0; --i) {
+        s_edit_digits[i] = (uint8_t)(value % 10);
+        value /= 10;
+    }
+}
+
+static int menu_edit_value_from_digits(void)
+{
+    int value = 0;
+    for (int i = 0; i < MENU_EDIT_DIGITS; ++i) {
+        value = (value * 10) + s_edit_digits[i];
+    }
+    return value;
+}
 
 void menu_set_active(Menu *m) { s_active = m; }
 Menu* menu_get_active(void)   { return s_active; }
@@ -68,6 +90,44 @@ void menu_draw_full(Menu *m) {
 
     m->last_drawn_selected = m->selected;
     m->last_drawn_top      = m->top;
+}
+
+void menu_draw_edit_value(const MenuItem *it)
+{
+    char line2[LCD_COLS + 1];
+    char line3[LCD_COLS + 1];
+    char line4[LCD_COLS + 1];
+
+    memset(line2, ' ', LCD_COLS);
+    memset(line3, ' ', LCD_COLS);
+    memset(line4, ' ', LCD_COLS);
+    line2[LCD_COLS] = '\0';
+    line3[LCD_COLS] = '\0';
+    line4[LCD_COLS] = '\0';
+
+    if (it->max == 1 && it->min == 0) {
+        const char *state = s_edit_value ? "ON" : "OFF";
+        int w2 = snprintf(line2, sizeof(line2), "( %s )", state);
+        if (w2 < 0) w2 = 0;
+        if (w2 > LCD_COLS) w2 = LCD_COLS;
+        memset(line2 + w2, ' ', LCD_COLS - w2);
+    } else {
+        int pos = 0;
+        for (int i = 0; i < MENU_EDIT_DIGITS; ++i) {
+            if (i == 3) {
+                line2[pos++] = ' ';
+            }
+            line2[pos++] = (char)('0' + s_edit_digits[i]);
+        }
+        if (s_edit_digit_index < MENU_EDIT_DIGITS) {
+            int cursor_pos = s_edit_digit_index + (s_edit_digit_index >= 3 ? 1 : 0);
+            line3[cursor_pos] = '^';
+        }
+    }
+
+    oled_write_line_full(2, line2);
+    oled_write_line_full(3, line3);
+    oled_write_line_full(4, line4);
 }
 
 static void menu_draw_delta(Menu *m) {
@@ -227,6 +287,11 @@ void menu_select(Menu *m) {
     	Buzzer_PlayPattern(BUZZER_INFO);
         s_edit_mode = 1;
         s_edit_value = *(it->value_ptr);
+        s_edit_digit_index = 0;
+        if (!(it->max == 1 && it->min == 0)) {
+            menu_edit_digits_from_value(s_edit_value);
+            s_edit_value = menu_edit_value_from_digits();
+        }
         oled_clear();
 
         char line1[LCD_COLS + 1];
@@ -234,21 +299,7 @@ void menu_select(Menu *m) {
         memset(line1 + w1, ' ', LCD_COLS - w1);
         line1[LCD_COLS] = '\0';
         oled_write_line_full(1, line1);
-
-        char buf[LCD_COLS + 1];
-        if (it->max == 1 && it->min == 0) {
-            // Boolean option
-            const char *state = s_edit_value ? "ON" : "OFF";
-            int w2 = snprintf(buf, sizeof(buf), "( %s )", state);
-            memset(buf + w2, ' ', LCD_COLS - w2);
-            buf[LCD_COLS] = '\0';
-        } else {
-            // Numeric option
-            int w2 = snprintf(buf, sizeof(buf), "( %d )", s_edit_value);
-            memset(buf + w2, ' ', LCD_COLS - w2);
-            buf[LCD_COLS] = '\0';
-        }
-        oled_write_line_full(2, buf);
+        menu_draw_edit_value(it);
         return;
     }
 
