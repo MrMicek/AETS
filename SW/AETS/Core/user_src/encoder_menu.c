@@ -16,6 +16,17 @@ static uint32_t g_last_press_ms = 0;
 
 extern uint8_t s_edit_mode;
 extern int s_edit_value;
+extern uint8_t s_edit_digit_index;
+extern uint8_t s_edit_digits[MENU_EDIT_DIGITS];
+
+static int menu_digits_to_value(void)
+{
+    int value = 0;
+    for (int i = 0; i < MENU_EDIT_DIGITS; ++i) {
+        value = (value * 10) + s_edit_digits[i];
+    }
+    return value;
+}
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == ENCODER_SW_Pin) {
@@ -41,34 +52,43 @@ void menu_poll(Menu *menu) {
                 s_edit_value = !s_edit_value; // Toggle ON/OFF
             }
         } else {
-            // Numeric edit
-            if (dir == UP) s_edit_value++;
-            if (dir == DOWN) s_edit_value--;
-            if (s_edit_value < it->min) s_edit_value = it->min;
-            if (s_edit_value > it->max) s_edit_value = it->max;
+            // Numeric edit (per-digit wrap)
+            if (dir == UP || dir == DOWN) {
+                int delta = (dir == UP) ? 1 : -1;
+                uint8_t digit = s_edit_digits[s_edit_digit_index];
+                digit = (uint8_t)((digit + 10 + delta) % 10);
+                s_edit_digits[s_edit_digit_index] = digit;
+                s_edit_value = menu_digits_to_value();
+            }
         }
 
         // Update display
-        char buf[LCD_COLS + 1];
-        if (it->max == 1 && it->min == 0) {
-            const char *state = s_edit_value ? "ON" : "OFF";
-            int w = snprintf(buf, sizeof(buf), "( %s )", state);
-            memset(buf + w, ' ', LCD_COLS - w);
-            buf[LCD_COLS] = '\0';
-        } else {
-            int w = snprintf(buf, sizeof(buf), "( %d )", s_edit_value);
-            memset(buf + w, ' ', LCD_COLS - w);
-            buf[LCD_COLS] = '\0';
-        }
-        oled_write_line_full(2, buf);
+        menu_draw_edit_value(it);
 
         if (g_encoder_pressed) {
             g_encoder_pressed = 0;
-            *(it->value_ptr) = s_edit_value;
-            s_edit_mode = 0;
-            oled_clear();
-            Buzzer_PlayPattern(BUZZER_INFO);
-            menu_draw_full(menu_get_active());
+            if (it->max == 1 && it->min == 0) {
+                *(it->value_ptr) = s_edit_value;
+                s_edit_mode = 0;
+                oled_clear();
+                Buzzer_PlayPattern(BUZZER_INFO);
+                menu_draw_full(menu_get_active());
+            } else {
+                if (s_edit_digit_index < (MENU_EDIT_DIGITS - 1)) {
+                    s_edit_digit_index++;
+                    menu_draw_edit_value(it);
+                } else {
+                    int new_value = menu_digits_to_value();
+                    if (new_value < it->min) new_value = it->min;
+                    if (new_value > it->max) new_value = it->max;
+                    *(it->value_ptr) = new_value;
+                    s_edit_mode = 0;
+                    s_edit_digit_index = 0;
+                    oled_clear();
+                    Buzzer_PlayPattern(BUZZER_INFO);
+                    menu_draw_full(menu_get_active());
+                }
+            }
         }
         return;
     }
