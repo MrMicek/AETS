@@ -1,0 +1,8 @@
+- The code on the GitHub is a last stable version. Dont change anything necessary, the code works at this time so do only the things i write here.
+1. Next i would like you to implement the testing submenu in the appmenu.c. if you can open the xls. file named display screens. you can find in the sheet hierarchy the section for testing screen (Start test top, start test bot, test top, test bot, stop test, test ok, error max current test error 0 current test).
+
+2. Next thing i will need you to do is in the connectivity branch and the remote mode ect. The first thing is that commands via USB commm cannot be send unless the remote mode is active. i also need you to make a screen and mechanism that when the remote mode is on, the screen will only display the option to go back to the manual mode or when the test will be started, than the screen will go to the test mode screen.
+
+3. I would also like you to implement commands for starting testing. Commands should be make according to the excel file for the screen mentioned in the first point.
+
+4. Next thing that i would like you to do is that i would like you to change the modules of relays and mosfets to work with the parameters that can be edited and you can start to shape up a testing option, so we can try to start testing the testing mode. Dont forget including trigger into the test.

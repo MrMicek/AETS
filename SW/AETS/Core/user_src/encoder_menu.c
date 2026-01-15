@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "buzzer.h"
 #include <string.h>
+#include "app_params.h"
 
 extern TIM_HandleTypeDef htim1;
 
@@ -72,7 +73,7 @@ void menu_poll(Menu *menu) {
                 app_menu_on_value_commit(it);
                 s_edit_mode = 0;
                 oled_clear();
-                Buzzer_PlayPattern(BUZZER_INFO);
+                (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
                 menu_draw_full(menu_get_active());
             } else {
                 if (s_edit_digit_index < (MENU_EDIT_DIGITS - 1)) {
@@ -87,7 +88,7 @@ void menu_poll(Menu *menu) {
                     s_edit_mode = 0;
                     s_edit_digit_index = 0;
                     oled_clear();
-                    Buzzer_PlayPattern(BUZZER_INFO);
+                    (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
                     menu_draw_full(menu_get_active());
                 }
             }

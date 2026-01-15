@@ -12,7 +12,7 @@ app_params_t g_app_params;
 void app_params_init(void)
 {
     const app_params_t defaults = {
-        .buzzer_enable = 0,
+        .buzzer_enable = 1,
         .connectivity = {
             .enable = 0,
             .can_enable = 0,

@@ -31,8 +31,8 @@ static void mux_write(mux_channel_t ch, mux_sel_t sel)
 void MUX_Init(void)
 {
     /* Default to external control (EXT = 0) on both mux channels */
-    mux_write(MUX_CH1, MUX_EXT);
-    mux_write(MUX_CH2, MUX_EXT);
+    mux_write(MUX_CH1, MUX_INT);
+    mux_write(MUX_CH2, MUX_INT);
 }
 
 

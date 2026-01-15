@@ -36,11 +36,10 @@ void io_apply(const io_state_t *desired)
         }
 
         if (g_app_params.mosfets[i].ext_control != 0) {
-            effective.mosfet[i] = false;
-            effective.mux[i] = MUX_INT;
+        	effective.mux[i] = MUX_EXT;
         }
         else {
-			effective.mux[i] = MUX_EXT;
+			effective.mux[i] = MUX_INT;
 		}
     }
 

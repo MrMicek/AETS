@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "buzzer.h"
+#include "app_params.h"
 
 
 
@@ -275,7 +276,7 @@ void menu_back(void) {
 
 void menu_select(Menu *m) {
     if (m->count == 0) {
-    	Buzzer_PlayPattern(BUZZER_BAD_INPUT);
+    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_BAD_INPUT) : 0;
     	return;
     }
 
@@ -284,7 +285,7 @@ void menu_select(Menu *m) {
     // Editable value?
 
     if (it->value_ptr) {
-    	Buzzer_PlayPattern(BUZZER_INFO);
+    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
         s_edit_mode = 1;
         s_edit_value = *(it->value_ptr);
         s_edit_digit_index = 0;
@@ -305,12 +306,12 @@ void menu_select(Menu *m) {
 
 
     if (it->submenu) {
-    	Buzzer_PlayPattern(BUZZER_INFO);
+    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
         menu_enter(m, it->submenu);
         return;
     }
     if (it->on_select) {
-    	Buzzer_PlayPattern(BUZZER_INFO);
+    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
         it->on_select();
         if (menu_get_active() != m) return;
         m->last_drawn_selected = -1;
@@ -318,5 +319,5 @@ void menu_select(Menu *m) {
         menu_draw_full(m);
     }
     else
-    	Buzzer_PlayPattern(BUZZER_BAD_INPUT);
+    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_BAD_INPUT) : 0;
 }

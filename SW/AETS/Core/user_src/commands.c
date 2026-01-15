@@ -280,10 +280,13 @@ if (strcmp(action, "set") == 0) {
                 if (strcmp(idx_s, "all") == 0 || strcmp(idx_s, "0") == 0) {
                         next.mux[0] = sel;
                         next.mux[1] = sel;
+                        g_app_params.mosfets[0].ext_control = (sel == MUX_EXT) ? 1 : 0;
+                        g_app_params.mosfets[1].ext_control = (sel == MUX_EXT) ? 1 : 0;
                 } else {
                         int idx = atoi(idx_s);
                         if (idx < 1 || idx > 2) return err_Td_Range;
                         next.mux[idx - 1] = sel;
+                        g_app_params.mosfets[idx - 1].ext_control = (sel == MUX_EXT) ? 1 : 0;
                 }
 
                 io_apply(&next);
