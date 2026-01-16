@@ -4,6 +4,7 @@
 #include "mux.h"
 #include "relay_counter.h"
 #include "app_params.h"
+#include "trigger.h"
 #include <string.h>
 
 static io_state_t s_state;
@@ -49,6 +50,11 @@ void io_apply(const io_state_t *desired)
         if (old_state != new_state) {
             Relay_Set(i, new_state);
             relay_counter_on_relay_change(i, old_state, new_state);
+            if (!old_state && new_state) {
+                if (g_app_params.trigger.enable != 0 && g_app_params.trigger.channel == (int)(i + 1U)) {
+                    Trigger_Pulse_us(100U);
+                }
+            }
             s_state.relays[i] = new_state;
         }
     }
