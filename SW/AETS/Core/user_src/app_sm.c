@@ -4,6 +4,8 @@
 #include "comuser.h"
 #include "utility.h"
 #include "main.h"
+#include "app_menu.h"
+#include "test_seq.h"
 
 #define APP_EVENT_QUEUE_LEN 16
 
@@ -76,6 +78,12 @@ void app_tick(uint32_t now_ms)
     while (app_pop_event(&evt)) {
         app_handle_event(evt, now_ms);
     }
+
+    if (s_ctx.status.state == APP_STATE_TEST) {
+        if (test_seq_tick(now_ms)) {
+            app_post_event((app_event_t){ .type = APP_EVT_TEST_DONE });
+        }
+    }
 }
 
 static void app_handle_event(app_event_t evt, uint32_t now_ms)
@@ -116,6 +124,7 @@ static void app_handle_event(app_event_t evt, uint32_t now_ms)
     case APP_EVT_TEST_FAIL:
         if (s_ctx.status.state == APP_STATE_TEST) {
             s_ctx.status.test_state = APP_TEST_ABORTING;
+            test_seq_stop();
             app_enter_state(s_ctx.status.return_state, now_ms);
         }
         break;
@@ -167,22 +176,27 @@ static void app_enter_state(app_state_t new_state, uint32_t now_ms)
 
     case APP_STATE_MANUAL:
         s_ctx.status.test_state = APP_TEST_IDLE;
+        app_menu_set_test_screen(APP_TEST_SCREEN_NONE);
         comu_SendF("evt state %s\r\n", app_state_str(new_state));
         break;
 
     case APP_STATE_REMOTE:
         s_ctx.status.test_state = APP_TEST_IDLE;
+        app_menu_set_test_screen(APP_TEST_SCREEN_NONE);
         comu_SendF("evt state %s\r\n", app_state_str(new_state));
         break;
 
     case APP_STATE_TEST:
         io_safe_off();
         s_ctx.status.test_state = APP_TEST_RUNNING;
+        app_menu_set_test_screen(APP_TEST_SCREEN_RUNNING);
+        test_seq_start(now_ms);
         comu_SendF("evt state %s\r\n", app_state_str(new_state));
         break;
 
     case APP_STATE_FAULT:
         io_safe_off();
+        app_menu_set_test_screen(APP_TEST_SCREEN_NONE);
         comu_SendF("evt fault %lu %lu\r\n", (unsigned long)s_ctx.status.fault_code, (unsigned long)now_ms);
         break;
 

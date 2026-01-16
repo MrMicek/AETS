@@ -1,6 +1,10 @@
-Core/user_src/current.o: ../Core/user_src/current.c \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/current.h \
- ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
+Core/user_src/test_seq.o: ../Core/user_src/test_seq.c \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/test_seq.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_params.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/io_control.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/mux.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/trigger.h \
+ ../Core/Inc/main.h ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h \
@@ -39,9 +43,13 @@ Core/user_src/current.o: ../Core/user_src/current.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h \
- ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/utility.h
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/current.h:
+ ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/test_seq.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_params.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/io_control.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/mux.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/trigger.h:
+../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h:
@@ -82,4 +90,3 @@ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/current.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/utility.h:

@@ -8,6 +8,10 @@ Help/info
 - gi <cmdId>
   Expect: "cmd gi <cmdId> <device info...>" then "ack gi <cmdId> 0 <timestamp>".
 
+Remote-mode gating
+- When not in REMOTE mode, only the "mode" command is accepted. Other commands should return ack error code 18 (disabled).
+- Use the menu Connectivity -> Remote Mode to enter REMOTE, or "mode set <cmdId> remote" if allowed.
+
 Mode control
 - mode get <cmdId>
   Expect: "cmd mode <cmdId> <state>" then ack.
@@ -59,6 +63,12 @@ Test control
   Expect: ack; "evt state TEST"; outputs may follow test sequence.
 - test stop <cmdId>
   Expect: ack; "evt state MANUAL" (or previous mode).
+- test ok <cmdId>
+  Expect: ack; test screen shows OK and state returns to previous mode.
+- test errmax <cmdId>
+  Expect: ack; test screen shows max-current error and state returns.
+- test errzero <cmdId>
+  Expect: ack; test screen shows 0-current error and state returns.
 - test status <cmdId>
   Expect: "cmd test <cmdId> <mode> <substate> <fault>" then ack.
 

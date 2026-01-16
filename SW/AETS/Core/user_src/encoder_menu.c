@@ -39,6 +39,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     }
 }
 
+uint8_t menu_encoder_take_press(void)
+{
+    if (g_encoder_pressed) {
+        g_encoder_pressed = 0;
+        return 1;
+    }
+    return 0;
+}
 // Call this regularly from main loop to update the menu
 void menu_poll(Menu *menu) {
     EncoderDirection_Td dir = Encoder_read();

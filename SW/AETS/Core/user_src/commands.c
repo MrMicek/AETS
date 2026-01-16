@@ -27,6 +27,7 @@
 #include "mux.h"
 #include "current.h"
 #include "app_params.h"
+#include "app_menu.h"
 
 
 
@@ -58,6 +59,7 @@
 #define HELP_LINE_13_6  ">    Examples: param relay get 1 | param relay set 1 1 100 100 500 10\r\n"
 #define HELP_LINE_13_7  ">              param mosfet set 2 1 0 100 100 5 | param trigger set 1 2\r\n"
 #define HELP_LINE_13_8  ">              param conn set 1 1 1 | param buzzer set 1\r\n"
+#define HELP_LINE_13_9  "> Test screens: test ok | test errmax | test errzero (in REMOTE mode)\r\n"
 #define HELP_LINE_14	"> Enjoy the tool.\r\n"
 
 
@@ -135,6 +137,7 @@ static err_Td GetHelpCb(char *cmdName, int32_t cmdId){
 	comu_SendF(HELP_LINE_13_6);
 	comu_SendF(HELP_LINE_13_7);
 	comu_SendF(HELP_LINE_13_8);
+	comu_SendF(HELP_LINE_13_9);
 	comu_SendF(HELP_LINE_14);
 	return err_Td_Ok;
 }
@@ -259,50 +262,46 @@ if (!action) return err_Td_Param;
         const io_state_t *cur = io_get();
         io_state_t next = *cur;
 
-if (strcmp(action, "set") == 0) {
-                char *idx_s = cmd_next_token();
-                char *sel_s = cmd_next_token();
-                mux_sel_t sel = MUX_INT;
-
-                if (!idx_s || !sel_s) return err_Td_Param;
-
-                if (strcmp(sel_s, "int") == 0) {
-                        sel = MUX_INT;
-                } else if (strcmp(sel_s, "ext") == 0) {
-                        sel = MUX_EXT;
-                } else {
-                        int val = atoi(sel_s);
-                        if (val == 0) sel = MUX_INT;
-                        else if (val == 1) sel = MUX_EXT;
-                        else return err_Td_Range;
-                }
-
-                if (strcmp(idx_s, "all") == 0 || strcmp(idx_s, "0") == 0) {
-                        next.mux[0] = sel;
-                        next.mux[1] = sel;
-                        g_app_params.mosfets[0].ext_control = (sel == MUX_EXT) ? 1 : 0;
-                        g_app_params.mosfets[1].ext_control = (sel == MUX_EXT) ? 1 : 0;
-                } else {
-                        int idx = atoi(idx_s);
-                        if (idx < 1 || idx > 2) return err_Td_Range;
-                        next.mux[idx - 1] = sel;
-                        g_app_params.mosfets[idx - 1].ext_control = (sel == MUX_EXT) ? 1 : 0;
-                }
-
-                io_apply(&next);
-                return err_Td_Ok;
-        } else if (strcmp(action, "get") == 0) {
-                char *idx_s = cmd_next_token();
-                if (idx_s) {
-                        int idx = atoi(idx_s);
-                        if (idx < 1 || idx > 2) return err_Td_Range;
-                        comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, idx, (cur->mux[idx - 1] == MUX_EXT) ? 1 : 0);
-                } else {
-                        comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, (cur->mux[0] == MUX_EXT) ? 1 : 0, (cur->mux[1] == MUX_EXT) ? 1 : 0);
-                }
-                return err_Td_Ok;
-        }
-        return err_Td_NotValid;
+        if (strcmp(action, "set") == 0) {
+				char *idx_s = cmd_next_token();
+				char *sel_s = cmd_next_token();
+				mux_sel_t sel = MUX_INT;
+				if (!idx_s || !sel_s) return err_Td_Param;
+				if (strcmp(sel_s, "int") == 0) {
+						sel = MUX_INT;
+				} else if (strcmp(sel_s, "ext") == 0) {
+						sel = MUX_EXT;
+				} else {
+						int val = atoi(sel_s);
+						if (val == 0) sel = MUX_INT;
+						else if (val == 1) sel = MUX_EXT;
+						else return err_Td_Range;
+				}
+				if (strcmp(idx_s, "all") == 0 || strcmp(idx_s, "0") == 0) {
+						next.mux[0] = sel;
+						next.mux[1] = sel;
+						g_app_params.mosfets[0].ext_control = (sel == MUX_EXT) ? 1 : 0;
+						g_app_params.mosfets[1].ext_control = (sel == MUX_EXT) ? 1 : 0;
+				} else {
+						int idx = atoi(idx_s);
+						if (idx < 1 || idx > 2) return err_Td_Range;
+						next.mux[idx - 1] = sel;
+						g_app_params.mosfets[idx - 1].ext_control = (sel == MUX_EXT) ? 1 : 0;
+				}
+				io_apply(&next);
+				return err_Td_Ok;
+		} else if (strcmp(action, "get") == 0) {
+				char *idx_s = cmd_next_token();
+				if (idx_s) {
+						int idx = atoi(idx_s);
+						if (idx < 1 || idx > 2) return err_Td_Range;
+						comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, idx, (cur->mux[idx - 1] == MUX_EXT) ? 1 : 0);
+				} else {
+						comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, (cur->mux[0] == MUX_EXT) ? 1 : 0, (cur->mux[1] == MUX_EXT) ? 1 : 0);
+				}
+				return err_Td_Ok;
+		}
+		return err_Td_NotValid;
 }
 
 static err_Td CurrentCmdCb(char *cmdName, int32_t cmdId)
@@ -336,11 +335,11 @@ char *idx_s = cmd_next_token();
                 if (idx_s) {
                         int idx = atoi(idx_s);
                         if (idx < 1 || idx > 4) return err_Td_Range;
-                        comu_SendF("0 cmd %s %d %d %lu\r\n", cmdName, cmdId, idx, (unsigned long long)relay_counter_get((uint8_t)(idx - 1)));
+                        comu_SendF("0 cmd %s %d %d %llu\r\n", cmdName, cmdId, idx, (unsigned long long)relay_counter_get((uint8_t)(idx - 1)));
                 } else {
                         uint64_t counts[4] = {0};
                         relay_counter_get_all(counts, 4);
-                        comu_SendF("0 cmd %s %d %lu %lu %lu %lu\r\n", cmdName, cmdId,
+                        comu_SendF("0 cmd %s %d %llu %llu %llu %llu\r\n", cmdName, cmdId,
                                         (unsigned long long)counts[0],
                                         (unsigned long long)counts[1],
                                         (unsigned long long)counts[2],
@@ -509,9 +508,20 @@ char *action = cmd_next_token();
 if (!action) return err_Td_Param;
 
         if (strcmp(action, "start") == 0) {
+                app_menu_set_test_screen(APP_TEST_SCREEN_START);
                 return app_post_event((app_event_t){ .type = APP_EVT_TEST_START }) ? err_Td_Ok : err_Td_Busy;
         } else if (strcmp(action, "stop") == 0) {
+                app_menu_set_test_screen(APP_TEST_SCREEN_STOP);
                 return app_post_event((app_event_t){ .type = APP_EVT_TEST_STOP }) ? err_Td_Ok : err_Td_Busy;
+        } else if (strcmp(action, "ok") == 0) {
+                app_menu_set_test_screen(APP_TEST_SCREEN_OK);
+                return app_post_event((app_event_t){ .type = APP_EVT_TEST_DONE }) ? err_Td_Ok : err_Td_Busy;
+        } else if (strcmp(action, "errmax") == 0) {
+                app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_MAX_CURRENT);
+                return app_post_event((app_event_t){ .type = APP_EVT_TEST_FAIL, .a = 1 }) ? err_Td_Ok : err_Td_Busy;
+        } else if (strcmp(action, "errzero") == 0) {
+                app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_ZERO_CURRENT);
+                return app_post_event((app_event_t){ .type = APP_EVT_TEST_FAIL, .a = 2 }) ? err_Td_Ok : err_Td_Busy;
         } else if (strcmp(action, "status") == 0) {
                 app_status_t st = app_get_status();
                 comu_SendF("0 cmd %s %d %s %d %lu\r\n", cmdName, cmdId, app_state_to_str(st.state), (int)st.test_state, (unsigned long)st.fault_code);
@@ -730,8 +740,8 @@ void cmd_Handle(char *str){
                 }
         }
 
-        char *IdToken = strtok_r(NULL, CMD_DELIMS, &save);
-        if (IdToken && IdToken[0] != '\0') {
+	char *IdToken = strtok_r(NULL, CMD_DELIMS, &save);
+	if (IdToken && IdToken[0] != '\0') {
                 bool id_is_number = true;
                 for (i = 0; i < strlen(IdToken); i++){
                         if(!isdigit((unsigned char)IdToken[i])){
@@ -746,14 +756,21 @@ void cmd_Handle(char *str){
                         Id = 0;                                                              // Default ID when omitted
                         cmd_prepare_tokens(IdToken, save, true);                             // Treat token as first parameter
                 }
-        } else {
-                Id = 0;                                                                // Default ID when omitted completely
-                cmd_prepare_tokens(NULL, save, false);
-        }
+	} else {
+		Id = 0;                                                                // Default ID when omitted completely
+		cmd_prepare_tokens(NULL, save, false);
+	}
 
-        if( ErrNo == err_Td_Ok && Name != NULL ){                                  // If there is no error in CRC, parse rest of command
-                ErrNo = err_Td_NotExist;
-                for( i=0; i<UT_SIZEOFARRAY(CmdList); i++ ){                             // Repeat through whole list of defined commands
+	if (ErrNo == err_Td_Ok && Name != NULL) {
+		app_status_t st = app_get_status();
+		if (st.state != APP_STATE_REMOTE && strcmp(Name, "mode") != 0) {
+			ErrNo = err_Td_Disabled;
+		}
+	}
+
+	if( ErrNo == err_Td_Ok && Name != NULL ){                                  // If there is no error in CRC, parse rest of command
+		ErrNo = err_Td_NotExist;
+		for( i=0; i<UT_SIZEOFARRAY(CmdList); i++ ){                             // Repeat through whole list of defined commands
                         if( strcmp(CmdList[i].Name, Name ) == 0 ){                      // If command name from defined list is equal to current command name
                                 if( CmdList[i].CallbackFn != 0 ){
                                         ErrNo = CmdList[i].CallbackFn(Name, Id);             // Call callback function to parse remaining data

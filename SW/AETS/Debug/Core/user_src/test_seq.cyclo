@@ -1,0 +1,4 @@
+../Core/user_src/test_seq.c:26:17:clamp_delay_ms	2
+../Core/user_src/test_seq.c:31:6:test_seq_start	1
+../Core/user_src/test_seq.c:39:6:test_seq_stop	1
+../Core/user_src/test_seq.c:45:6:test_seq_tick	17

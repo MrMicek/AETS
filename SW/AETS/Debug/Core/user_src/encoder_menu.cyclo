@@ -1,3 +1,4 @@
 ../Core/user_src/encoder_menu.c:23:12:menu_digits_to_value	2
 ../Core/user_src/encoder_menu.c:32:6:HAL_GPIO_EXTI_Callback	3
-../Core/user_src/encoder_menu.c:43:6:menu_poll	20
+../Core/user_src/encoder_menu.c:42:9:menu_encoder_take_press	2
+../Core/user_src/encoder_menu.c:51:6:menu_poll	20

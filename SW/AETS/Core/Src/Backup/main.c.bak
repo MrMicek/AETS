@@ -47,6 +47,7 @@
 #include "app_sm.h"
 #include "io_control.h"
 #include "relay_counter.h"
+#include "app_params.h"
 
 /* USER CODE END Includes */
 
@@ -142,6 +143,7 @@ int main(void)
   Trigger_Init();
   cfd_Init();
   KV_Init();
+  app_params_init();
   relay_counter_init();
   app_menu_init();
   app_init();

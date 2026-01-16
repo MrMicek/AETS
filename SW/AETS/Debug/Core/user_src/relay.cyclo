@@ -1,6 +1,6 @@
-../Core/user_src/relay.c:16:6:Relay_Init	1
-../Core/user_src/relay.c:23:6:Relay_Set	2
-../Core/user_src/relay.c:31:6:Relay_Toggle	2
-../Core/user_src/relay.c:39:6:Relay_AllOff	2
-../Core/user_src/relay.c:45:6:Relay_AllOn	2
-../Core/user_src/relay.c:51:6:Relay_TestToggleAll	2
+../Core/user_src/relay.c:17:6:Relay_Init	1
+../Core/user_src/relay.c:24:6:Relay_Set	4
+../Core/user_src/relay.c:33:6:Relay_Toggle	2
+../Core/user_src/relay.c:41:6:Relay_AllOff	2
+../Core/user_src/relay.c:47:6:Relay_AllOn	2
+../Core/user_src/relay.c:53:6:Relay_TestToggleAll	2
