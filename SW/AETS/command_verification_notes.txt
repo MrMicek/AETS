@@ -1,0 +1,95 @@
+AETS command verification checklist
+
+Below is the list of USB CDC commands to exercise and the expected behavior to confirm the firmware is working.
+
+Help/info
+- gh <cmdId>
+  Expect: multi-line help text, then "ack gh <cmdId> 0 <timestamp>".
+- gi <cmdId>
+  Expect: "cmd gi <cmdId> <device info...>" then "ack gi <cmdId> 0 <timestamp>".
+
+Remote-mode gating
+- When not in REMOTE mode, only the "mode" command is accepted. Other commands should return ack error code 18 (disabled).
+- Use the menu Connectivity -> Remote Mode to enter REMOTE, or "mode set <cmdId> remote" if allowed.
+
+Mode control
+- mode get <cmdId>
+  Expect: "cmd mode <cmdId> <state>" then ack.
+- mode set <cmdId> manual
+- mode set <cmdId> remote
+- mode set <cmdId> test
+  Expect: ack with error 0 if transition allowed; a later "evt state <state>" event.
+
+Relay control
+- relay get <cmdId>
+  Expect: "cmd relay <cmdId> r1 r2 r3 r4" then ack.
+- relay set <cmdId> <1-4> <0|1>
+  Expect: relay toggles physically; relay state reflects in "relay get" output.
+- relay all <cmdId> <r1> <r2> <r3> <r4>
+  Expect: all relays change; "relay get" matches.
+
+MOSFET control
+- mosfet get <cmdId>
+  Expect: "cmd mosfet <cmdId> m1 m2" then ack.
+- mosfet set <cmdId> <1-2> <0|1>
+  Expect: MOSFET output toggles; "mosfet get" reflects.
+
+Mux control (two channels)
+- mux get <cmdId>
+  Expect: "cmd mux <cmdId> <mux1> <mux2>" with 0=EXT, 1=INT.
+- mux set <cmdId> <1-2> <0|1>
+  Expect: selected mux channel switches (LED/measurement change).
+- mux all <cmdId> <m1> <m2>
+  Expect: both channels switch together.
+
+Current measurement
+- curr raw <cmdId> <1-4>
+  Expect: "cmd current <cmdId> <raw>" (or equivalent) then ack.
+- curr ma <cmdId> <1-4>
+  Expect: "cmd current <cmdId> <ma>" (or equivalent) then ack.
+
+Relay counters
+- rcnt get <cmdId> [<1-4>]
+  Expect: counters for all or single relay.
+- rcnt reset <cmdId>
+  Expect: counters reset to zero; verify with rcnt get and after power cycle.
+- rcnt save <cmdId>
+  Expect: counters saved to EEPROM immediately.
+- rcnt load <cmdId>
+  Expect: counters reloaded from EEPROM (ack error if none stored).
+
+Test control
+- test start <cmdId>
+  Expect: ack; "evt state TEST"; outputs may follow test sequence.
+- test stop <cmdId>
+  Expect: ack; "evt state MANUAL" (or previous mode).
+- test ok <cmdId>
+  Expect: ack; test screen shows OK and state returns to previous mode.
+- test errmax <cmdId>
+  Expect: ack; test screen shows max-current error and state returns.
+- test errzero <cmdId>
+  Expect: ack; test screen shows 0-current error and state returns.
+- test status <cmdId>
+  Expect: "cmd test <cmdId> <mode> <substate> <fault>" then ack.
+
+Parameter settings
+- param relay get <cmdId> [<1-4>]
+  Expect: one line per relay (or single relay) in the form "cmd param <cmdId> relay <idx> <enable> <ton_ms> <toff_ms> <imax_ma> <sw_count_k>".
+- param relay set <cmdId> <1-4> <enable> <ton_ms> <toff_ms> <imax_ma> <sw_count_k>
+  Expect: ack; relay enable should immediately force OFF if set to 0.
+- param mosfet get <cmdId> [<1-2>]
+  Expect: "cmd param <cmdId> mosfet <idx> <enable> <ext> <ton_ms> <toff_ms> <sw_count>".
+- param mosfet set <cmdId> <1-2> <enable> <ext> <ton_ms> <toff_ms> <sw_count>
+  Expect: ack; ext=1 forces mux to EXT and MOSFET output off.
+- param trigger get <cmdId>
+  Expect: "cmd param <cmdId> trigger <enable> <channel>".
+- param trigger set <cmdId> <enable> <channel>
+  Expect: ack; channel must be 1-4.
+- param conn get <cmdId>
+  Expect: "cmd param <cmdId> conn <remote> <can> <usb>".
+- param conn set <cmdId> <remote> <can> <usb>
+  Expect: ack; settings reflected in menu.
+- param buzzer get <cmdId>
+  Expect: "cmd param <cmdId> buzzer <enable>".
+- param buzzer set <cmdId> <enable>
+  Expect: ack; menu should reflect new value.

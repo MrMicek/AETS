@@ -8,6 +8,7 @@
 
 #include "mosfet.h"
 #include "main.h"
+#include "app_params.h"
 
 static GPIO_TypeDef* const mosfet_ports[2] = { GPIO_MOSFET1_GPIO_Port, GPIO_MOSFET2_GPIO_Port };
 static const uint16_t mosfet_pins [2] = { GPIO_MOSFET1_Pin, GPIO_MOSFET2_Pin };
@@ -22,7 +23,10 @@ for (int i=0;i<2;++i) HAL_GPIO_WritePin(mosfet_ports[i], mosfet_pins[i], GPIO_PI
 
 void MOSFET_Set(mosfet_id_t id, bool on)
 {
-if (id <= MOSFET2) HAL_GPIO_WritePin(mosfet_ports[id], mosfet_pins[id], on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	if (id <= MOSFET2) {
+		bool allow = (g_app_params.mosfets[id].enabled != 0) && (g_app_params.mosfets[id].ext_control == 0);
+		HAL_GPIO_WritePin(mosfet_ports[id], mosfet_pins[id], (on && allow) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	}
 }
 
 

@@ -11,6 +11,9 @@
 #include "menu.h"
 #include "display.h"
 #include "stm32g4xx_hal.h"
+#include "app_params.h"
+#include "io_control.h"
+#include "app_sm.h"
 
 // Common back action
 static void saveToProfile(int n) {
@@ -39,61 +42,31 @@ static void loadFromProfile5(void) { loadFromProfile(5); }
 static void saveToProfile6(void) { saveToProfile(6); }
 static void loadFromProfile6(void) { loadFromProfile(6); }
 
-static int buzzerEnable = 0;
-
-static int connectivityEnable = 0;
-static int connectivityCanEnable = 0;
-static int connectivityUsbEnable = 0;
-
-static int triggerEnable = 0;
-static int triggerChannel = 1;
-
-static int mosfet1Enable = 0;
-static int mosfet1Ext = 0;
-static int mosfet1Ton = 0;
-static int mosfet1Toff = 0;
-static int mosfet1Count = 0;
-
-static int mosfet2Enable = 0;
-static int mosfet2Ext = 0;
-static int mosfet2Ton = 0;
-static int mosfet2Toff = 0;
-static int mosfet2Count = 0;
-
-static int relay1Enabled = 0;
-static int relay1Ton = 0;
-static int relay1Toff = 0;
-static int relay1Imax = 0;
-static int relay1Count = 0;
-
-static int relay2Enabled = 0;
-static int relay2Ton = 0;
-static int relay2Toff = 0;
-static int relay2Imax = 0;
-static int relay2Count = 0;
-
-static int relay3Enabled = 0;
-static int relay3Ton = 0;
-static int relay3Toff = 0;
-static int relay3Imax = 0;
-static int relay3Count = 0;
-
-static int relay4Enabled = 0;
-static int relay4Ton = 0;
-static int relay4Toff = 0;
-static int relay4Imax = 0;
-static int relay4Count = 0;
-
-static int relay1Health = 100000;
-static int relay2Health = 70000;
-static int relay3Health = 90000;
-static int relay4Health = 80000;
 
 // ---------- Actions ----------
 static void act_start(void) {
-    oled_clear();
-    oled_write_line_full(2, "> Starting...");
-    HAL_Delay(600);
+    app_menu_set_test_screen(APP_TEST_SCREEN_START);
+    app_post_event((app_event_t){ .type = APP_EVT_TEST_START });
+}
+
+static void act_stop_test(void) {
+    app_menu_set_test_screen(APP_TEST_SCREEN_STOP);
+    app_post_event((app_event_t){ .type = APP_EVT_TEST_STOP });
+}
+
+static void act_test_ok(void) {
+    app_menu_set_test_screen(APP_TEST_SCREEN_OK);
+    app_post_event((app_event_t){ .type = APP_EVT_TEST_DONE });
+}
+
+static void act_test_err_max(void) {
+    app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_MAX_CURRENT);
+    app_post_event((app_event_t){ .type = APP_EVT_TEST_FAIL, .a = 1 });
+}
+
+static void act_test_err_zero(void) {
+    app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_ZERO_CURRENT);
+    app_post_event((app_event_t){ .type = APP_EVT_TEST_FAIL, .a = 2 });
 }
 
 // Common back action
@@ -106,11 +79,11 @@ static void act_back(void) {
 // ---------- SUBMENUS_3 ------------------------------------------------------------------------------
 static const MenuItem RELAY1_ITEMS[] = {
     { "< Return", act_back,        NULL },
-	{ "Enable", NULL, NULL, &relay1Enabled, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &relay1Ton, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &relay1Toff, 0, 10000 },
-	{ "I-max (mA)", NULL, NULL, &relay1Imax, 8, 4000 },
-	{ "SW. Cnt (k)", NULL, NULL, &relay1Count, 0, 1000 },
+	{ "Enable", NULL, NULL, &g_app_params.relays[0].enabled, 0, 1 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[0].ton_ms, 0, 10000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[0].toff_ms, 0, 10000 },
+	{ "I-max (mA)", NULL, NULL, &g_app_params.relays[0].imax_ma, 8, 4000 },
+	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[0].sw_count_k, 0, 1000 },
 };
 static Menu gRelay1Menu = {
     .items = RELAY1_ITEMS,
@@ -123,11 +96,11 @@ static Menu gRelay1Menu = {
 
 static const MenuItem RELAY2_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
-	{ "Enable", NULL, NULL, &relay2Enabled, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &relay2Ton, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &relay2Toff, 0, 10000 },
-	{ "I-max (mA)", NULL, NULL, &relay2Imax, 8, 4000 },
-	{ "SW. Cnt (k)", NULL, NULL, &relay2Count, 0, 1000 },
+	{ "Enable", NULL, NULL, &g_app_params.relays[1].enabled, 0, 1 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[1].ton_ms, 0, 10000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[1].toff_ms, 0, 10000 },
+	{ "I-max (mA)", NULL, NULL, &g_app_params.relays[1].imax_ma, 8, 4000 },
+	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[1].sw_count_k, 0, 1000 },
 };
 static Menu gRelay2Menu = {
     .items = RELAY2_ITEMS,
@@ -140,11 +113,11 @@ static Menu gRelay2Menu = {
 
 static const MenuItem RELAY3_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
-	{ "Enable", NULL, NULL, &relay3Enabled, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &relay3Ton, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &relay3Toff, 0, 10000 },
-	{ "I-max(mA)", NULL, NULL, &relay3Imax, 8, 4000 },
-	{ "SW. Cnt (k)", NULL, NULL, &relay3Count, 0, 1000 },
+	{ "Enable", NULL, NULL, &g_app_params.relays[2].enabled, 0, 1 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[2].ton_ms, 0, 10000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[2].toff_ms, 0, 10000 },
+	{ "I-max(mA)", NULL, NULL, &g_app_params.relays[2].imax_ma, 8, 4000 },
+	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[2].sw_count_k, 0, 1000 },
 };
 static Menu gRelay3Menu = {
     .items = RELAY3_ITEMS,
@@ -157,11 +130,11 @@ static Menu gRelay3Menu = {
 
 static const MenuItem RELAY4_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
-	{ "Enable", NULL, NULL, &relay4Enabled, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &relay4Ton, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &relay4Toff, 0, 10000 },
-	{ "I-max (mA)", NULL, NULL, &relay4Imax, 8, 4000 },
-	{ "SW. Cnt (k)", NULL, NULL, &relay4Count, 0, 1000 },
+	{ "Enable", NULL, NULL, &g_app_params.relays[3].enabled, 0, 1 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[3].ton_ms, 0, 10000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[3].toff_ms, 0, 10000 },
+	{ "I-max (mA)", NULL, NULL, &g_app_params.relays[3].imax_ma, 8, 4000 },
+	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[3].sw_count_k, 0, 1000 },
 };
 static Menu gRelay4Menu = {
     .items = RELAY4_ITEMS,
@@ -257,13 +230,30 @@ static Menu gProfile6Menu = {
     .flags = 0,
 };
 
+static const MenuItem TEST_ITEMS[] = {
+    { "< Return", act_back,        NULL },
+    { "Start Test", act_start,     NULL },
+    { "Stop Test", act_stop_test,  NULL },
+    { "Test OK", act_test_ok,      NULL },
+    { "Err Max I", act_test_err_max, NULL },
+    { "Err 0 I", act_test_err_zero, NULL },
+};
+static Menu gTestMenu = {
+    .items = TEST_ITEMS,
+    .count = sizeof(TEST_ITEMS)/sizeof(TEST_ITEMS[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
 static const MenuItem MOSFET1_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
-	{ "Enable", NULL, NULL, &mosfet1Enable, 0, 1 },
-	{ "Ext. Control", NULL, NULL, &mosfet1Ext, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &mosfet1Ton, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &mosfet1Toff, 0, 10000 },
-	{ "SW. Cnt", NULL, NULL, &mosfet1Count, 0, 10000 },
+	{ "Enable", NULL, NULL, &g_app_params.mosfets[0].enabled, 0, 1 },
+	{ "Ext. Control", NULL, NULL, &g_app_params.mosfets[0].ext_control, 0, 1 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.mosfets[0].ton_ms, 0, 10000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.mosfets[0].toff_ms, 0, 10000 },
+	{ "SW. Cnt", NULL, NULL, &g_app_params.mosfets[0].sw_count, 0, 10000 },
 };
 static Menu gMosfet1Menu = {
     .items = MOSFET1_ITEMS,
@@ -276,11 +266,11 @@ static Menu gMosfet1Menu = {
 
 static const MenuItem MOSFET2_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
-	{ "Enable", NULL, NULL, &mosfet2Enable, 0, 1 },
-	{ "Ext. Control", NULL, NULL, &mosfet2Ext, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &mosfet2Ton, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &mosfet2Toff, 0, 10000 },
-	{ "SW. Cnt", NULL, NULL, &mosfet2Count, 0, 10000 },
+	{ "Enable", NULL, NULL, &g_app_params.mosfets[1].enabled, 0, 1 },
+	{ "Ext. Control", NULL, NULL, &g_app_params.mosfets[1].ext_control, 0, 1 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.mosfets[1].ton_ms, 0, 10000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.mosfets[1].toff_ms, 0, 10000 },
+	{ "SW. Cnt", NULL, NULL, &g_app_params.mosfets[1].sw_count, 0, 10000 },
 };
 static Menu gMosfet2Menu = {
     .items = MOSFET2_ITEMS,
@@ -309,10 +299,10 @@ static Menu gSetRelayMenu = {
 
 static const MenuItem RELAY_HEALTH_ITEMS[] = {
     { "< Return", act_back,        NULL },
-    { "Relay1 (k)", NULL, NULL, NULL, 0, 0, &relay1Health },
-	{ "Relay2 (k)", NULL, NULL, NULL, 0, 0, &relay2Health },
-	{ "Relay3 (k)", NULL, NULL, NULL, 0, 0, &relay3Health },
-	{ "Relay4 (k)", NULL, NULL, NULL, 0, 0, &relay4Health },
+    { "Relay1 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health[0] },
+	{ "Relay2 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health[1] },
+	{ "Relay3 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health[2] },
+	{ "Relay4 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health[3] },
 };
 static Menu gRelayHealth = {
     .items = RELAY_HEALTH_ITEMS,
@@ -325,10 +315,10 @@ static Menu gRelayHealth = {
 
 static const MenuItem SET_RELAY_HEALTH_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
-	{ "Relay1 (k)", NULL, NULL, &relay1Health, 0, 2000},
-	{ "Relay2 (k)", NULL, NULL, &relay2Health, 0, 2000},
-	{ "Relay3 (k)", NULL, NULL, &relay3Health, 0, 2000},
-	{ "Relay4 (k)", NULL, NULL, &relay4Health, 0, 2000},
+	{ "Relay1 (k)", NULL, NULL, &g_app_params.relay_health[0], 0, 2000},
+	{ "Relay2 (k)", NULL, NULL, &g_app_params.relay_health[1], 0, 2000},
+	{ "Relay3 (k)", NULL, NULL, &g_app_params.relay_health[2], 0, 2000},
+	{ "Relay4 (k)", NULL, NULL, &g_app_params.relay_health[3], 0, 2000},
 };
 static Menu gSetRelayHealth = {
     .items = SET_RELAY_HEALTH_ITEMS,
@@ -360,7 +350,7 @@ static Menu gInfoMenu = {
 
 static const MenuItem SETTINGS_ITEMS[] = {
     { "< Return", act_back,        NULL },
-	{ "Buzzer enable", NULL, NULL, &buzzerEnable, 0, 1},
+	{ "Buzzer enable", NULL, NULL, &g_app_params.buzzer_enable, 0, 1},
 };
 static Menu gSettingMenu = {
     .items = SETTINGS_ITEMS,
@@ -391,9 +381,9 @@ static Menu gProfileMenu = {
 
 static const MenuItem CONNECTIVITY_ITEMS[] = {
     { "< Return", act_back,        NULL },
-    { "Remote Mode ",NULL, NULL, &connectivityEnable, 0, 1},
-	{ "CAN Output ",NULL, NULL, &connectivityCanEnable, 0, 1},
-	{ "USB Output ",NULL, NULL, &connectivityUsbEnable, 0, 1},
+    { "Remote Mode ",NULL, NULL, &g_app_params.connectivity.enable, 0, 1},
+	{ "CAN Output ",NULL, NULL, &g_app_params.connectivity.can_enable, 0, 1},
+	{ "USB Output ",NULL, NULL, &g_app_params.connectivity.usb_enable, 0, 1},
 };
 static Menu gConectivityMenu = {
     .items = CONNECTIVITY_ITEMS,
@@ -406,8 +396,8 @@ static Menu gConectivityMenu = {
 
 static const MenuItem TRIGGER_ITEMS[] = {
     { "< Return", act_back,        NULL },
-    { "Enable ",NULL, NULL, &triggerEnable, 0, 1},
-	{ "Relay Ch.",NULL, NULL, &triggerChannel, 1, 4},
+    { "Enable ",NULL, NULL, &g_app_params.trigger.enable, 0, 1},
+	{ "Relay Ch.",NULL, NULL, &g_app_params.trigger.channel, 1, 4},
 };
 static Menu gTriggerMenu = {
     .items = TRIGGER_ITEMS,
@@ -453,7 +443,7 @@ static Menu gRelayMenu = {
 // Note: Items can either have an on_select action OR a .submenu
 
 static const MenuItem MAIN_ITEMS[] = {
-    { "Start Test",    act_start,     NULL },
+    { "Testing", NULL,          &gTestMenu },
     { "Relays", NULL,          &gRelayMenu },
 	{ "Mosfets", NULL,          &gMosfetMenu },
 	{ "Trigger", NULL,          &gTriggerMenu },
@@ -472,6 +462,65 @@ static Menu gMainMenu = {
     .flags = MENU_FLAG_WRAP, // main menu can wrap
 };
 
+static app_test_screen_t s_test_screen = APP_TEST_SCREEN_NONE;
+static uint8_t s_remote_screen_drawn = 0;
+static uint8_t s_test_screen_drawn = 0;
+
+static void app_menu_draw_remote_screen(void) {
+    oled_clear();
+    oled_write_line_full(2, "REMOTE MODE");
+    oled_write_line_full(3, "<RETURN MANUAL");
+}
+
+static void app_menu_draw_test_screen(app_test_screen_t screen) {
+    const char *top = "";
+    const char *bot = "";
+
+    switch (screen) {
+    case APP_TEST_SCREEN_START:
+        top = "START TEST";
+        bot = "PRESS TO START";
+        break;
+    case APP_TEST_SCREEN_RUNNING:
+        top = "TEST";
+        bot = "STOP TEST";
+        break;
+    case APP_TEST_SCREEN_STOP:
+        top = "STOP TEST";
+        bot = "<RETURN TO MENU";
+        break;
+    case APP_TEST_SCREEN_OK:
+        top = "TEST OK";
+        bot = "<RETURN TO MENU";
+        break;
+    case APP_TEST_SCREEN_ERROR_MAX_CURRENT:
+        top = "ERROR MAX CURRENT";
+        bot = "<RETURN TO MENU";
+        break;
+    case APP_TEST_SCREEN_ERROR_ZERO_CURRENT:
+        top = "ERROR 0 CURRENT";
+        bot = "<RETURN TO MENU";
+        break;
+    case APP_TEST_SCREEN_NONE:
+    default:
+        return;
+    }
+
+    oled_clear();
+    oled_write_line_full(2, top);
+    oled_write_line_full(3, bot);
+}
+
+void app_menu_set_test_screen(app_test_screen_t screen)
+{
+    s_test_screen = screen;
+    s_test_screen_drawn = 0;
+}
+
+app_test_screen_t app_menu_get_test_screen(void)
+{
+    return s_test_screen;
+}
 
 
 
@@ -484,10 +533,51 @@ void app_menu_init(void) {
 
 void app_menu_task(void) {
     extern void menu_poll(Menu *menu); // from encoder_menu_glue.c
+    extern uint8_t menu_encoder_take_press(void);
+    app_status_t st = app_get_status();
+
+    if (st.state == APP_STATE_TEST) {
+        if (!s_test_screen_drawn || s_test_screen != APP_TEST_SCREEN_NONE) {
+            app_menu_draw_test_screen(s_test_screen);
+            s_test_screen_drawn = 1;
+        }
+        if (menu_encoder_take_press()) {
+            app_menu_set_test_screen(APP_TEST_SCREEN_STOP);
+            app_post_event((app_event_t){ .type = APP_EVT_TEST_STOP });
+        }
+        return;
+    }
+
+    if (st.state == APP_STATE_REMOTE) {
+        if (!s_remote_screen_drawn) {
+            app_menu_draw_remote_screen();
+            s_remote_screen_drawn = 1;
+        }
+        if (menu_encoder_take_press()) {
+            g_app_params.connectivity.enable = 0;
+            app_post_event((app_event_t){ .type = APP_EVT_CMD_MODE_MANUAL });
+            s_remote_screen_drawn = 0;
+            oled_clear();
+            menu_draw_full(menu_get_active());
+        }
+        return;
+    }
+
+    s_remote_screen_drawn = 0;
+    s_test_screen_drawn = 0;
     menu_poll(menu_get_active());
 }
 
+void app_menu_on_value_commit(const MenuItem *it)
+{
+    (void)it;
+    io_apply(io_get());
 
-
-
-
+    if (it && it->value_ptr == &g_app_params.connectivity.enable) {
+        if (g_app_params.connectivity.enable != 0) {
+            app_post_event((app_event_t){ .type = APP_EVT_CMD_MODE_REMOTE });
+        } else {
+            app_post_event((app_event_t){ .type = APP_EVT_CMD_MODE_MANUAL });
+        }
+    }
+}

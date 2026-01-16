@@ -8,8 +8,24 @@
 #ifndef USER_INC_APP_MENU_H_
 #define USER_INC_APP_MENU_H_
 
+#include "menu.h"
+
 
 void app_menu_init(void);
 void app_menu_task(void);
+void app_menu_on_value_commit(const MenuItem *it);
+
+typedef enum {
+    APP_TEST_SCREEN_NONE = 0,
+    APP_TEST_SCREEN_START,
+    APP_TEST_SCREEN_RUNNING,
+    APP_TEST_SCREEN_STOP,
+    APP_TEST_SCREEN_OK,
+    APP_TEST_SCREEN_ERROR_MAX_CURRENT,
+    APP_TEST_SCREEN_ERROR_ZERO_CURRENT,
+} app_test_screen_t;
+
+void app_menu_set_test_screen(app_test_screen_t screen);
+app_test_screen_t app_menu_get_test_screen(void);
 
 #endif /* USER_INC_APP_MENU_H_ */

@@ -1,0 +1,62 @@
+AETS parameter command & menu verification tests
+
+Purpose
+- Verify that menu-edited parameters are stored, reflected via USB commands, and applied to output gating and mux control.
+- Verify remote parameter commands update the menu and immediately affect output behavior where applicable.
+
+Pre-checks
+- Connect USB CDC terminal, OLED/encoder, and observe relay/MOSFET hardware state (LEDs or scope).
+- Start from MANUAL mode.
+
+Menu parameter editing
+1) Relay enable gating
+   - Navigate to Relays -> Set Relay -> Relay 1 -> Enable.
+   - Set Enable = 0.
+   - Send: relay set <cmdId> 1 1. Confirm relay does NOT turn on.
+   - Set Enable = 1. Send: relay set <cmdId> 1 1. Confirm relay turns on.
+
+2) MOSFET enable gating
+   - Navigate to Mosfets -> MOSFET 1 -> Enable.
+   - Set Enable = 0, send: mosfet set <cmdId> 1 1. Confirm MOSFET stays off.
+   - Set Enable = 1, send: mosfet set <cmdId> 1 1. Confirm MOSFET turns on.
+
+3) MOSFET external control -> MUX EXT
+   - Navigate to Mosfets -> MOSFET 1 -> Ext. Control.
+   - Set Ext. Control = 1. Confirm MUX channel 1 goes to EXT (LED/scope).
+   - Try: mosfet set <cmdId> 1 1. Confirm MOSFET stays off while ext control is enabled.
+   - Set Ext. Control = 0. Confirm MUX can be driven by mux command again.
+
+4) Parameter value storage
+   - Edit Relay 1 Ton/Toff/I-max and Mosfet 1 Ton/Toff/Sw Cnt via menu.
+   - Send: param relay get <cmdId> 1 and param mosfet get <cmdId> 1.
+   - Confirm returned values match menu edits.
+
+USB command parameter editing
+5) Relay parameter set/get
+   - Send: param relay set <cmdId> 2 1 250 250 800 12
+   - Send: param relay get <cmdId> 2
+   - Confirm values match, and relay enable gating works (relay set 2 1).
+
+6) MOSFET parameter set/get
+   - Send: param mosfet set <cmdId> 2 1 1 300 300 7
+   - Send: param mosfet get <cmdId> 2
+   - Confirm ext control forces mux 2 EXT and MOSFET output off.
+
+7) Trigger parameter set/get
+   - Send: param trigger set <cmdId> 1 3
+   - Send: param trigger get <cmdId>
+   - Confirm values match and menu shows updated values.
+
+8) Connectivity/buzzer set/get
+   - Send: param conn set <cmdId> 1 1 0
+   - Send: param conn get <cmdId>
+   - Send: param buzzer set <cmdId> 1
+   - Send: param buzzer get <cmdId>
+   - Confirm menu shows updated values.
+
+Oscilloscope checks (recommended)
+- Verify MOSFET/MUX lines for ext control toggling with param or menu edits.
+- Verify relay coil control lines stay low when relay enable is 0 and toggle when set to 1.
+
+Notes
+- These tests validate parameter storage, command handling, and output gating behavior added in the latest update.

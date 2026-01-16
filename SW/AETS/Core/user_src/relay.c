@@ -8,6 +8,7 @@
 
 #include "relay.h"
 #include "main.h"
+#include "app_params.h"
 
 static GPIO_TypeDef* const relay_ports[4] = { GPIO_RELAY1_GPIO_Port, GPIO_RELAY2_GPIO_Port, GPIO_RELAY3_GPIO_Port, GPIO_RELAY4_GPIO_Port };
 static const uint16_t relay_pins [4] = { GPIO_RELAY1_Pin, GPIO_RELAY2_Pin, GPIO_RELAY3_Pin, GPIO_RELAY4_Pin };
@@ -22,9 +23,10 @@ Relay_AllOff();
 
 void Relay_Set(uint8_t index, bool on)
 {
-if (index < 4) {
-HAL_GPIO_WritePin(relay_ports[index], relay_pins[index], on ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
+	if (index < 4) {
+		bool allow = (g_app_params.relays[index].enabled != 0);
+		HAL_GPIO_WritePin(relay_ports[index], relay_pins[index], (on && allow) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	}
 }
 
 
