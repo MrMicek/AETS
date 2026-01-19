@@ -1,0 +1,14 @@
+Changes implemented:
+- Added test parameter snapshot support in test_seq so relay/mosfet ton/toff and switch counts are applied during the test run; remaining counts decrement on each ON transition.
+- Fixed the test sequencer so each relay/mosfet repeats ON/OFF cycles until its remaining switch count reaches zero before moving to the next channel.
+- Trigger output now pulses on every positive edge of the configured relay channel.
+- Rebuilt the test UI flow: a Start Test submenu provides Current Settings and Profile 1-6 selection, and the running screen now shows live counts and ON/OFF state with top/bottom pages.
+- Added end-of-test screens for manual stop, success, max-current error, and zero-current error.
+- Profiles are not yet implemented; selecting a profile uses the current settings as a placeholder.
+
+How to test:
+1) On the device, open Testing -> Start Test and select "Current Settings". Verify the test starts and the running screen updates remaining counts for enabled relays/mosfets.
+2) Rotate the encoder to switch between TEST TOP and TEST BOT pages while the test is running.
+3) Press the encoder during the test to stop. Confirm the STOP TEST screen appears, then press again to return to the menu.
+4) Configure Trigger -> Enable = 1 and select a Relay Channel. With an oscilloscope on TRIGGER_OUT, verify a pulse occurs on every relay ON edge (positive transition).
+5) Set relay/mosfet Ton/Toff and switch count values, start the test, and verify the waveform timing matches the configured parameters.

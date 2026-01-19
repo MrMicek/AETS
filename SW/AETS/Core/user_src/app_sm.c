@@ -125,11 +125,27 @@ static void app_handle_event(app_event_t evt, uint32_t now_ms)
         if (s_ctx.status.state == APP_STATE_TEST) {
             s_ctx.status.test_state = APP_TEST_ABORTING;
             test_seq_stop();
-            app_enter_state(s_ctx.status.return_state, now_ms);
+            if (evt.type == APP_EVT_TEST_STOP) {
+                app_menu_set_test_screen(APP_TEST_SCREEN_STOP);
+            } else {
+                if (evt.a == 2U) {
+                    app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_ZERO_CURRENT);
+                } else {
+                    app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_MAX_CURRENT);
+                }
+            }
         }
         break;
 
     case APP_EVT_TEST_DONE:
+        if (s_ctx.status.state == APP_STATE_TEST) {
+            s_ctx.status.test_state = APP_TEST_IDLE;
+            test_seq_stop();
+            app_menu_set_test_screen(APP_TEST_SCREEN_OK);
+        }
+        break;
+
+    case APP_EVT_TEST_EXIT:
         if (s_ctx.status.state == APP_STATE_TEST) {
             s_ctx.status.test_state = APP_TEST_IDLE;
             app_enter_state(s_ctx.status.return_state, now_ms);

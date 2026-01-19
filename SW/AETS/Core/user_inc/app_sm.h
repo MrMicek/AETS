@@ -34,6 +34,7 @@ typedef enum {
     APP_EVT_TEST_STOP,
     APP_EVT_TEST_DONE,
     APP_EVT_TEST_FAIL,
+    APP_EVT_TEST_EXIT,
     APP_EVT_FAULT,
     APP_EVT_CLEAR_FAULT
 } app_event_type_t;
