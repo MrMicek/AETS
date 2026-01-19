@@ -1,4 +1,12 @@
-../Core/user_src/test_seq.c:26:17:clamp_delay_ms	2
-../Core/user_src/test_seq.c:31:6:test_seq_start	1
-../Core/user_src/test_seq.c:39:6:test_seq_stop	1
-../Core/user_src/test_seq.c:45:6:test_seq_tick	17
+../Core/user_src/test_seq.c:37:17:clamp_delay_ms	2
+../Core/user_src/test_seq.c:42:17:relay_count_from_k	2
+../Core/user_src/test_seq.c:50:13:test_seq_reset_remaining	6
+../Core/user_src/test_seq.c:68:6:test_seq_set_params_current	1
+../Core/user_src/test_seq.c:77:6:test_seq_set_params_profile	1
+../Core/user_src/test_seq.c:83:6:test_seq_start	2
+../Core/user_src/test_seq.c:95:6:test_seq_stop	1
+../Core/user_src/test_seq.c:101:6:test_seq_tick	19
+../Core/user_src/test_seq.c:181:10:test_seq_get_relay_remaining	2
+../Core/user_src/test_seq.c:189:10:test_seq_get_mosfet_remaining	2
+../Core/user_src/test_seq.c:197:6:test_seq_relay_is_enabled	2
+../Core/user_src/test_seq.c:205:6:test_seq_mosfet_is_enabled	4

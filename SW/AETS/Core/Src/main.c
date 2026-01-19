@@ -183,7 +183,6 @@ int main(void)
 //    a_ma[2] = Current_Read_mA(current_ch3);
 //    a_ma[3] = Current_Read_mA(current_ch4);
 
-    HAL_Delay(1);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

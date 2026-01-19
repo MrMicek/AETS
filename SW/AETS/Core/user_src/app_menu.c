@@ -19,6 +19,7 @@
 #include "encoder.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include "buzzer.h"
 
 // Common back action
 static void saveToProfile(int n) {
@@ -227,7 +228,8 @@ static Menu gProfile6Menu = {
     .flags = 0,
 };
 
-static const MenuItem TEST_START_ITEMS[] = {
+
+static const MenuItem TEST_ITEMS[] = {
     { "< Return", act_back,        NULL },
     { "Current Settings", act_test_current, NULL },
     { "Profile 1", act_test_profile1, NULL },
@@ -236,19 +238,6 @@ static const MenuItem TEST_START_ITEMS[] = {
     { "Profile 4", act_test_profile4, NULL },
     { "Profile 5", act_test_profile5, NULL },
     { "Profile 6", act_test_profile6, NULL },
-};
-static Menu gTestStartMenu = {
-    .items = TEST_START_ITEMS,
-    .count = sizeof(TEST_START_ITEMS)/sizeof(TEST_START_ITEMS[0]),
-    .selected = 0, .top = 0,
-    .last_drawn_selected = -1, .last_drawn_top = -1,
-    .parent = NULL,
-    .flags = 0,
-};
-
-static const MenuItem TEST_ITEMS[] = {
-    { "< Return", act_back,        NULL },
-    { "Start Test", NULL, &gTestStartMenu },
 };
 static Menu gTestMenu = {
     .items = TEST_ITEMS,
@@ -455,7 +444,7 @@ static Menu gRelayMenu = {
 // Note: Items can either have an on_select action OR a .submenu
 
 static const MenuItem MAIN_ITEMS[] = {
-    { "Testing", NULL,          &gTestMenu },
+    { "Start test", NULL,          &gTestMenu },
     { "Relays", NULL,          &gRelayMenu },
 	{ "Mosfets", NULL,          &gMosfetMenu },
 	{ "Trigger", NULL,          &gTriggerMenu },
@@ -528,7 +517,7 @@ static void app_menu_draw_test_running(uint8_t page)
     const io_state_t *io = io_get();
 
     if (page == 0U) {
-        snprintf(line, sizeof(line), "TEST TOP  %c Stop Test", 0xDF);
+        snprintf(line, sizeof(line), "%c Stop Test", 0xDF);
         oled_write_line_full(1, line);
         oled_write_line_full(2, "Count Left:");
         format_test_entry(line, sizeof(line), 'R', 0U, test_seq_relay_is_enabled(0U),
@@ -541,7 +530,7 @@ static void app_menu_draw_test_running(uint8_t page)
         format_test_entry_compact(line, sizeof(line), 'R', 2U, test_seq_relay_is_enabled(2U),
                                   test_seq_get_relay_remaining(2U), io->relays[2]);
         char line1[21];
-        snprintf(line1, sizeof(line1), "TEST BOT  %s", line);
+        snprintf(line1, sizeof(line1), "%s", line);
         oled_write_line_full(1, line1);
         format_test_entry(line, sizeof(line), 'R', 3U, test_seq_relay_is_enabled(3U),
                           test_seq_get_relay_remaining(3U), io->relays[3]);
@@ -565,39 +554,40 @@ static void app_menu_draw_test_screen(app_test_screen_t screen) {
         break;
     case APP_TEST_SCREEN_STOP:
         oled_clear();
-        snprintf(line, sizeof(line), "%c < RETURN TO MENU", 0xDF);
+        snprintf(line, sizeof(line), "%c < Return", 0xDF);
         oled_write_line_full(1, line);
-        oled_write_line_full(2, "TEST STOPPED");
-        oled_write_line_full(3, "");
+        oled_write_line_full(2, "Test Stopped");
+        oled_write_line_full(3, "Manually");
         oled_write_line_full(4, "");
         break;
     case APP_TEST_SCREEN_OK:
         oled_clear();
-        snprintf(line, sizeof(line), "%c < RETURN TO MENU", 0xDF);
+        snprintf(line, sizeof(line), "%c < Return", 0xDF);
         oled_write_line_full(1, line);
-        oled_write_line_full(2, "TEST FINISHED");
-        oled_write_line_full(3, "SUCCESSFULLY");
+        oled_write_line_full(2, "Test Finished");
+        oled_write_line_full(3, "Successfully");
         oled_write_line_full(4, "");
         break;
     case APP_TEST_SCREEN_ERROR_MAX_CURRENT:
         oled_clear();
-        snprintf(line, sizeof(line), "%c < RETURN TO MENU", 0xDF);
+        snprintf(line, sizeof(line), "%c < Return", 0xDF);
         oled_write_line_full(1, line);
-        oled_write_line_full(2, "TEST ENDED");
-        oled_write_line_full(3, "ERROR:");
-        oled_write_line_full(4, "CURRENT EXCEEDED");
+        oled_write_line_full(2, "Test Ended");
+        oled_write_line_full(3, "Error:");
+        oled_write_line_full(4, "Current Exceeded");
         break;
     case APP_TEST_SCREEN_ERROR_ZERO_CURRENT:
         oled_clear();
-        snprintf(line, sizeof(line), "%c < RETURN TO MENU", 0xDF);
+        snprintf(line, sizeof(line), "%c < Return", 0xDF);
         oled_write_line_full(1, line);
-        oled_write_line_full(2, "TEST ENDED");
-        oled_write_line_full(3, "ERROR:");
-        oled_write_line_full(4, "NO CURRENT FLOW");
+        oled_write_line_full(2, "Test Ended");
+        oled_write_line_full(3, "Error:");
+        oled_write_line_full(4, "No Current Flow");
         break;
     case APP_TEST_SCREEN_NONE:
     default:
-        return;
+    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
+    	act_back();
     }
 }
 
