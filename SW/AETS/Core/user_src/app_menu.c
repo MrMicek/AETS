@@ -503,7 +503,7 @@ static void format_test_entry_compact(char *line, size_t line_len, char prefix, 
 {
     const char *state = on ? "ON" : "OFF";
     if (!enabled) {
-        snprintf(line, line_len, "%c%u:*****%s", prefix, (unsigned)(index + 1U), "***");
+        snprintf(line, line_len, "%c%u: ***** ***", prefix, (unsigned)(index + 1U));
     } else {
         uint32_t shown = (remaining > 99999U) ? 99999U : remaining;
         snprintf(line, line_len, "%c%u:%05lu%s", prefix, (unsigned)(index + 1U),

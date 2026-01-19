@@ -133,7 +133,10 @@ bool test_seq_tick(uint32_t now_ms)
         next.relays[s_relay_idx] = false;
         io_apply(&next);
         s_deadline_ms = now_ms + clamp_delay_ms(s_params.relays[s_relay_idx].toff_ms);
-        s_relay_idx++;
+        /* advance only after this relay exhausts its remaining count */
+        if (s_relay_remaining[s_relay_idx] == 0U) {
+            s_relay_idx++;
+        }
         s_state = TEST_SEQ_RELAY_ON;
         break;
     }
@@ -164,7 +167,10 @@ bool test_seq_tick(uint32_t now_ms)
         next.mosfet[s_mosfet_idx] = false;
         io_apply(&next);
         s_deadline_ms = now_ms + clamp_delay_ms(s_params.mosfets[s_mosfet_idx].toff_ms);
-        s_mosfet_idx++;
+        /* advance only after this MOSFET exhausts its remaining count */
+        if (s_mosfet_remaining[s_mosfet_idx] == 0U) {
+            s_mosfet_idx++;
+        }
         s_state = TEST_SEQ_MOSFET_ON;
         break;
     }
