@@ -49,7 +49,8 @@ Core/user_src/app_sm.o: ../Core/user_src/app_sm.c \
  ../Core/Inc/main.h \
  C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_menu.h \
  C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/test_seq.h
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/test_seq.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay_health_store.h
 C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_sm.h:
 C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h:
 C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/io_control.h:
@@ -101,3 +102,4 @@ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/utility.h:
 C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_menu.h:
 C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h:
 C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/test_seq.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay_health_store.h:

@@ -1,0 +1,9 @@
+../Core/user_src/relay_health_store.c:25:17:crc16_ccitt	4
+../Core/user_src/relay_health_store.c:38:17:slot_addr	1
+../Core/user_src/relay_health_store.c:43:26:relay_health_save	3
+../Core/user_src/relay_health_store.c:64:26:relay_health_load_internal	9
+../Core/user_src/relay_health_store.c:97:6:relay_health_init	3
+../Core/user_src/relay_health_store.c:111:19:relay_health_save_now	1
+../Core/user_src/relay_health_store.c:116:6:relay_health_request_pending	1
+../Core/user_src/relay_health_store.c:121:6:relay_health_handle_pending	2
+../Core/user_src/relay_health_store.c:129:6:relay_health_update_from_test	6

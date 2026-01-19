@@ -1,8 +1,8 @@
-../Core/user_src/kvstore.c:17:17:crc16_ccitt	4
-../Core/user_src/kvstore.c:30:17:slot_addr	1
-../Core/user_src/kvstore.c:35:6:KV_Init	7
-../Core/user_src/kvstore.c:73:10:KV_GetCounter	1
-../Core/user_src/kvstore.c:78:6:KV_IncCounter	1
-../Core/user_src/kvstore.c:83:6:KV_SaveCounter	2
-../Core/user_src/kvstore.c:109:6:KV_HandlePending	3
-../Core/user_src/kvstore.c:139:6:Power_OnBrownout	2
+../Core/user_src/kvstore.c:18:17:crc16_ccitt	4
+../Core/user_src/kvstore.c:31:17:slot_addr	1
+../Core/user_src/kvstore.c:36:6:KV_Init	7
+../Core/user_src/kvstore.c:74:10:KV_GetCounter	1
+../Core/user_src/kvstore.c:79:6:KV_IncCounter	1
+../Core/user_src/kvstore.c:84:6:KV_SaveCounter	2
+../Core/user_src/kvstore.c:110:6:KV_HandlePending	3
+../Core/user_src/kvstore.c:140:6:Power_OnBrownout	2

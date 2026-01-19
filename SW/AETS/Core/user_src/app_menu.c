@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "buzzer.h"
+#include "relay_health_store.h"
 
 // Common back action
 static void saveToProfile(int n) {
@@ -300,10 +301,10 @@ static Menu gSetRelayMenu = {
 
 static const MenuItem RELAY_HEALTH_ITEMS[] = {
     { "< Return", act_back,        NULL },
-    { "Relay1 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health[0] },
-	{ "Relay2 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health[1] },
-	{ "Relay3 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health[2] },
-	{ "Relay4 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health[3] },
+    { "Relay1 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health_remaining_k[0] },
+	{ "Relay2 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health_remaining_k[1] },
+	{ "Relay3 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health_remaining_k[2] },
+	{ "Relay4 (k)", NULL, NULL, NULL, 0, 0, &g_app_params.relay_health_remaining_k[3] },
 };
 static Menu gRelayHealth = {
     .items = RELAY_HEALTH_ITEMS,
@@ -316,10 +317,10 @@ static Menu gRelayHealth = {
 
 static const MenuItem SET_RELAY_HEALTH_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
-	{ "Relay1 (k)", NULL, NULL, &g_app_params.relay_health[0], 0, 2000},
-	{ "Relay2 (k)", NULL, NULL, &g_app_params.relay_health[1], 0, 2000},
-	{ "Relay3 (k)", NULL, NULL, &g_app_params.relay_health[2], 0, 2000},
-	{ "Relay4 (k)", NULL, NULL, &g_app_params.relay_health[3], 0, 2000},
+	{ "Relay1 (k)", NULL, NULL, &g_app_params.relay_health_set_k[0], 0, 2000},
+	{ "Relay2 (k)", NULL, NULL, &g_app_params.relay_health_set_k[1], 0, 2000},
+	{ "Relay3 (k)", NULL, NULL, &g_app_params.relay_health_set_k[2], 0, 2000},
+	{ "Relay4 (k)", NULL, NULL, &g_app_params.relay_health_set_k[3], 0, 2000},
 };
 static Menu gSetRelayHealth = {
     .items = SET_RELAY_HEALTH_ITEMS,

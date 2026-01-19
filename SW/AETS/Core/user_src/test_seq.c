@@ -31,6 +31,7 @@ typedef struct {
 
 static test_seq_params_t s_params;
 static uint32_t s_relay_remaining[4];
+static uint32_t s_relay_initial[4];
 static uint32_t s_mosfet_remaining[2];
 static uint8_t s_params_valid = 0;
 
@@ -55,6 +56,7 @@ static void test_seq_reset_remaining(void)
         } else {
             s_relay_remaining[i] = 0;
         }
+        s_relay_initial[i] = s_relay_remaining[i];
     }
     for (uint8_t i = 0; i < 2U; ++i) {
         if (s_params.mosfets[i].enabled != 0 && s_params.mosfets[i].ext_control == 0) {
@@ -190,6 +192,14 @@ uint32_t test_seq_get_relay_remaining(uint8_t index)
         return 0;
     }
     return s_relay_remaining[index];
+}
+
+uint32_t test_seq_get_relay_initial(uint8_t index)
+{
+    if (index >= 4U) {
+        return 0;
+    }
+    return s_relay_initial[index];
 }
 
 uint32_t test_seq_get_mosfet_remaining(uint8_t index)
