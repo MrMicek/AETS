@@ -6,6 +6,7 @@
 #include "main.h"
 #include "app_menu.h"
 #include "test_seq.h"
+#include "relay_health_store.h"
 
 #define APP_EVENT_QUEUE_LEN 16
 
@@ -124,12 +125,30 @@ static void app_handle_event(app_event_t evt, uint32_t now_ms)
     case APP_EVT_TEST_FAIL:
         if (s_ctx.status.state == APP_STATE_TEST) {
             s_ctx.status.test_state = APP_TEST_ABORTING;
+            relay_health_update_from_test();
             test_seq_stop();
-            app_enter_state(s_ctx.status.return_state, now_ms);
+            if (evt.type == APP_EVT_TEST_STOP) {
+                app_menu_set_test_screen(APP_TEST_SCREEN_STOP);
+            } else {
+                if (evt.a == 2U) {
+                    app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_ZERO_CURRENT);
+                } else {
+                    app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_MAX_CURRENT);
+                }
+            }
         }
         break;
 
     case APP_EVT_TEST_DONE:
+        if (s_ctx.status.state == APP_STATE_TEST) {
+            s_ctx.status.test_state = APP_TEST_IDLE;
+            relay_health_update_from_test();
+            test_seq_stop();
+            app_menu_set_test_screen(APP_TEST_SCREEN_OK);
+        }
+        break;
+
+    case APP_EVT_TEST_EXIT:
         if (s_ctx.status.state == APP_STATE_TEST) {
             s_ctx.status.test_state = APP_TEST_IDLE;
             app_enter_state(s_ctx.status.return_state, now_ms);
