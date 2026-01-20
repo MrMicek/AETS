@@ -1,0 +1,6 @@
+../Core/user_src/profile_store.c:17:17:crc16_ccitt	4
+../Core/user_src/profile_store.c:30:17:profile_addr	1
+../Core/user_src/profile_store.c:35:6:profile_store_from_params	3
+../Core/user_src/profile_store.c:48:6:profile_store_apply	3
+../Core/user_src/profile_store.c:60:6:profile_store_save	4
+../Core/user_src/profile_store.c:77:6:profile_store_load	7

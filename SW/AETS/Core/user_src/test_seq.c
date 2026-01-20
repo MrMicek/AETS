@@ -7,6 +7,7 @@
 #include "test_seq.h"
 #include "app_params.h"
 #include "io_control.h"
+#include "profile_store.h"
 #include <string.h>
 
 typedef enum {
@@ -78,8 +79,16 @@ void test_seq_set_params_current(void)
 
 void test_seq_set_params_profile(uint8_t profile_id)
 {
-    (void)profile_id;
-    test_seq_set_params_current();
+    app_profile_t profile;
+    if (!profile_store_load(profile_id, &profile)) {
+        test_seq_set_params_current();
+        return;
+    }
+    memcpy(&s_params.relays[0], &profile.relays[0], sizeof(s_params.relays));
+    memcpy(&s_params.mosfets[0], &profile.mosfets[0], sizeof(s_params.mosfets));
+    memcpy(&s_params.trigger, &profile.trigger, sizeof(s_params.trigger));
+    test_seq_reset_remaining();
+    s_params_valid = 1;
 }
 
 void test_seq_start(uint32_t now_ms)
@@ -200,6 +209,14 @@ uint32_t test_seq_get_relay_initial(uint8_t index)
         return 0;
     }
     return s_relay_initial[index];
+}
+
+uint32_t test_seq_get_relay_imax(uint8_t index)
+{
+    if (index >= 4U) {
+        return 0;
+    }
+    return (uint32_t)((s_params.relays[index].imax_ma > 0) ? s_params.relays[index].imax_ma : 0);
 }
 
 uint32_t test_seq_get_mosfet_remaining(uint8_t index)

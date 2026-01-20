@@ -21,14 +21,21 @@
 #include <stdbool.h>
 #include "buzzer.h"
 #include "relay_health_store.h"
+#include "profile_store.h"
 
 // Common back action
 static void saveToProfile(int n) {
-
+    (void)profile_store_save((uint8_t)n, &g_app_params);
 }
 
 // Common back action
 static void loadFromProfile(int n) {
+    app_profile_t profile;
+    if (profile_store_load((uint8_t)n, &profile)) {
+        profile_store_apply(&profile, &g_app_params);
+        io_apply(io_get());
+        menu_draw_full(menu_get_active());
+    }
 }
 
 static void saveToProfile1(void) { saveToProfile(1); }
@@ -710,6 +717,16 @@ void app_menu_on_value_commit(const MenuItem *it)
             app_post_event((app_event_t){ .type = APP_EVT_CMD_MODE_REMOTE });
         } else {
             app_post_event((app_event_t){ .type = APP_EVT_CMD_MODE_MANUAL });
+        }
+    }
+
+    if (it) {
+        for (uint8_t i = 0; i < 4U; ++i) {
+            if (it->value_ptr == &g_app_params.relay_health_set_k[i]) {
+                g_app_params.relay_health_remaining_k[i] = g_app_params.relay_health_set_k[i];
+                relay_health_save_now(200U);
+                break;
+            }
         }
     }
 }
