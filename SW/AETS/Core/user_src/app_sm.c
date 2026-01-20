@@ -6,8 +6,13 @@
 #include "main.h"
 #include "app_menu.h"
 #include "test_seq.h"
+#include "relay_health_store.h"
+#include "current.h"
+#include <string.h>
 
 #define APP_EVENT_QUEUE_LEN 16
+#define CURRENT_FAULT_STREAK_LIMIT 10U
+#define CURRENT_SAMPLE_PERIOD_MS 100U
 
 /*
  * Developer note: application state machine event flow
@@ -30,6 +35,10 @@ typedef struct {
 } app_context_t;
 
 static app_context_t s_ctx;
+static uint32_t s_current_last_ms = 0;
+static uint8_t s_current_over_streak[4];
+static uint8_t s_current_zero_streak[4];
+static uint8_t s_current_fault_posted = 0U;
 
 static void app_handle_event(app_event_t evt, uint32_t now_ms);
 static void app_enter_state(app_state_t new_state, uint32_t now_ms);
@@ -83,6 +92,42 @@ void app_tick(uint32_t now_ms)
         if (test_seq_tick(now_ms)) {
             app_post_event((app_event_t){ .type = APP_EVT_TEST_DONE });
         }
+        if (s_ctx.status.test_state == APP_TEST_RUNNING && (now_ms - s_current_last_ms) >= CURRENT_SAMPLE_PERIOD_MS) {
+            s_current_last_ms = now_ms;
+            const io_state_t *io = io_get();
+            for (uint8_t i = 0; i < 4U; ++i) {
+                if (!test_seq_relay_is_enabled(i) || !io->relays[i]) {
+                    s_current_over_streak[i] = 0U;
+                    s_current_zero_streak[i] = 0U;
+                    continue;
+                }
+                uint32_t current_ma = Current_Read_mA(i);
+                uint32_t imax_ma = test_seq_get_relay_imax(i);
+                if (imax_ma > 0U && current_ma > imax_ma) {
+                    if (s_current_over_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
+                        s_current_over_streak[i]++;
+                    }
+                } else {
+                    s_current_over_streak[i] = 0U;
+                }
+                if (current_ma == 0U) {
+                    if (s_current_zero_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
+                        s_current_zero_streak[i]++;
+                    }
+                } else {
+                    s_current_zero_streak[i] = 0U;
+                }
+
+                if (s_current_fault_posted == 0U &&
+                    (s_current_over_streak[i] >= CURRENT_FAULT_STREAK_LIMIT ||
+                     s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT)) {
+                    s_current_fault_posted = 1U;
+                    app_post_event((app_event_t){ .type = APP_EVT_TEST_FAIL,
+                                                  .a = (s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT) ? 2U : 1U });
+                    break;
+                }
+            }
+        }
     }
 }
 
@@ -124,12 +169,30 @@ static void app_handle_event(app_event_t evt, uint32_t now_ms)
     case APP_EVT_TEST_FAIL:
         if (s_ctx.status.state == APP_STATE_TEST) {
             s_ctx.status.test_state = APP_TEST_ABORTING;
+            relay_health_update_from_test();
             test_seq_stop();
-            app_enter_state(s_ctx.status.return_state, now_ms);
+            if (evt.type == APP_EVT_TEST_STOP) {
+                app_menu_set_test_screen(APP_TEST_SCREEN_STOP);
+            } else {
+                if (evt.a == 2U) {
+                    app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_ZERO_CURRENT);
+                } else {
+                    app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_MAX_CURRENT);
+                }
+            }
         }
         break;
 
     case APP_EVT_TEST_DONE:
+        if (s_ctx.status.state == APP_STATE_TEST) {
+            s_ctx.status.test_state = APP_TEST_IDLE;
+            relay_health_update_from_test();
+            test_seq_stop();
+            app_menu_set_test_screen(APP_TEST_SCREEN_OK);
+        }
+        break;
+
+    case APP_EVT_TEST_EXIT:
         if (s_ctx.status.state == APP_STATE_TEST) {
             s_ctx.status.test_state = APP_TEST_IDLE;
             app_enter_state(s_ctx.status.return_state, now_ms);
@@ -191,6 +254,10 @@ static void app_enter_state(app_state_t new_state, uint32_t now_ms)
         s_ctx.status.test_state = APP_TEST_RUNNING;
         app_menu_set_test_screen(APP_TEST_SCREEN_RUNNING);
         test_seq_start(now_ms);
+        s_current_last_ms = now_ms;
+        memset(s_current_over_streak, 0, sizeof(s_current_over_streak));
+        memset(s_current_zero_streak, 0, sizeof(s_current_zero_streak));
+        s_current_fault_posted = 0U;
         comu_SendF("evt state %s\r\n", app_state_str(new_state));
         break;
 

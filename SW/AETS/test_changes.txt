@@ -1,0 +1,24 @@
+Changes implemented:
+- Added test parameter snapshot support in test_seq so relay/mosfet ton/toff and switch counts are applied during the test run; remaining counts decrement on each ON transition.
+- Fixed the test sequencer so each relay/mosfet repeats ON/OFF cycles until its remaining switch count reaches zero before moving to the next channel.
+- Trigger output now pulses on every positive edge of the configured relay channel.
+- Rebuilt the test UI flow: a Start Test submenu provides Current Settings and Profile 1-6 selection, and the running screen now shows live counts and ON/OFF state with top/bottom pages.
+- Added end-of-test screens for manual stop, success, max-current error, and zero-current error.
+- Profiles are not yet implemented; selecting a profile uses the current settings as a placeholder.
+- Added relay health persistence: set/remaining counts load from EEPROM at boot and remaining counts are updated after a test completes for enabled relays.
+- Added brownout pending-save handling so relay health and KV stores attempt to persist on low-voltage events.
+- Added current monitoring during tests: if a relay sees overcurrent or zero current for 10 consecutive samples while ON, the test stops with the corresponding error screen.
+- Added EEPROM-backed profiles (1-6) for saving/loading relay/mosfet/trigger/connectivity/buzzer settings (excluding relay health).
+
+How to test:
+1) On the device, open Testing -> Start Test and select "Current Settings". Verify the test starts and the running screen updates remaining counts for enabled relays/mosfets.
+2) Rotate the encoder to switch between TEST TOP and TEST BOT pages while the test is running.
+3) Press the encoder during the test to stop. Confirm the STOP TEST screen appears, then press again to return to the menu.
+4) Configure Trigger -> Enable = 1 and select a Relay Channel. With an oscilloscope on TRIGGER_OUT, verify a pulse occurs on every relay ON edge (positive transition).
+5) Set relay/mosfet Ton/Toff and switch count values, start the test, and verify the waveform timing matches the configured parameters.
+6) Open Relays -> Set Count and set Relay1 (k) to a value. Confirm Relays -> Remain Count shows the same value.
+7) Run a test with Relay1 enabled, then stop it early. Confirm the remaining count decreases after the test ends (saved to EEPROM).
+8) Power cycle the device and verify the Relay Remain Count retains its last saved value.
+9) Save a profile (Profile -> Profile 1 -> Save to profile), change relay/mosfet parameters, then Load from profile and confirm settings restore.
+10) Run a test with a relay enabled and set I-max. Force current above I-max for ~10 samples; confirm the MAX CURRENT error screen appears.
+11) Run a test with a relay enabled and force 0 current for ~10 samples; confirm the NO CURRENT FLOW error screen appears.

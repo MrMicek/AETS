@@ -42,7 +42,8 @@ typedef struct {
     trigger_params_t trigger;
     relay_params_t relays[4];
     mosfet_params_t mosfets[2];
-    int relay_health[4];
+    int relay_health_set_k[4];
+    int relay_health_remaining_k[4];
 } app_params_t;
 
 extern app_params_t g_app_params;
