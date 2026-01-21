@@ -34,6 +34,7 @@ typedef enum {
     APP_EVT_TEST_STOP,
     APP_EVT_TEST_DONE,
     APP_EVT_TEST_FAIL,
+    APP_EVT_TEST_EXIT,
     APP_EVT_FAULT,
     APP_EVT_CLEAR_FAULT
 } app_event_type_t;
@@ -56,5 +57,6 @@ void app_init(void);
 bool app_post_event(app_event_t evt);
 void app_tick(uint32_t now_ms);
 app_status_t app_get_status(void);
+uint32_t app_get_relay_current_ma(uint8_t index);
 
 #endif /* USER_INC_APP_SM_H_ */
