@@ -242,3 +242,24 @@ bool test_seq_mosfet_is_enabled(uint8_t index)
     }
     return (s_params.mosfets[index].enabled != 0) && (s_params.mosfets[index].ext_control == 0);
 }
+
+uint8_t test_seq_get_mosfet_ext_control(uint8_t index)
+{
+    if (index >= 2U) {
+        return 0U;
+    }
+    return (s_params.mosfets[index].ext_control != 0) ? 1U : 0U;
+}
+
+uint8_t test_seq_get_trigger_enabled(void)
+{
+    return (s_params.trigger.enable != 0) ? 1U : 0U;
+}
+
+uint8_t test_seq_get_trigger_channel(void)
+{
+    if (s_params.trigger.channel <= 0) {
+        return 0U;
+    }
+    return (uint8_t)s_params.trigger.channel;
+}

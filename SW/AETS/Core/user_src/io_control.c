@@ -4,6 +4,8 @@
 #include "mux.h"
 #include "relay_counter.h"
 #include "app_params.h"
+#include "app_sm.h"
+#include "test_seq.h"
 #include "trigger.h"
 #include <string.h>
 
@@ -23,20 +25,28 @@ void io_apply(const io_state_t *desired)
         return;
     }
 
+    app_status_t status = app_get_status();
+    uint8_t use_test_params = (status.state == APP_STATE_TEST) ? 1U : 0U;
     io_state_t effective = *desired;
 
     for (uint8_t i = 0; i < 4; ++i) {
-        if (g_app_params.relays[i].enabled == 0) {
+        uint8_t relay_enabled = (use_test_params != 0U) ? (test_seq_relay_is_enabled(i) ? 1U : 0U)
+                                                        : (g_app_params.relays[i].enabled != 0);
+        if (relay_enabled == 0U) {
             effective.relays[i] = false;
         }
     }
 
     for (uint8_t i = 0; i < 2; ++i) {
-        if (g_app_params.mosfets[i].enabled == 0) {
+        uint8_t mosfet_enabled = (use_test_params != 0U) ? (test_seq_mosfet_is_enabled(i) ? 1U : 0U)
+                                                         : (g_app_params.mosfets[i].enabled != 0);
+        if (mosfet_enabled == 0U) {
             effective.mosfet[i] = false;
         }
 
-        if (g_app_params.mosfets[i].ext_control != 0) {
+        if (use_test_params != 0U) {
+            effective.mux[i] = test_seq_get_mosfet_ext_control(i) ? MUX_EXT : MUX_INT;
+        } else if (g_app_params.mosfets[i].ext_control != 0) {
         	effective.mux[i] = MUX_EXT;
         }
         else {
@@ -51,7 +61,11 @@ void io_apply(const io_state_t *desired)
             Relay_Set(i, new_state);
             relay_counter_on_relay_change(i, old_state, new_state);
             if (!old_state && new_state) {
-                if (g_app_params.trigger.enable != 0 && g_app_params.trigger.channel == (int)(i + 1U)) {
+                uint8_t trigger_enabled = (use_test_params != 0U) ? test_seq_get_trigger_enabled()
+                                                                  : (g_app_params.trigger.enable != 0);
+                uint8_t trigger_channel = (use_test_params != 0U) ? test_seq_get_trigger_channel()
+                                                                  : (uint8_t)g_app_params.trigger.channel;
+                if (trigger_enabled != 0U && trigger_channel == (uint8_t)(i + 1U)) {
                     Trigger_Pulse_us(100U);
                 }
             }

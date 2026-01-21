@@ -68,12 +68,12 @@ static void act_test_profile(uint8_t profile_id) {
     app_post_event((app_event_t){ .type = APP_EVT_TEST_START });
 }
 
-static void act_test_profile1(void) { act_test_profile(1U); }
-static void act_test_profile2(void) { act_test_profile(2U); }
-static void act_test_profile3(void) { act_test_profile(3U); }
-static void act_test_profile4(void) { act_test_profile(4U); }
-static void act_test_profile5(void) { act_test_profile(5U); }
-static void act_test_profile6(void) { act_test_profile(6U); }
+static void act_test_profile1(void) { loadFromProfile(1);  act_test_profile(1U); }
+static void act_test_profile2(void) { loadFromProfile(2);  act_test_profile(2U); }
+static void act_test_profile3(void) { loadFromProfile(3);  act_test_profile(3U); }
+static void act_test_profile4(void) { loadFromProfile(4);  act_test_profile(4U); }
+static void act_test_profile5(void) { loadFromProfile(5);  act_test_profile(5U); }
+static void act_test_profile6(void) { loadFromProfile(6);  act_test_profile(6U); }
 
 // Common back action
 static void act_back(void) {
@@ -86,10 +86,10 @@ static void act_back(void) {
 static const MenuItem RELAY1_ITEMS[] = {
     { "< Return", act_back,        NULL },
 	{ "Enable", NULL, NULL, &g_app_params.relays[0].enabled, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[0].ton_ms, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[0].toff_ms, 0, 10000 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[0].ton_ms, 0, 1000000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[0].toff_ms, 0, 1000000 },
 	{ "I-max (mA)", NULL, NULL, &g_app_params.relays[0].imax_ma, 8, 4000 },
-	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[0].sw_count_k, 0, 1000 },
+	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[0].sw_count_k, 0, 1000000 },
 };
 static Menu gRelay1Menu = {
     .items = RELAY1_ITEMS,
@@ -103,10 +103,10 @@ static Menu gRelay1Menu = {
 static const MenuItem RELAY2_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
 	{ "Enable", NULL, NULL, &g_app_params.relays[1].enabled, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[1].ton_ms, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[1].toff_ms, 0, 10000 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[1].ton_ms, 0, 1000000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[1].toff_ms, 0, 1000000 },
 	{ "I-max (mA)", NULL, NULL, &g_app_params.relays[1].imax_ma, 8, 4000 },
-	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[1].sw_count_k, 0, 1000 },
+	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[1].sw_count_k, 0, 1000000 },
 };
 static Menu gRelay2Menu = {
     .items = RELAY2_ITEMS,
@@ -120,10 +120,10 @@ static Menu gRelay2Menu = {
 static const MenuItem RELAY3_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
 	{ "Enable", NULL, NULL, &g_app_params.relays[2].enabled, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[2].ton_ms, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[2].toff_ms, 0, 10000 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[2].ton_ms, 0, 1000000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[2].toff_ms, 0, 1000000 },
 	{ "I-max(mA)", NULL, NULL, &g_app_params.relays[2].imax_ma, 8, 4000 },
-	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[2].sw_count_k, 0, 1000 },
+	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[2].sw_count_k, 0, 1000000 },
 };
 static Menu gRelay3Menu = {
     .items = RELAY3_ITEMS,
@@ -137,10 +137,10 @@ static Menu gRelay3Menu = {
 static const MenuItem RELAY4_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
 	{ "Enable", NULL, NULL, &g_app_params.relays[3].enabled, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[3].ton_ms, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[3].toff_ms, 0, 10000 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.relays[3].ton_ms, 0, 1000000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.relays[3].toff_ms, 0, 1000000 },
 	{ "I-max (mA)", NULL, NULL, &g_app_params.relays[3].imax_ma, 8, 4000 },
-	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[3].sw_count_k, 0, 1000 },
+	{ "SW. Cnt (k)", NULL, NULL, &g_app_params.relays[3].sw_count_k, 0, 1000000 },
 };
 static Menu gRelay4Menu = {
     .items = RELAY4_ITEMS,
@@ -260,9 +260,9 @@ static const MenuItem MOSFET1_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
 	{ "Enable", NULL, NULL, &g_app_params.mosfets[0].enabled, 0, 1 },
 	{ "Ext. Control", NULL, NULL, &g_app_params.mosfets[0].ext_control, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &g_app_params.mosfets[0].ton_ms, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &g_app_params.mosfets[0].toff_ms, 0, 10000 },
-	{ "SW. Cnt", NULL, NULL, &g_app_params.mosfets[0].sw_count, 0, 10000 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.mosfets[0].ton_ms, 0, 1000000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.mosfets[0].toff_ms, 0, 1000000 },
+	{ "SW. Cnt", NULL, NULL, &g_app_params.mosfets[0].sw_count, 0, 1000000 },
 };
 static Menu gMosfet1Menu = {
     .items = MOSFET1_ITEMS,
@@ -277,9 +277,9 @@ static const MenuItem MOSFET2_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
 	{ "Enable", NULL, NULL, &g_app_params.mosfets[1].enabled, 0, 1 },
 	{ "Ext. Control", NULL, NULL, &g_app_params.mosfets[1].ext_control, 0, 1 },
-	{ "Ton (ms)", NULL, NULL, &g_app_params.mosfets[1].ton_ms, 0, 10000 },
-	{ "Toff (ms)", NULL, NULL, &g_app_params.mosfets[1].toff_ms, 0, 10000 },
-	{ "SW. Cnt", NULL, NULL, &g_app_params.mosfets[1].sw_count, 0, 10000 },
+	{ "Ton (ms)", NULL, NULL, &g_app_params.mosfets[1].ton_ms, 0, 1000000 },
+	{ "Toff (ms)", NULL, NULL, &g_app_params.mosfets[1].toff_ms, 0, 1000000 },
+	{ "SW. Cnt", NULL, NULL, &g_app_params.mosfets[1].sw_count, 0, 1000000 },
 };
 static Menu gMosfet2Menu = {
     .items = MOSFET2_ITEMS,
@@ -324,10 +324,10 @@ static Menu gRelayHealth = {
 
 static const MenuItem SET_RELAY_HEALTH_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
-	{ "Relay1 (k)", NULL, NULL, &g_app_params.relay_health_set_k[0], 0, 2000},
-	{ "Relay2 (k)", NULL, NULL, &g_app_params.relay_health_set_k[1], 0, 2000},
-	{ "Relay3 (k)", NULL, NULL, &g_app_params.relay_health_set_k[2], 0, 2000},
-	{ "Relay4 (k)", NULL, NULL, &g_app_params.relay_health_set_k[3], 0, 2000},
+	{ "Relay1 (k)", NULL, NULL, &g_app_params.relay_health_set_k[0], 0, 100000},
+	{ "Relay2 (k)", NULL, NULL, &g_app_params.relay_health_set_k[1], 0, 100000},
+	{ "Relay3 (k)", NULL, NULL, &g_app_params.relay_health_set_k[2], 0, 100000},
+	{ "Relay4 (k)", NULL, NULL, &g_app_params.relay_health_set_k[3], 0, 100000},
 };
 static Menu gSetRelayHealth = {
     .items = SET_RELAY_HEALTH_ITEMS,
@@ -480,6 +480,7 @@ typedef struct {
     app_test_screen_t screen;
     uint8_t page;
     uint32_t relay_remaining[4];
+    uint32_t relay_current_ma[4];
     uint32_t mosfet_remaining[2];
     uint8_t relay_on[4];
     uint8_t mosfet_on[2];
@@ -506,6 +507,34 @@ static void format_test_entry(char *line, size_t line_len, char prefix, uint8_t 
     }
 }
 
+static void format_test_entry_relay(char *line, size_t line_len, char prefix, uint8_t index,
+                                    bool enabled, uint32_t remaining, bool on, uint32_t current_ma)
+{
+    const char *state = on ? "ON " : "OFF";
+    if (!enabled) {
+        snprintf(line, line_len, "%c%u: ***** ***", prefix, (unsigned)(index + 1U));
+    } else {
+        uint32_t shown = (remaining > 99999U) ? 99999U : remaining;
+        uint32_t shown_current = (current_ma > 9999U) ? 9999U : current_ma;
+        snprintf(line, line_len, "%c%u: %05lu %s I:%4lu", prefix, (unsigned)(index + 1U),
+                 (unsigned long)shown, state, (unsigned long)shown_current);
+    }
+}
+
+static void format_test_entry_compact_relay(char *line, size_t line_len, char prefix, uint8_t index,
+                                            bool enabled, uint32_t remaining, bool on, uint32_t current_ma)
+{
+    const char *state = on ? "ON" : "OFF";
+    if (!enabled) {
+        snprintf(line, line_len, "%c%u:*****%s", prefix, (unsigned)(index + 1U), "***");
+    } else {
+        uint32_t shown = (remaining > 99999U) ? 99999U : remaining;
+        uint32_t shown_current = (current_ma > 9999U) ? 9999U : current_ma;
+        snprintf(line, line_len, "%c%u: %05lu %s I:%4lu", prefix, (unsigned)(index + 1U),
+                 (unsigned long)shown, state, (unsigned long)shown_current);
+    }
+}
+
 static void format_test_entry_compact(char *line, size_t line_len, char prefix, uint8_t index,
                                       bool enabled, uint32_t remaining, bool on)
 {
@@ -528,20 +557,24 @@ static void app_menu_draw_test_running(uint8_t page)
         snprintf(line, sizeof(line), "%c Stop Test", 0xDF);
         oled_write_line_full(1, line);
         oled_write_line_full(2, "Count Left:");
-        format_test_entry(line, sizeof(line), 'R', 0U, test_seq_relay_is_enabled(0U),
-                          test_seq_get_relay_remaining(0U), io->relays[0]);
+        format_test_entry_relay(line, sizeof(line), 'R', 0U, test_seq_relay_is_enabled(0U),
+                                test_seq_get_relay_remaining(0U), io->relays[0],
+                                app_get_relay_current_ma(0U));
         oled_write_line_full(3, line);
-        format_test_entry(line, sizeof(line), 'R', 1U, test_seq_relay_is_enabled(1U),
-                          test_seq_get_relay_remaining(1U), io->relays[1]);
+        format_test_entry_relay(line, sizeof(line), 'R', 1U, test_seq_relay_is_enabled(1U),
+                                test_seq_get_relay_remaining(1U), io->relays[1],
+                                app_get_relay_current_ma(1U));
         oled_write_line_full(4, line);
     } else {
-        format_test_entry_compact(line, sizeof(line), 'R', 2U, test_seq_relay_is_enabled(2U),
-                                  test_seq_get_relay_remaining(2U), io->relays[2]);
+        format_test_entry_compact_relay(line, sizeof(line), 'R', 2U, test_seq_relay_is_enabled(2U),
+                                        test_seq_get_relay_remaining(2U), io->relays[2],
+                                        app_get_relay_current_ma(2U));
         char line1[21];
         snprintf(line1, sizeof(line1), "%s", line);
         oled_write_line_full(1, line1);
-        format_test_entry(line, sizeof(line), 'R', 3U, test_seq_relay_is_enabled(3U),
-                          test_seq_get_relay_remaining(3U), io->relays[3]);
+        format_test_entry_relay(line, sizeof(line), 'R', 3U, test_seq_relay_is_enabled(3U),
+                                test_seq_get_relay_remaining(3U), io->relays[3],
+                                app_get_relay_current_ma(3U));
         oled_write_line_full(2, line);
         format_test_entry(line, sizeof(line), 'M', 0U, test_seq_mosfet_is_enabled(0U),
                           test_seq_get_mosfet_remaining(0U), io->mosfet[0]);

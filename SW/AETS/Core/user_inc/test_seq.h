@@ -21,5 +21,8 @@ uint32_t test_seq_get_relay_imax(uint8_t index);
 uint32_t test_seq_get_mosfet_remaining(uint8_t index);
 bool test_seq_relay_is_enabled(uint8_t index);
 bool test_seq_mosfet_is_enabled(uint8_t index);
+uint8_t test_seq_get_mosfet_ext_control(uint8_t index);
+uint8_t test_seq_get_trigger_enabled(void);
+uint8_t test_seq_get_trigger_channel(void);
 
 #endif /* USER_INC_TEST_SEQ_H_ */

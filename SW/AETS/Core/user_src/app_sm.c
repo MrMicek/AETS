@@ -11,8 +11,8 @@
 #include <string.h>
 
 #define APP_EVENT_QUEUE_LEN 16
-#define CURRENT_FAULT_STREAK_LIMIT 100U
-#define CURRENT_SAMPLE_PERIOD_MS 100U
+#define CURRENT_FAULT_STREAK_LIMIT 10U
+#define CURRENT_SAMPLE_SETTLE_MS 50U
 
 /*
  * Developer note: application state machine event flow
@@ -35,10 +35,13 @@ typedef struct {
 } app_context_t;
 
 static app_context_t s_ctx;
-static uint32_t s_current_last_ms = 0;
 static uint8_t s_current_over_streak[4];
 static uint8_t s_current_zero_streak[4];
 static uint8_t s_current_fault_posted = 0U;
+static uint32_t s_current_last_ma[4];
+static uint32_t s_current_pending_at[4];
+static uint8_t s_current_pending[4];
+static uint8_t s_current_last_state[4];
 
 static void app_handle_event(app_event_t evt, uint32_t now_ms);
 static void app_enter_state(app_state_t new_state, uint32_t now_ms);
@@ -92,39 +95,60 @@ void app_tick(uint32_t now_ms)
         if (test_seq_tick(now_ms)) {
             app_post_event((app_event_t){ .type = APP_EVT_TEST_DONE });
         }
-        if (s_ctx.status.test_state == APP_TEST_RUNNING && (now_ms - s_current_last_ms) >= CURRENT_SAMPLE_PERIOD_MS) {
-            s_current_last_ms = now_ms;
+        if (s_ctx.status.test_state == APP_TEST_RUNNING) {
             const io_state_t *io = io_get();
             for (uint8_t i = 0; i < 4U; ++i) {
-                if (!test_seq_relay_is_enabled(i) || !io->relays[i]) {
+                uint8_t enabled = test_seq_relay_is_enabled(i) ? 1U : 0U;
+                uint8_t relay_on = io->relays[i] ? 1U : 0U;
+
+                if (!enabled) {
                     s_current_over_streak[i] = 0U;
                     s_current_zero_streak[i] = 0U;
+                    s_current_pending[i] = 0U;
+                    s_current_last_state[i] = 0U;
+                    s_current_last_ma[i] = 0U;
                     continue;
                 }
-                uint32_t current_ma = Current_Read_mA(i);
-                uint32_t imax_ma = test_seq_get_relay_imax(i);
-                if (imax_ma > 0U && current_ma > imax_ma) {
-                    if (s_current_over_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
-                        s_current_over_streak[i]++;
-                    }
-                } else {
-                    s_current_over_streak[i] = 0U;
-                }
-                if (current_ma == 0U) {
-                    if (s_current_zero_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
-                        s_current_zero_streak[i]++;
-                    }
-                } else {
-                    s_current_zero_streak[i] = 0U;
+
+                if (relay_on && !s_current_last_state[i]) {
+                    s_current_pending[i] = 1U;
+                    s_current_pending_at[i] = now_ms + CURRENT_SAMPLE_SETTLE_MS;
+                } else if (!relay_on) {
+                    s_current_pending[i] = 0U;
+                    //s_current_last_ma[i] = 0U;
                 }
 
-                if (s_current_fault_posted == 0U &&
-                    (s_current_over_streak[i] >= CURRENT_FAULT_STREAK_LIMIT ||
-                     s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT)) {
-                    s_current_fault_posted = 1U;
-                    app_post_event((app_event_t){ .type = APP_EVT_TEST_FAIL,
-                                                  .a = (s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT) ? 2U : 1U });
-                    break;
+                s_current_last_state[i] = relay_on;
+
+                if (relay_on && s_current_pending[i] && now_ms >= s_current_pending_at[i]) {
+                    uint32_t current_ma = Current_Read_mA(i);
+                    uint32_t imax_ma = test_seq_get_relay_imax(i);
+                    s_current_last_ma[i] = current_ma;
+                    s_current_pending[i] = 0U;
+
+                    if (imax_ma > 0U && current_ma > imax_ma) {
+                        if (s_current_over_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
+                            s_current_over_streak[i]++;
+                        }
+                    } else {
+                        s_current_over_streak[i] = 0U;
+                    }
+                    if (current_ma == 0U) {
+                        if (s_current_zero_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
+                            s_current_zero_streak[i]++;
+                        }
+                    } else {
+                        s_current_zero_streak[i] = 0U;
+                    }
+
+                    if (s_current_fault_posted == 0U &&
+                        (s_current_over_streak[i] >= CURRENT_FAULT_STREAK_LIMIT ||
+                         s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT)) {
+                        s_current_fault_posted = 1U;
+                        app_post_event((app_event_t){ .type = APP_EVT_TEST_FAIL,
+                                                      .a = (s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT) ? 2U : 1U });
+                        break;
+                    }
                 }
             }
         }
@@ -254,10 +278,13 @@ static void app_enter_state(app_state_t new_state, uint32_t now_ms)
         s_ctx.status.test_state = APP_TEST_RUNNING;
         app_menu_set_test_screen(APP_TEST_SCREEN_RUNNING);
         test_seq_start(now_ms);
-        s_current_last_ms = now_ms;
         memset(s_current_over_streak, 0, sizeof(s_current_over_streak));
         memset(s_current_zero_streak, 0, sizeof(s_current_zero_streak));
         s_current_fault_posted = 0U;
+        memset(s_current_last_ma, 0, sizeof(s_current_last_ma));
+        memset(s_current_pending, 0, sizeof(s_current_pending));
+        memset(s_current_pending_at, 0, sizeof(s_current_pending_at));
+        memset(s_current_last_state, 0, sizeof(s_current_last_state));
         comu_SendF("evt state %s\r\n", app_state_str(new_state));
         break;
 
@@ -275,6 +302,14 @@ static void app_enter_state(app_state_t new_state, uint32_t now_ms)
 app_status_t app_get_status(void)
 {
     return s_ctx.status;
+}
+
+uint32_t app_get_relay_current_ma(uint8_t index)
+{
+    if (index >= 4U) {
+        return 0U;
+    }
+    return s_current_last_ma[index];
 }
 
 static const char* app_state_str(app_state_t st)

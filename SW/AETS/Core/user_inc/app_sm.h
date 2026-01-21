@@ -57,5 +57,6 @@ void app_init(void);
 bool app_post_event(app_event_t evt);
 void app_tick(uint32_t now_ms);
 app_status_t app_get_status(void);
+uint32_t app_get_relay_current_ma(uint8_t index);
 
 #endif /* USER_INC_APP_SM_H_ */

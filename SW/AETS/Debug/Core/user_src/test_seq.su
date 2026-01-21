@@ -12,3 +12,6 @@
 ../Core/user_src/test_seq.c:222:10:test_seq_get_mosfet_remaining	16	static
 ../Core/user_src/test_seq.c:230:6:test_seq_relay_is_enabled	16	static
 ../Core/user_src/test_seq.c:238:6:test_seq_mosfet_is_enabled	16	static
+../Core/user_src/test_seq.c:246:9:test_seq_get_mosfet_ext_control	16	static
+../Core/user_src/test_seq.c:254:9:test_seq_get_trigger_enabled	4	static
+../Core/user_src/test_seq.c:259:9:test_seq_get_trigger_channel	4	static
