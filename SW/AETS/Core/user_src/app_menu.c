@@ -526,7 +526,7 @@ static void format_test_entry_compact_relay(char *line, size_t line_len, char pr
 {
     const char *state = on ? "ON" : "OFF";
     if (!enabled) {
-        snprintf(line, line_len, "%c%u:*****%s", prefix, (unsigned)(index + 1U), "***");
+        snprintf(line, line_len, "%c%u: ***** ***", prefix, (unsigned)(index + 1U));
     } else {
         uint32_t shown = (remaining > 99999U) ? 99999U : remaining;
         uint32_t shown_current = (current_ma > 9999U) ? 9999U : current_ma;
@@ -535,18 +535,6 @@ static void format_test_entry_compact_relay(char *line, size_t line_len, char pr
     }
 }
 
-static void format_test_entry_compact(char *line, size_t line_len, char prefix, uint8_t index,
-                                      bool enabled, uint32_t remaining, bool on)
-{
-    const char *state = on ? "ON" : "OFF";
-    if (!enabled) {
-        snprintf(line, line_len, "%c%u: ***** ***", prefix, (unsigned)(index + 1U));
-    } else {
-        uint32_t shown = (remaining > 99999U) ? 99999U : remaining;
-        snprintf(line, line_len, "%c%u:%05lu%s", prefix, (unsigned)(index + 1U),
-                 (unsigned long)shown, state);
-    }
-}
 
 static void app_menu_draw_test_running(uint8_t page)
 {
