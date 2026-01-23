@@ -1,9 +1,9 @@
 Core/user_src/app_sm.o: ../Core/user_src/app_sm.c \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_sm.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/io_control.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_counter.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_sm.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/io_control.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/mux.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay_counter.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -44,19 +44,20 @@ Core/user_src/app_sm.o: ../Core/user_src/app_sm.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/utility.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/comuser.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/utility.h \
  ../Core/Inc/main.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_menu.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/test_seq.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_health_store.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/current.h
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_sm.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/io_control.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_counter.h:
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_menu.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/test_seq.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay_health_store.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/current.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_params.h
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_sm.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/io_control.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/mux.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay_counter.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h:
@@ -97,11 +98,12 @@ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Co
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/utility.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/comuser.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/utility.h:
 ../Core/Inc/main.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_menu.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/test_seq.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_health_store.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/current.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_menu.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/test_seq.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay_health_store.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/current.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_params.h:

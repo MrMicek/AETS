@@ -1,0 +1,2 @@
+../Core/user_src/telemetry.c:20:13:fill_telemetry	32	static
+../Core/user_src/telemetry.c:37:6:telemetry_tick	88	static

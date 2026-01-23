@@ -57,6 +57,9 @@ static void saveToProfile6(void) { saveToProfile(6); }
 static void loadFromProfile6(void) { loadFromProfile(6); }
 
 
+static uint8_t s_test_fail_relay = 0;
+void app_menu_set_test_fail_relay(uint8_t relay_idx) { s_test_fail_relay = relay_idx; }
+
 // ---------- Actions ----------
 void act_test_current(void) {
     test_seq_set_params_current();
@@ -615,6 +618,18 @@ static void app_menu_draw_test_running(uint8_t page)
         oled_write_line_full(4, "No Current Flow");
         break;
     case APP_TEST_SCREEN_NONE:
+    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
+    	act_back();
+    	break;
+    case APP_TEST_SCREEN_RELAY_COUNT_LOW:
+    	oled_clear();
+    	snprintf(line, sizeof(line), "%c < Return", 0xDF);
+    	oled_write_line_full(1, line);
+    	oled_write_line_full(2, "Can't Start Test");
+    	snprintf(line, sizeof(line), "Relay %u:", (unsigned)s_test_fail_relay);
+    	oled_write_line_full(3, line);
+    	oled_write_line_full(4, "Not enough switches");
+    	break;
     default:
     	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
     	act_back();
@@ -647,6 +662,28 @@ void app_menu_task(void) {
     extern void menu_poll(Menu *menu); // from encoder_menu_glue.c
     extern uint8_t menu_encoder_take_press(void);
     app_status_t st = app_get_status();
+
+
+    if (s_test_screen == APP_TEST_SCREEN_RELAY_COUNT_LOW) {
+        if (!s_test_screen_drawn) {
+            app_menu_draw_test_screen(s_test_screen);
+            s_test_screen_drawn = 1;
+            if (st.state == APP_STATE_REMOTE) {
+            	comu_SendF("test blocked. Not enough switches left. Relay: %u\r\n", (unsigned)s_test_fail_relay);
+            }
+        }
+
+        // optional: handle encoder press to dismiss
+        if (menu_encoder_take_press()) {
+            app_menu_set_test_screen(APP_TEST_SCREEN_NONE);
+            s_test_screen_drawn = 0;
+            oled_clear();
+            menu_draw_full(menu_get_active());
+            (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
+        }else
+        	return; // avoid normal menu draw/poll while error screen is visible
+    }
+
 
     if (st.state == APP_STATE_TEST) {
         if (s_test_screen == APP_TEST_SCREEN_RUNNING) {

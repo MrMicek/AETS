@@ -37,6 +37,7 @@
 "./Core/user_src/relay.o"
 "./Core/user_src/relay_counter.o"
 "./Core/user_src/relay_health_store.o"
+"./Core/user_src/telemetry.o"
 "./Core/user_src/test_seq.o"
 "./Core/user_src/trigger.o"
 "./Core/user_src/utility.o"

@@ -1,5 +1,7 @@
-../Core/user_src/canfd.c:66:13:InsertBits	40	static
-../Core/user_src/canfd.c:78:6:cfd_Init	8	static
-../Core/user_src/canfd.c:93:6:UpdateTxBufferForCan_Msg1	8	static
-../Core/user_src/canfd.c:111:6:UpdateTxBufferForCan_Msg2	8	static
-../Core/user_src/canfd.c:129:6:cfd_HandleCommunication	16	static
+../Core/user_src/canfd.c:38:17:relay_count_k	24	static
+../Core/user_src/canfd.c:47:17:clamp_current_ma	16	static
+../Core/user_src/canfd.c:56:13:InsertBits	40	static
+../Core/user_src/canfd.c:68:6:cfd_Init	8	static
+../Core/user_src/canfd.c:83:13:UpdateTxBufferForCan_Msg1	16	static
+../Core/user_src/canfd.c:101:13:UpdateTxBufferForCan_Msg2	16	static
+../Core/user_src/canfd.c:119:6:cfd_HandleCommunication	16	static

@@ -1,7 +1,7 @@
 Core/user_src/profile_store.o: ../Core/user_src/profile_store.c \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/profile_store.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_params.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/eeprom.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/profile_store.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_params.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/eeprom.h \
  ../Core/Inc/main.h ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -42,9 +42,9 @@ Core/user_src/profile_store.o: ../Core/user_src/profile_store.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/profile_store.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_params.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/eeprom.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/profile_store.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_params.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/eeprom.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:

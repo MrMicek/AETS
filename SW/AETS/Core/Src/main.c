@@ -49,6 +49,7 @@
 #include "relay_counter.h"
 #include "app_params.h"
 #include "relay_health_store.h"
+#include "telemetry.h"
 
 /* USER CODE END Includes */
 
@@ -180,6 +181,7 @@ int main(void)
     KV_HandlePending();
     relay_health_handle_pending();
     relay_counter_periodic_flush(now);
+    telemetry_tick(now);
 
 //    uint32_t a_ma[4];
 //    a_ma[0] = Current_Read_mA(current_ch1);
@@ -187,6 +189,7 @@ int main(void)
 //    a_ma[2] = Current_Read_mA(current_ch3);
 //    a_ma[3] = Current_Read_mA(current_ch4);
 
+    HAL_Delay(1);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
