@@ -48,6 +48,8 @@
 #include "io_control.h"
 #include "relay_counter.h"
 #include "app_params.h"
+#include "relay_health_store.h"
+#include "telemetry.h"
 
 /* USER CODE END Includes */
 
@@ -144,6 +146,7 @@ int main(void)
   cfd_Init();
   KV_Init();
   app_params_init();
+  relay_health_init();
   relay_counter_init();
   app_menu_init();
   app_init();
@@ -175,7 +178,10 @@ int main(void)
     app_menu_task();
     comu_HandleCommunication();
     app_tick(now);
+    KV_HandlePending();
+    relay_health_handle_pending();
     relay_counter_periodic_flush(now);
+    telemetry_tick(now);
 
 //    uint32_t a_ma[4];
 //    a_ma[0] = Current_Read_mA(current_ch1);

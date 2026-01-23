@@ -3,6 +3,7 @@
 #include "stm32g4xx_hal.h"
 #include <string.h>
 #include "comuser.h"
+#include "relay_health_store.h"
 
 static uint32_t s_counter = 0;
 static uint32_t s_seq = 0;
@@ -139,6 +140,7 @@ void KV_HandlePending(void)
 void Power_OnBrownout(void)
 {
     s_pending_save = 1;
+    relay_health_request_pending();
 
 #if KV_IMMEDIATE_ON_BROWNOUT
     // Best-effort immediate short blocking write. This may call HAL I2C APIs from
