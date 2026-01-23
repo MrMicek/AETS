@@ -9,6 +9,6 @@
 ../Core/user_src/commands.c:257:15:MuxCmdCb	17
 ../Core/user_src/commands.c:307:15:CurrentCmdCb	7
 ../Core/user_src/commands.c:328:15:RelayCountCmdCb	10
-../Core/user_src/commands.c:362:15:ParamCmdCb	50
-../Core/user_src/commands.c:505:15:TestCmdCb	13
-../Core/user_src/commands.c:710:6:cmd_Handle	22
+../Core/user_src/commands.c:360:15:ParamCmdCb	50
+../Core/user_src/commands.c:503:15:TestCmdCb	10
+../Core/user_src/commands.c:563:6:cmd_Handle	24

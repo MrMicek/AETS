@@ -99,7 +99,7 @@ static char *cmd_next_token(void)
  * Response: [CRC] cmd [CmdName] [CmdId] [Company] [Author] [Device] [HWVer] [FWVer] [Id] [CalDate]\r\n
  */
 static err_Td GetInfoCb(char *cmdName, int32_t cmdId){
-	comu_SendF("0 cmd %s %d %s %s %s %s %s %s %s\r\n", cmdName, cmdId, APPINFO_COMPANY, APPINFO_AUTHOR, APPINFO_DEVICE, APPINFO_HWVER, APPINFO_FWVER, APPINFO_ID, APPINFO_CALDATE);
+	comu_SendF("cmd %s %d %s %s %s %s %s %s %s\r\n", cmdName, cmdId, APPINFO_COMPANY, APPINFO_AUTHOR, APPINFO_DEVICE, APPINFO_HWVER, APPINFO_FWVER, APPINFO_ID, APPINFO_CALDATE);
 	return err_Td_Ok;
 }
 
@@ -163,7 +163,7 @@ if (!action) return err_Td_Param;
 
 if (strcmp(action, "get") == 0) {
 app_status_t st = app_get_status();
-comu_SendF("0 cmd %s %d %s\r\n", cmdName, cmdId, app_state_to_str(st.state));
+comu_SendF("cmd %s %d %s\r\n", cmdName, cmdId, app_state_to_str(st.state));
                 return err_Td_Ok;
         }
 
@@ -208,9 +208,9 @@ char *idx_s = cmd_next_token();
 if (idx_s) {
 int idx = atoi(idx_s);
 if (idx < 1 || idx > 4) return err_Td_Range;
-comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, idx, cur->relays[idx - 1] ? 1 : 0);
+comu_SendF("cmd %s %d %d %d\r\n", cmdName, cmdId, idx, cur->relays[idx - 1] ? 1 : 0);
                 } else {
-                        comu_SendF("0 cmd %s %d %d %d %d %d\r\n", cmdName, cmdId,
+                        comu_SendF("cmd %s %d %d %d %d %d\r\n", cmdName, cmdId,
                                         cur->relays[0] ? 1 : 0,
                                         cur->relays[1] ? 1 : 0,
                                         cur->relays[2] ? 1 : 0,
@@ -248,7 +248,7 @@ char *val_s = cmd_next_token();
                 io_apply(&next);
                 return err_Td_Ok;
         } else if (strcmp(action, "get") == 0) {
-                comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, cur->mosfet[0] ? 1 : 0, cur->mosfet[1] ? 1 : 0);
+                comu_SendF("cmd %s %d %d %d\r\n", cmdName, cmdId, cur->mosfet[0] ? 1 : 0, cur->mosfet[1] ? 1 : 0);
                 return err_Td_Ok;
         }
         return err_Td_NotValid;
@@ -295,9 +295,9 @@ if (!action) return err_Td_Param;
 				if (idx_s) {
 						int idx = atoi(idx_s);
 						if (idx < 1 || idx > 2) return err_Td_Range;
-						comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, idx, (cur->mux[idx - 1] == MUX_EXT) ? 1 : 0);
+						comu_SendF("cmd %s %d %d %d\r\n", cmdName, cmdId, idx, (cur->mux[idx - 1] == MUX_EXT) ? 1 : 0);
 				} else {
-						comu_SendF("0 cmd %s %d %d %d\r\n", cmdName, cmdId, (cur->mux[0] == MUX_EXT) ? 1 : 0, (cur->mux[1] == MUX_EXT) ? 1 : 0);
+						comu_SendF("cmd %s %d %d %d\r\n", cmdName, cmdId, (cur->mux[0] == MUX_EXT) ? 1 : 0, (cur->mux[1] == MUX_EXT) ? 1 : 0);
 				}
 				return err_Td_Ok;
 		}
@@ -315,11 +315,11 @@ char *ch_s = cmd_next_token();
 
         if (strcmp(mode, "raw") == 0) {
                 uint16_t raw = Current_ReadRaw(ch);
-                comu_SendF("0 cmd %s %d %d %u\r\n", cmdName, cmdId, idx, (unsigned)raw);
+                comu_SendF("cmd %s %d %d %u\r\n", cmdName, cmdId, idx, (unsigned)raw);
                 return (raw == 0xFFFFU) ? err_Td_General : err_Td_Ok;
         } else if (strcmp(mode, "ma") == 0) {
                 uint32_t ma = Current_Read_mA(ch);
-                comu_SendF("0 cmd %s %d %d %lu\r\n", cmdName, cmdId, idx, (unsigned long)ma);
+                comu_SendF("cmd %s %d %d %lu\r\n", cmdName, cmdId, idx, (unsigned long)ma);
                 return err_Td_Ok;
         }
         return err_Td_NotValid;
@@ -335,15 +335,13 @@ char *idx_s = cmd_next_token();
                 if (idx_s) {
                         int idx = atoi(idx_s);
                         if (idx < 1 || idx > 4) return err_Td_Range;
-                        comu_SendF("0 cmd %s %d %d %llu\r\n", cmdName, cmdId, idx, (unsigned long long)relay_counter_get((uint8_t)(idx - 1)));
+                        comu_SendF("cmd %s %d %d %lu\r\n", cmdName, cmdId, idx, (unsigned long long)g_app_params.relay_health_remaining_k[idx - 1]);
                 } else {
-                        uint64_t counts[4] = {0};
-                        relay_counter_get_all(counts, 4);
-                        comu_SendF("0 cmd %s %d %llu %llu %llu %llu\r\n", cmdName, cmdId,
-                                        (unsigned long long)counts[0],
-                                        (unsigned long long)counts[1],
-                                        (unsigned long long)counts[2],
-                                        (unsigned long long)counts[3]);
+                        comu_SendF("cmd %s %d %d %d %d %d\r\n", cmdName, cmdId,
+                                        g_app_params.relay_health_remaining_k[0],
+                                        g_app_params.relay_health_remaining_k[1],
+                                        g_app_params.relay_health_remaining_k[2],
+                                        g_app_params.relay_health_remaining_k[3]);
                 }
                 return err_Td_Ok;
         } else if (strcmp(action, "reset") == 0) {
@@ -373,13 +371,13 @@ static err_Td ParamCmdCb(char *cmdName, int32_t cmdId)
                 int idx = atoi(idx_s);
                 if (idx < 1 || idx > 4) return err_Td_Range;
                 relay_params_t *p = &g_app_params.relays[idx - 1];
-                comu_SendF("0 cmd %s %d relay %d %d %d %d %d %d\r\n",
+                comu_SendF("cmd %s %d relay %d %d %d %d %d %d\r\n",
                            cmdName, cmdId, idx, p->enabled, p->ton_ms, p->toff_ms, p->imax_ma, p->sw_count_k);
                 return err_Td_Ok;
             }
             for (int i = 0; i < 4; ++i) {
                 relay_params_t *p = &g_app_params.relays[i];
-                comu_SendF("0 cmd %s %d relay %d %d %d %d %d %d\r\n",
+                comu_SendF("cmd %s %d relay %d %d %d %d %d %d\r\n",
                            cmdName, cmdId, i + 1, p->enabled, p->ton_ms, p->toff_ms, p->imax_ma, p->sw_count_k);
             }
             return err_Td_Ok;
@@ -413,13 +411,13 @@ static err_Td ParamCmdCb(char *cmdName, int32_t cmdId)
                 int idx = atoi(idx_s);
                 if (idx < 1 || idx > 2) return err_Td_Range;
                 mosfet_params_t *p = &g_app_params.mosfets[idx - 1];
-                comu_SendF("0 cmd %s %d mosfet %d %d %d %d %d %d\r\n",
+                comu_SendF("cmd %s %d mosfet %d %d %d %d %d %d\r\n",
                            cmdName, cmdId, idx, p->enabled, p->ext_control, p->ton_ms, p->toff_ms, p->sw_count);
                 return err_Td_Ok;
             }
             for (int i = 0; i < 2; ++i) {
                 mosfet_params_t *p = &g_app_params.mosfets[i];
-                comu_SendF("0 cmd %s %d mosfet %d %d %d %d %d %d\r\n",
+                comu_SendF("cmd %s %d mosfet %d %d %d %d %d %d\r\n",
                            cmdName, cmdId, i + 1, p->enabled, p->ext_control, p->ton_ms, p->toff_ms, p->sw_count);
             }
             return err_Td_Ok;
@@ -448,7 +446,7 @@ static err_Td ParamCmdCb(char *cmdName, int32_t cmdId)
 
     if (strcmp(group, "trigger") == 0) {
         if (strcmp(action, "get") == 0) {
-            comu_SendF("0 cmd %s %d trigger %d %d\r\n", cmdName, cmdId, g_app_params.trigger.enable, g_app_params.trigger.channel);
+            comu_SendF("cmd %s %d trigger %d %d\r\n", cmdName, cmdId, g_app_params.trigger.enable, g_app_params.trigger.channel);
             return err_Td_Ok;
         }
         if (strcmp(action, "set") == 0) {
@@ -466,7 +464,7 @@ static err_Td ParamCmdCb(char *cmdName, int32_t cmdId)
 
     if (strcmp(group, "conn") == 0) {
         if (strcmp(action, "get") == 0) {
-            comu_SendF("0 cmd %s %d conn %d %d %d\r\n", cmdName, cmdId,
+            comu_SendF("cmd %s %d conn %d %d %d\r\n", cmdName, cmdId,
                        g_app_params.connectivity.enable,
                        g_app_params.connectivity.can_enable,
                        g_app_params.connectivity.usb_enable);
@@ -487,7 +485,7 @@ static err_Td ParamCmdCb(char *cmdName, int32_t cmdId)
 
     if (strcmp(group, "buzzer") == 0) {
         if (strcmp(action, "get") == 0) {
-            comu_SendF("0 cmd %s %d buzzer %d\r\n", cmdName, cmdId, g_app_params.buzzer_enable);
+            comu_SendF("cmd %s %d buzzer %d\r\n", cmdName, cmdId, g_app_params.buzzer_enable);
             return err_Td_Ok;
         }
         if (strcmp(action, "set") == 0) {
@@ -504,185 +502,40 @@ static err_Td ParamCmdCb(char *cmdName, int32_t cmdId)
 
 static err_Td TestCmdCb(char *cmdName, int32_t cmdId)
 {
-char *action = cmd_next_token();
-if (!action) return err_Td_Param;
-
-        if (strcmp(action, "start") == 0) {
+	char *group = cmd_next_token();
+	char *action = cmd_next_token();
+	if (!group) return err_Td_Param;
+        if (strcmp(group, "start") == 0) {
+        	if (!action) return err_Td_Param;
+        	if (strcmp(action, "current") == 0) {
+        		act_test_current();
                 app_menu_set_test_screen(APP_TEST_SCREEN_START);
                 return app_post_event((app_event_t){ .type = APP_EVT_TEST_START }) ? err_Td_Ok : err_Td_Busy;
-        } else if (strcmp(action, "stop") == 0) {
+        	}
+        	else if (strcmp(action, "profile") == 0) {
+        	        char *idx_s = cmd_next_token();
+        	        int idx = atoi(idx_s);
+        			act_test_profile(idx);
+        			app_menu_set_test_screen(APP_TEST_SCREEN_START);
+        			return app_post_event((app_event_t){ .type = APP_EVT_TEST_START }) ? err_Td_Ok : err_Td_Busy;
+        	}
+        }
+
+        if (strcmp(group, "stop") == 0) {
                 app_menu_set_test_screen(APP_TEST_SCREEN_STOP);
-                return app_post_event((app_event_t){ .type = APP_EVT_TEST_STOP }) ? err_Td_Ok : err_Td_Busy;
-        } else if (strcmp(action, "ok") == 0) {
-                app_menu_set_test_screen(APP_TEST_SCREEN_OK);
-                return app_post_event((app_event_t){ .type = APP_EVT_TEST_DONE }) ? err_Td_Ok : err_Td_Busy;
-        } else if (strcmp(action, "errmax") == 0) {
-                app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_MAX_CURRENT);
-                return app_post_event((app_event_t){ .type = APP_EVT_TEST_FAIL, .a = 1 }) ? err_Td_Ok : err_Td_Busy;
-        } else if (strcmp(action, "errzero") == 0) {
-                app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_ZERO_CURRENT);
-                return app_post_event((app_event_t){ .type = APP_EVT_TEST_FAIL, .a = 2 }) ? err_Td_Ok : err_Td_Busy;
-        } else if (strcmp(action, "status") == 0) {
-                app_status_t st = app_get_status();
-                comu_SendF("0 cmd %s %d %s %d %lu\r\n", cmdName, cmdId, app_state_to_str(st.state), (int)st.test_state, (unsigned long)st.fault_code);
-                return err_Td_Ok;
+
+                if(app_post_event((app_event_t){ .type = APP_EVT_TEST_STOP })){
+                	app_menu_draw_test_screen(APP_TEST_SCREEN_STOP);
+                	app_post_event((app_event_t){ .type = APP_EVT_CMD_MODE_REMOTE });
+                	return err_Td_Ok;
+                }
+				else {
+					return err_Td_Busy;
+				}
         }
         return err_Td_NotValid;
 }
 
-
-/*
- * Send the message via CAN interface. All the parameters from MsgId forward are in hexadecimal form:
- * An optional prefix indicating octal or hexadecimal base ("0" or "0x"/"0X" respectively)
- * Syntax B0 to B7 might be inverted using SetByteOrder command to B7 to B0.
- * Syntax: [CRC] [CmdName] [CmdId] [MsgId] [ByteCnt] [B0] [B1] [B2] [B3] [B4] [B5] [B6] [B7]\r\n
- * Response: none
-
-static err_Td TransmitCb(char *cmdName, int32_t cmdId){
-	uint32_t i, Id, ByteCnt, TxMailbox;
-	uint8_t Data[8];
-	CAN_TxHeaderTypeDef TxHeader = {0};
-
-	Id = strtol(strtok(0, " \r"), 0, 16);
-	ByteCnt = strtol(strtok(0, " \r"), 0, 16);
-	for( i=0; i<UT_SIZEOFARRAY(Data); i++){
-
-		if(com_GetByteOrder()){						//If inverted syntax is requested
-			Data[UT_SIZEOFARRAY(Data)-1-i] = strtol(strtok(0, " \r"), 0, 16);
-		}
-		else{										//Else if normal syntax is requested
-			Data[i] = strtol(strtok(0, " \r"), 0, 16);
-		}
-
-	}
-
-
-	if(com_IsExtIdUsed()){
-		TxHeader.StdId = 0x00;
-		TxHeader.ExtId = Id;
-		TxHeader.IDE = CAN_ID_EXT;
-	}
-	else{
-		TxHeader.StdId = Id;
-		TxHeader.ExtId = 0x00;
-		TxHeader.IDE = CAN_ID_STD;
-	}
-
-
-	TxHeader.RTR = CAN_RTR_DATA;
-
-	TxHeader.DLC = ByteCnt;
-	TxHeader.TransmitGlobalTime = DISABLE;
-
-
-
-	uint8_t IsSil = com_IsSilent();		//Check if silent mode is configured (transmission not possible, must be changed to normal mode)
-	if(IsSil){
-		com_SetCANSpeedAndMode(com_GetBaudrate(), 0, com_GetResponseWaitMs());	//Configure normal mode
-		HAL_Delay(2);
-	}
-
-	HAL_StatusTypeDef ErrCode = HAL_CAN_AddTxMessage(&hcan, &TxHeader, Data, &TxMailbox);
-
-
-	if(IsSil){
-		com_SetSilentAsync();//Set silent mode in defined number of ms.
-	}
-
-
-	if( ErrCode == HAL_OK){
-		return err_Td_Ok;
-	}
-	else{
-		return err_Td_General;
-	}
-}
- */
-
-
-/*
- * Sets CAN baud rate. Possible values: 250, 500, 1000 kbps.
- * Syntax: [CRC] [CmdName] [CmdId] [BR_kbps]\r\n
- * Response: none
-
-static err_Td SetBaudRateCb(char *cmdName, int32_t cmdId){
-	uint32_t BR;
-	BR = strtol(strtok(0, " \r"), 0, 10);
-	return com_SetCANSpeedAndMode(BR, com_IsSilent(), com_GetResponseWaitMs());
-}
- */
-
-
-/*
- * Get CAN baud rate. Possible values: 250, 500, 1000 kbps or 0 in case of initialization failure (invalid parameter etc).
- * Syntax: [CRC] [CmdName] [CmdId]\r\n
- * Response: [CRC] cmd [CmdName] [CmdId] [BR_kbps]\r\n
-
-static err_Td GetBaudRateCb(char *cmdName, int32_t cmdId){
-	com_SendF("0 cmd %s %d %d\r\n", cmdName, cmdId, com_GetBaudrate());
-	return err_Td_Ok;
-}
- */
-
-
-
-/*
- * Sets, resets or blinks defined led diode.
- * Syntax: [CRC] [CmdName] [CmdId] [LedIndex] [StateOrPeriodInMs]\r\n
- * Response: none
-*/
-//static err_Td LedSetCb(char *cmdName, int32_t cmdId){
-//	uint32_t LedIndex = strtol(strtok(0, " \r"), 0, 10);
-//	uint32_t StateOrPeriodInMs = strtol(strtok(0, " \r"), 0, 10);
-//
-//	if(LedIndex<0 || LedIndex >= LEDS_HANDLECOUNT){
-//		return err_Td_Range;
-//	}
-//
-//	if(StateOrPeriodInMs == 0){
-//		leds_Reset(leds_Array[LedIndex]);
-//	}
-//	else if(StateOrPeriodInMs == 1){
-//		leds_Set(leds_Array[LedIndex]);
-//	}
-//	else{
-//		leds_Blink(leds_Array[LedIndex], StateOrPeriodInMs);
-//	}
-//	return err_Td_Ok;
-//}
-
-
-
-
-/*
- * Debug command
- * Syntax: [CRC] [CmdName] [CmdId] [intparam1] [intparam2]\r\n
- * Response: none
-*/
-//static err_Td DbgCb(char *cmdName, int32_t cmdId){
-//	int32_t IntParam1 = strtol(strtok(0, " \r"), 0, 10);
-//	int32_t IntParam2 = strtol(strtok(0, " \r"), 0, 10);
-//
-//
-//	if(IntParam1 == 0){	// RESET pin of ftdi
-//		if(IntParam2 == 0){
-//			HAL_GPIO_WritePin(FTDI_RESET_GPIO_Port, FTDI_RESET_Pin, GPIO_PIN_RESET);
-//		}
-//		else {
-//			HAL_GPIO_WritePin(FTDI_RESET_GPIO_Port, FTDI_RESET_Pin, GPIO_PIN_SET);
-//		}
-//	}
-//	else if(IntParam1 == 1){	// ENABLE pin of ftdi
-//		if(IntParam2 == 0){
-//			HAL_GPIO_WritePin(USART_EN_GPIO_Port, USART_EN_Pin, GPIO_PIN_RESET);
-//		}
-//		else {
-//			HAL_GPIO_WritePin(USART_EN_GPIO_Port, USART_EN_Pin, GPIO_PIN_SET);
-//		}
-//	}
-//
-//	return err_Td_Ok;
-//}
 
 
 /*
@@ -764,7 +617,8 @@ void cmd_Handle(char *str){
 	if (ErrNo == err_Td_Ok && Name != NULL) {
 		app_status_t st = app_get_status();
 		if (st.state != APP_STATE_REMOTE && strcmp(Name, "mode") != 0) {
-			ErrNo = err_Td_Disabled;
+			if (st.state != APP_STATE_REMOTE && strcmp(Name, "test") != 0)
+				ErrNo = err_Td_Disabled;
 		}
 	}
 

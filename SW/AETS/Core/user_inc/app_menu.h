@@ -28,4 +28,9 @@ typedef enum {
 void app_menu_set_test_screen(app_test_screen_t screen);
 app_test_screen_t app_menu_get_test_screen(void);
 
+void act_test_current(void);
+void act_test_profile(uint8_t profile_id);
+void app_menu_draw_test_screen(app_test_screen_t screen);
+
+
 #endif /* USER_INC_APP_MENU_H_ */

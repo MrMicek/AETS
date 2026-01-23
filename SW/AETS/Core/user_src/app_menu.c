@@ -58,22 +58,23 @@ static void loadFromProfile6(void) { loadFromProfile(6); }
 
 
 // ---------- Actions ----------
-static void act_test_current(void) {
+void act_test_current(void) {
     test_seq_set_params_current();
     app_post_event((app_event_t){ .type = APP_EVT_TEST_START });
 }
 
-static void act_test_profile(uint8_t profile_id) {
+void act_test_profile(uint8_t profile_id) {
+	loadFromProfile(profile_id);
     test_seq_set_params_profile(profile_id);
     app_post_event((app_event_t){ .type = APP_EVT_TEST_START });
 }
 
-static void act_test_profile1(void) { loadFromProfile(1);  act_test_profile(1U); }
-static void act_test_profile2(void) { loadFromProfile(2);  act_test_profile(2U); }
-static void act_test_profile3(void) { loadFromProfile(3);  act_test_profile(3U); }
-static void act_test_profile4(void) { loadFromProfile(4);  act_test_profile(4U); }
-static void act_test_profile5(void) { loadFromProfile(5);  act_test_profile(5U); }
-static void act_test_profile6(void) { loadFromProfile(6);  act_test_profile(6U); }
+static void act_test_profile1(void) { act_test_profile(1U); }
+static void act_test_profile2(void) { act_test_profile(2U); }
+static void act_test_profile3(void) { act_test_profile(3U); }
+static void act_test_profile4(void) { act_test_profile(4U); }
+static void act_test_profile5(void) { act_test_profile(5U); }
+static void act_test_profile6(void) { act_test_profile(6U); }
 
 // Common back action
 static void act_back(void) {
@@ -573,7 +574,7 @@ static void app_menu_draw_test_running(uint8_t page)
     }
 }
 
-static void app_menu_draw_test_screen(app_test_screen_t screen) {
+ void app_menu_draw_test_screen(app_test_screen_t screen) {
     char line[21];
 
     switch (screen) {
