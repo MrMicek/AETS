@@ -1,9 +1,9 @@
 ../Core/user_src/app_sm.c:50:6:app_init	24	static
 ../Core/user_src/app_sm.c:64:6:app_post_event	32	static
 ../Core/user_src/app_sm.c:75:13:app_pop_event	16	static
-../Core/user_src/app_sm.c:87:6:app_tick	72	static
-../Core/user_src/app_sm.c:158:13:app_handle_event	56	static
-../Core/user_src/app_sm.c:244:13:app_enter_state	16	static
-../Core/user_src/app_sm.c:302:14:app_get_status	16	static
-../Core/user_src/app_sm.c:307:10:app_get_relay_current_ma	16	static
-../Core/user_src/app_sm.c:315:20:app_state_str	16	static
+../Core/user_src/app_sm.c:87:6:app_tick	80	static
+../Core/user_src/app_sm.c:163:13:app_handle_event	56	static
+../Core/user_src/app_sm.c:249:13:app_enter_state	16	static
+../Core/user_src/app_sm.c:307:14:app_get_status	16	static
+../Core/user_src/app_sm.c:312:10:app_get_relay_current_ma	16	static
+../Core/user_src/app_sm.c:320:20:app_state_str	16	static

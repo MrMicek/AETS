@@ -18,6 +18,7 @@ void test_seq_set_params_profile(uint8_t profile_id);
 uint32_t test_seq_get_relay_remaining(uint8_t index);
 uint32_t test_seq_get_relay_initial(uint8_t index);
 uint32_t test_seq_get_relay_imax(uint8_t index);
+uint32_t test_seq_get_relay_ton_ms(uint8_t index);
 uint32_t test_seq_get_mosfet_remaining(uint8_t index);
 bool test_seq_relay_is_enabled(uint8_t index);
 bool test_seq_mosfet_is_enabled(uint8_t index);

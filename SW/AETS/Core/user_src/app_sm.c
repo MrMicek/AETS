@@ -112,7 +112,12 @@ void app_tick(uint32_t now_ms)
 
                 if (relay_on && !s_current_last_state[i]) {
                     s_current_pending[i] = 1U;
-                    s_current_pending_at[i] = now_ms + CURRENT_SAMPLE_SETTLE_MS;
+                    uint32_t ton_ms = test_seq_get_relay_ton_ms(i);
+                    uint32_t settle_ms = CURRENT_SAMPLE_SETTLE_MS;
+                    if (ton_ms > 0U && ton_ms < settle_ms) {
+                        settle_ms = ton_ms;
+                    }
+                    s_current_pending_at[i] = now_ms + settle_ms;
                 } else if (!relay_on) {
                     s_current_pending[i] = 0U;
                     s_current_last_ma[i] = 0U;
