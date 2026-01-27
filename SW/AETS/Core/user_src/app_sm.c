@@ -9,7 +9,6 @@
 #include "relay_health_store.h"
 #include "current.h"
 #include <string.h>
-#include "app_params.h"
 
 #define APP_EVENT_QUEUE_LEN 16
 #define CURRENT_FAULT_STREAK_LIMIT 10U
@@ -184,19 +183,7 @@ static void app_handle_event(app_event_t evt, uint32_t now_ms)
 
     case APP_EVT_CMD_MODE_TEST:
     case APP_EVT_TEST_START:
-    	for (int i = 0; i < 4; ++i) {
-    	    const relay_params_t *rp = &g_app_params.relays[i];
-    	    int sw_count_k = rp->sw_count_k;
-
-    	    if (rp->enabled != 0 && sw_count_k > 0) {
-    	        if (g_app_params.relay_health_remaining_k[i] < sw_count_k) {
-    	            app_menu_set_test_fail_relay((uint8_t)(i + 1));
-    	            app_menu_set_test_screen(APP_TEST_SCREEN_RELAY_COUNT_LOW);
-    	            return;
-    	        }
-    	    }
-    	}
-    	if (s_ctx.status.state != APP_STATE_FAULT) {
+        if (s_ctx.status.state != APP_STATE_FAULT) {
             s_ctx.status.return_state = (s_ctx.status.state == APP_STATE_REMOTE) ? APP_STATE_REMOTE : APP_STATE_MANUAL;
             app_enter_state(APP_STATE_TEST, now_ms);
         }
@@ -210,14 +197,11 @@ static void app_handle_event(app_event_t evt, uint32_t now_ms)
             test_seq_stop();
             if (evt.type == APP_EVT_TEST_STOP) {
                 app_menu_set_test_screen(APP_TEST_SCREEN_STOP);
-                comu_SendF("test stopped. timestamp: %lu\r\n", (unsigned long)now_ms);
             } else {
                 if (evt.a == 2U) {
                     app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_ZERO_CURRENT);
-                    comu_SendF("test err-zeroCurrent. timestamp: %lu\r\n", (unsigned long)now_ms);
                 } else {
                     app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_MAX_CURRENT);
-                    comu_SendF("test err-maxCurrent. timestamp: %lu\r\n", (unsigned long)now_ms);
                 }
             }
         }
@@ -229,7 +213,6 @@ static void app_handle_event(app_event_t evt, uint32_t now_ms)
             relay_health_update_from_test();
             test_seq_stop();
             app_menu_set_test_screen(APP_TEST_SCREEN_OK);
-            comu_SendF("test completed. timestamp: %lu\r\n", (unsigned long)now_ms);
         }
         break;
 

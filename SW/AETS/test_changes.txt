@@ -11,6 +11,7 @@ Changes implemented:
 - Ensured test-profile settings drive outputs by gating relay/mosfet/trigger control with the active test parameters during TEST mode.
 - Added relay current (mA) display to the test running screen for enabled relays.
 - Added periodic telemetry output for CAN and USB when their respective connectivity flags are enabled.
+- Reordered the main loop to prioritize brownout handling and output sequencing, while keeping UI/comms lowest priority and telemetry only during active tests.
 
 How to test:
 1) On the device, open Testing -> Start Test and select "Current Settings". Verify the test starts and the running screen updates remaining counts for enabled relays/mosfets.
@@ -26,5 +27,6 @@ How to test:
 11) During a running test, confirm the relay lines show the current values next to the ON/OFF status on the TEST screens.
 12) Run a test with a relay enabled and set I-max. Force current above I-max for 10 consecutive ON samples; confirm the MAX CURRENT error screen appears.
 13) Run a test with a relay enabled and force 0 current for 10 consecutive ON samples; confirm the NO CURRENT FLOW error screen appears.
-14) Enable Connectivity -> CAN Output and confirm CAN frames are published once per second (IDs 49 and 50) with relay counts, states, currents, and MOSFET/MUX states.
-15) Enable Connectivity -> USB Output and confirm a line like `out <timestamp> r1 <remain> <state> <current> ... m1 <state> m2 <state>` appears once per second on USB.
+14) Enable Connectivity -> CAN Output and confirm CAN frames are published once per second (IDs 49 and 50) with relay counts, states, currents, and MOSFET/MUX states (only during active tests).
+15) Enable Connectivity -> USB Output and confirm a line like `out <timestamp> r1 <remain> <state> <current> ... m1 <state> m2 <state>` appears once per second on USB (only during active tests).
+16) Trigger a brownout event and confirm relay health/KV pending saves are prioritized before other loop work (observe persistence after power cycle).

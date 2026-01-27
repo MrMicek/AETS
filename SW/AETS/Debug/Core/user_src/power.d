@@ -1,5 +1,5 @@
 Core/user_src/power.o: ../Core/user_src/power.c \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/power.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/power.h \
  ../Core/Inc/main.h ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -40,9 +40,9 @@ Core/user_src/power.o: ../Core/user_src/power.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/power.h:
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/power.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -84,5 +84,5 @@ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/power.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h:

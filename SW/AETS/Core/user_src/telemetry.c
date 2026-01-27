@@ -36,10 +36,6 @@ static void fill_telemetry(cfd_telemetry_t *out)
 
 void telemetry_tick(uint32_t now_ms)
 {
-	app_status_t st = app_get_status();
-	if (st.state != APP_STATE_TEST || st.test_state != APP_TEST_RUNNING) {
-	    return; // only send telemetry while test is active
-	}
     cfd_telemetry_t telemetry;
     telemetry.timestamp_ms = now_ms;
     fill_telemetry(&telemetry);
@@ -51,9 +47,9 @@ void telemetry_tick(uint32_t now_ms)
     if (g_app_params.connectivity.usb_enable != 0) {
         if ((now_ms - s_last_usb_ms) >= TELEMETRY_USB_PERIOD_MS) {
             s_last_usb_ms = now_ms;
-            comu_SendF("out timestamp: %lu ", (unsigned long)now_ms);
+            comu_SendF("out %lu ", (unsigned long)now_ms);
             for (uint8_t i = 0; i < 4U; ++i) {
-                comu_SendF("r%u countRemainig: %lu, RelayState: %u, Current(mA): %lu ", (unsigned)(i + 1U),
+                comu_SendF("r%u %lu %u %lu ", (unsigned)(i + 1U),
                            (unsigned long)telemetry.relay_remaining[i],
                            (unsigned)telemetry.relay_state[i],
                            (unsigned long)telemetry.relay_current_ma[i]);

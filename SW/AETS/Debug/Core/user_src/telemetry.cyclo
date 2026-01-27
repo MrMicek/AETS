@@ -1,2 +1,2 @@
 ../Core/user_src/telemetry.c:20:13:fill_telemetry	7
-../Core/user_src/telemetry.c:37:6:telemetry_tick	7
+../Core/user_src/telemetry.c:37:6:telemetry_tick	5

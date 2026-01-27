@@ -152,17 +152,6 @@ int main(void)
   app_init();
 
 
-  // Relay_TestToggleAll(1000); WORKS
-
-  //MUX_Set(MUX_CH1, MUX_INT); MOSFET_TestToggle(1000); WORKS
-   //MUX_Test(); WORKS
-  //adc_Read_Current_mA(current_ch1); //SOMEWHAT WORKS
-  //Power_TestBrownout(); WORKS
-  //Encoder_Test();
-  //Buzzer_Test();
-  // CAN_TestFrame();
-   //Trigger_TestPulse();
-  // USB_TestEcho();
 
 
 
@@ -175,21 +164,27 @@ int main(void)
   {
 
     uint32_t now = HAL_GetTick();
-    app_menu_task();
-    comu_HandleCommunication();
+    /* Highest priority: brownout/pending saves */
+    //KV_HandlePending();
+    //relay_health_handle_pending();
+
+    /* Core state machine and output sequencing */
     app_tick(now);
     KV_HandlePending();
     relay_health_handle_pending();
     relay_counter_periodic_flush(now);
     telemetry_tick(now);
 
-//    uint32_t a_ma[4];
-//    a_ma[0] = Current_Read_mA(current_ch1);
-//    a_ma[1] = Current_Read_mA(current_ch2);
-//    a_ma[2] = Current_Read_mA(current_ch3);
-//    a_ma[3] = Current_Read_mA(current_ch4);
+    /* Test telemetry only when test is active */
+    app_status_t st = app_get_status();
+    if (st.state == APP_STATE_TEST) {
+      telemetry_tick(now);
+    }
 
-    HAL_Delay(1);
+    /* Lowest priority: UI and communication */
+    comu_HandleCommunication();
+    app_menu_task();
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
