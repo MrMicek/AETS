@@ -31,5 +31,5 @@
 ../Core/user_src/app_menu.c:639:6:app_menu_set_test_screen	1
 ../Core/user_src/app_menu.c:647:19:app_menu_get_test_screen	1
 ../Core/user_src/app_menu.c:654:6:app_menu_init	1
-../Core/user_src/app_menu.c:661:6:app_menu_task	33
-../Core/user_src/app_menu.c:769:6:app_menu_on_value_commit	7
+../Core/user_src/app_menu.c:661:6:app_menu_task	34
+../Core/user_src/app_menu.c:770:6:app_menu_on_value_commit	7

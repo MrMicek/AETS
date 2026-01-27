@@ -44,31 +44,31 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/tim.h ../USB_Device/App/usb_device.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
  ../USB_Device/Target/usbd_conf.h ../Core/Inc/gpio.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mosfet.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/current.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/power.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/buzzer.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/trigger.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/display.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/encoder.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/canfd.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/kvstore.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/eeprom.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_menu.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_sm.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/io_control.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_counter.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_params.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_health_store.h \
- C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/telemetry.h
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/mosfet.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/mux.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/current.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/power.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/buzzer.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/trigger.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/display.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/comuser.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/encoder.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/comuser.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/canfd.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/kvstore.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/eeprom.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_menu.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_sm.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/io_control.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/mux.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay_counter.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_params.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay_health_store.h \
+ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/telemetry.h
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -121,28 +121,28 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:
 ../USB_Device/Target/usbd_conf.h:
 ../Core/Inc/gpio.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mosfet.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/current.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/power.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/buzzer.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/trigger.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/display.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/encoder.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/canfd.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/kvstore.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/eeprom.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_menu.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_sm.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/io_control.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/mux.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_counter.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_params.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/relay_health_store.h:
-C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/telemetry.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/mosfet.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/mux.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/current.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/power.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/buzzer.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/trigger.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/display.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/comuser.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/encoder.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/comuser.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/canfd.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/kvstore.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/eeprom.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_menu.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_sm.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/io_control.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/mux.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay_counter.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_params.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/relay_health_store.h:
+C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/telemetry.h:

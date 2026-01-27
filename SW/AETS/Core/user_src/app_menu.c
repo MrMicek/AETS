@@ -668,6 +668,7 @@ void app_menu_task(void) {
         if (!s_test_screen_drawn) {
             app_menu_draw_test_screen(s_test_screen);
             s_test_screen_drawn = 1;
+            (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_DANGER) : 0;
             if (st.state == APP_STATE_REMOTE) {
             	comu_SendF("test blocked. Not enough switches left. Relay: %u\r\n", (unsigned)s_test_fail_relay);
             }

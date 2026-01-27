@@ -32,4 +32,4 @@
 ../Core/user_src/app_menu.c:647:19:app_menu_get_test_screen	4	static
 ../Core/user_src/app_menu.c:654:6:app_menu_init	8	static
 ../Core/user_src/app_menu.c:661:6:app_menu_task	96	static
-../Core/user_src/app_menu.c:769:6:app_menu_on_value_commit	48	static
+../Core/user_src/app_menu.c:770:6:app_menu_on_value_commit	48	static
