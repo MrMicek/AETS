@@ -152,17 +152,6 @@ int main(void)
   app_init();
 
 
-  // Relay_TestToggleAll(1000); WORKS
-
-  //MUX_Set(MUX_CH1, MUX_INT); MOSFET_TestToggle(1000); WORKS
-   //MUX_Test(); WORKS
-  //adc_Read_Current_mA(current_ch1); //SOMEWHAT WORKS
-  //Power_TestBrownout(); WORKS
-  //Encoder_Test();
-  //Buzzer_Test();
-  // CAN_TestFrame();
-   //Trigger_TestPulse();
-  // USB_TestEcho();
 
 
 
@@ -185,14 +174,13 @@ int main(void)
 
     /* Test telemetry only when test is active */
     app_status_t st = app_get_status();
-    if (st.state == APP_STATE_TEST) {
+    if (st.state == APP_STATE_TEST && st.test_state == APP_TEST_RUNNING) {
       telemetry_tick(now);
     }
 
     /* Lowest priority: UI and communication */
     comu_HandleCommunication();
     app_menu_task();
-
 
 
     /* USER CODE END WHILE */

@@ -48,6 +48,8 @@
 #include "io_control.h"
 #include "relay_counter.h"
 #include "app_params.h"
+#include "relay_health_store.h"
+#include "telemetry.h"
 
 /* USER CODE END Includes */
 
@@ -144,6 +146,7 @@ int main(void)
   cfd_Init();
   KV_Init();
   app_params_init();
+  relay_health_init();
   relay_counter_init();
   app_menu_init();
   app_init();
@@ -172,10 +175,23 @@ int main(void)
   {
 
     uint32_t now = HAL_GetTick();
-    app_menu_task();
-    comu_HandleCommunication();
+    /* Highest priority: brownout/pending saves */
+    KV_HandlePending();
+    relay_health_handle_pending();
+
+    /* Core state machine and output sequencing */
     app_tick(now);
     relay_counter_periodic_flush(now);
+
+    /* Test telemetry only when test is active */
+    app_status_t st = app_get_status();
+    if (st.state == APP_STATE_TEST && st.test_state == APP_TEST_RUNNING) {
+      telemetry_tick(now);
+    }
+
+    /* Lowest priority: UI and communication */
+    comu_HandleCommunication();
+    app_menu_task();
 
 //    uint32_t a_ma[4];
 //    a_ma[0] = Current_Read_mA(current_ch1);
@@ -183,7 +199,6 @@ int main(void)
 //    a_ma[2] = Current_Read_mA(current_ch3);
 //    a_ma[3] = Current_Read_mA(current_ch4);
 
-    HAL_Delay(1);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

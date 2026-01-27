@@ -202,11 +202,14 @@ static void app_handle_event(app_event_t evt, uint32_t now_ms)
             test_seq_stop();
             if (evt.type == APP_EVT_TEST_STOP) {
                 app_menu_set_test_screen(APP_TEST_SCREEN_STOP);
+                comu_SendF("Test Stopped\r\n");
             } else {
                 if (evt.a == 2U) {
                     app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_ZERO_CURRENT);
+                    comu_SendF("Test Fail: Zero Current\r\n");
                 } else {
                     app_menu_set_test_screen(APP_TEST_SCREEN_ERROR_MAX_CURRENT);
+                    comu_SendF("Test Fail: OverCurrent\r\n");
                 }
             }
         }
@@ -218,6 +221,7 @@ static void app_handle_event(app_event_t evt, uint32_t now_ms)
             relay_health_update_from_test();
             test_seq_stop();
             app_menu_set_test_screen(APP_TEST_SCREEN_OK);
+            comu_SendF("Test Done\r\n");
         }
         break;
 

@@ -3,7 +3,7 @@
 ../Core/user_src/app_sm.c:75:13:app_pop_event	16	static
 ../Core/user_src/app_sm.c:87:6:app_tick	80	static
 ../Core/user_src/app_sm.c:163:13:app_handle_event	56	static
-../Core/user_src/app_sm.c:249:13:app_enter_state	16	static
-../Core/user_src/app_sm.c:307:14:app_get_status	16	static
-../Core/user_src/app_sm.c:312:10:app_get_relay_current_ma	16	static
-../Core/user_src/app_sm.c:320:20:app_state_str	16	static
+../Core/user_src/app_sm.c:253:13:app_enter_state	16	static
+../Core/user_src/app_sm.c:311:14:app_get_status	16	static
+../Core/user_src/app_sm.c:316:10:app_get_relay_current_ma	16	static
+../Core/user_src/app_sm.c:324:20:app_state_str	16	static

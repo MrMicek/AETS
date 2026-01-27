@@ -11,7 +11,7 @@
 #include "comuser.h"
 #include "io_control.h"
 #include "test_seq.h"
-#include <stdio.h>
+#include "stdio.h"
 
 #define TELEMETRY_USB_PERIOD_MS 2000U
 

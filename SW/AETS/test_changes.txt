@@ -13,6 +13,7 @@ Changes implemented:
 - Added periodic telemetry output for CAN and USB when their respective connectivity flags are enabled.
 - Reordered the main loop to prioritize brownout handling and output sequencing, while keeping UI/comms lowest priority and telemetry only during active tests.
 - Split relay and MOSFET sequencing into independent phases so they operate in parallel during tests, and adjusted current sampling to respect short relay TON settings.
+- Extended relay and MOSFET sequencing to run independently per-channel so all enabled relays/mosfets toggle concurrently.
 
 How to test:
 1) On the device, open Testing -> Start Test and select "Current Settings". Verify the test starts and the running screen updates remaining counts for enabled relays/mosfets.
@@ -31,4 +32,4 @@ How to test:
 14) Enable Connectivity -> CAN Output and confirm CAN frames are published once per second (IDs 49 and 50) with relay counts, states, currents, and MOSFET/MUX states (only during active tests).
 15) Enable Connectivity -> USB Output and confirm a line like `out <timestamp> r1 <remain> <state> <current> ... m1 <state> m2 <state>` appears once per second on USB (only during active tests).
 16) Trigger a brownout event and confirm relay health/KV pending saves are prioritized before other loop work (observe persistence after power cycle).
-17) Run a test with both relay and MOSFET enabled and confirm both channels toggle independently instead of running sequentially.
+17) Run a test with all relays and both MOSFETs enabled and confirm each channel toggles independently according to its parameters.

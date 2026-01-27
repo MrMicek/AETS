@@ -23,12 +23,10 @@ typedef enum {
 } test_seq_phase_t;
 
 static test_seq_state_t s_state = TEST_SEQ_IDLE;
-static test_seq_phase_t s_relay_phase = TEST_SEQ_PHASE_ON;
-static test_seq_phase_t s_mosfet_phase = TEST_SEQ_PHASE_ON;
-static uint8_t s_relay_idx = 0;
-static uint8_t s_mosfet_idx = 0;
-static uint32_t s_relay_deadline_ms = 0;
-static uint32_t s_mosfet_deadline_ms = 0;
+static test_seq_phase_t s_relay_phase[4];
+static test_seq_phase_t s_mosfet_phase[2];
+static uint32_t s_relay_start_ms[4];
+static uint32_t s_mosfet_start_ms[2];
 
 typedef struct {
     relay_params_t relays[4];
@@ -104,108 +102,176 @@ void test_seq_start(uint32_t now_ms)
     }
     test_seq_reset_remaining();
     s_state = TEST_SEQ_RUNNING;
-    s_relay_phase = TEST_SEQ_PHASE_ON;
-    s_mosfet_phase = TEST_SEQ_PHASE_ON;
-    s_relay_idx = 0;
-    s_mosfet_idx = 0;
-    s_relay_deadline_ms = now_ms;
-    s_mosfet_deadline_ms = now_ms;
+    for (uint8_t i = 0; i < 4U; ++i) {
+        if (s_params.relays[i].enabled != 0 && s_relay_remaining[i] > 0U) {
+            s_relay_phase[i] = TEST_SEQ_PHASE_ON;
+            s_relay_start_ms[i] = now_ms;
+        } else {
+            s_relay_phase[i] = TEST_SEQ_PHASE_DONE;
+        }
+    }
+    for (uint8_t i = 0; i < 2U; ++i) {
+        if (s_params.mosfets[i].enabled != 0 && s_params.mosfets[i].ext_control == 0 &&
+            s_mosfet_remaining[i] > 0U) {
+            s_mosfet_phase[i] = TEST_SEQ_PHASE_ON;
+            s_mosfet_start_ms[i] = now_ms;
+        } else {
+            s_mosfet_phase[i] = TEST_SEQ_PHASE_DONE;
+        }
+    }
 }
 
 void test_seq_stop(void)
 {
     s_state = TEST_SEQ_IDLE;
-    s_relay_phase = TEST_SEQ_PHASE_DONE;
-    s_mosfet_phase = TEST_SEQ_PHASE_DONE;
+    for (uint8_t i = 0; i < 4U; ++i) {
+        s_relay_phase[i] = TEST_SEQ_PHASE_DONE;
+    }
+    for (uint8_t i = 0; i < 2U; ++i) {
+        s_mosfet_phase[i] = TEST_SEQ_PHASE_DONE;
+    }
     io_safe_off();
 }
 
 static void test_seq_step_relays(uint32_t now_ms)
 {
-    if (s_relay_phase == TEST_SEQ_PHASE_DONE) {
-        return;
-    }
+    for (uint8_t i = 0; i < 4U; ++i) {
+        if (s_relay_phase[i] == TEST_SEQ_PHASE_DONE) {
+            continue;
+        }
 
-    if (now_ms < s_relay_deadline_ms) {
-        return;
-    }
+        // --- Determine the duration for the current phase ---
+        uint32_t duration = 0;
+        if (s_relay_phase[i] == TEST_SEQ_PHASE_ON) {
+            duration = clamp_delay_ms(s_params.relays[i].ton_ms);
+        } else {
+            duration = clamp_delay_ms(s_params.relays[i].toff_ms);
+        }
 
-    if (s_relay_phase == TEST_SEQ_PHASE_ON) {
-        while (s_relay_idx < 4U &&
-               (s_params.relays[s_relay_idx].enabled == 0 || s_relay_remaining[s_relay_idx] == 0U)) {
-            s_relay_idx++;
+        // --- SAFE WRAP-AROUND CHECK ---
+        // If the elapsed time (now - start) is less than duration, we wait.
+        if ((now_ms - s_relay_start_ms[i]) < duration) {
+            continue;
         }
-        if (s_relay_idx >= 4U) {
-            s_relay_phase = TEST_SEQ_PHASE_DONE;
-            return;
-        }
-        io_state_t next = *io_get();
-        next.relays[s_relay_idx] = true;
-        io_apply(&next);
-        if (s_relay_remaining[s_relay_idx] > 0U) {
-            s_relay_remaining[s_relay_idx]--;
-        }
-        s_relay_deadline_ms = now_ms + clamp_delay_ms(s_params.relays[s_relay_idx].ton_ms);
-        s_relay_phase = TEST_SEQ_PHASE_OFF;
-        return;
-    }
 
-    if (s_relay_phase == TEST_SEQ_PHASE_OFF) {
-        io_state_t next = *io_get();
-        next.relays[s_relay_idx] = false;
-        io_apply(&next);
-        s_relay_deadline_ms = now_ms + clamp_delay_ms(s_params.relays[s_relay_idx].toff_ms);
-        if (s_relay_remaining[s_relay_idx] == 0U) {
-            s_relay_idx++;
+        // --- TIMEOUT EXPIRED, SWITCH STATE ---
+        if (s_relay_phase[i] == TEST_SEQ_PHASE_ON) {
+            if (s_params.relays[i].enabled == 0 || s_relay_remaining[i] == 0U) {
+                s_relay_phase[i] = TEST_SEQ_PHASE_DONE;
+                continue;
+            }
+
+            // Turn Relay ON
+            io_state_t next = *io_get();
+            next.relays[i] = true;
+            io_apply(&next);
+
+            // Decrement counter
+            if (s_relay_remaining[i] > 0U) {
+                s_relay_remaining[i]--;
+            }
+
+            // Reset timer for the next phase
+            s_relay_start_ms[i] = now_ms;
+            s_relay_phase[i] = TEST_SEQ_PHASE_OFF;
+
         }
-        s_relay_phase = TEST_SEQ_PHASE_ON;
-        return;
+        else if (s_relay_phase[i] == TEST_SEQ_PHASE_OFF) {
+            // Turn Relay OFF
+            io_state_t next = *io_get();
+            next.relays[i] = false;
+            io_apply(&next);
+
+            // Reset timer for the next phase
+            s_relay_start_ms[i] = now_ms;
+
+            if (s_relay_remaining[i] == 0U) {
+                s_relay_phase[i] = TEST_SEQ_PHASE_DONE;
+            } else {
+                s_relay_phase[i] = TEST_SEQ_PHASE_ON;
+            }
+        }
     }
 }
 
 static void test_seq_step_mosfets(uint32_t now_ms)
 {
-    if (s_mosfet_phase == TEST_SEQ_PHASE_DONE) {
-        return;
-    }
+    for (uint8_t i = 0; i < 2U; ++i) {
+        if (s_mosfet_phase[i] == TEST_SEQ_PHASE_DONE) {
+            continue;
+        }
 
-    if (now_ms < s_mosfet_deadline_ms) {
-        return;
-    }
+        /* LOGIC:
+           If Phase is ON, we are waiting for the previous TOFF to complete.
+           If Phase is OFF, we are waiting for the previous TON to complete.
+        */
+        uint32_t duration = 0;
+        if (s_mosfet_phase[i] == TEST_SEQ_PHASE_ON) {
+            duration = clamp_delay_ms(s_params.mosfets[i].toff_ms);
+        } else {
+            duration = clamp_delay_ms(s_params.mosfets[i].ton_ms);
+        }
 
-    if (s_mosfet_phase == TEST_SEQ_PHASE_ON) {
-        while (s_mosfet_idx < 2U && (s_params.mosfets[s_mosfet_idx].enabled == 0 ||
-                                     s_params.mosfets[s_mosfet_idx].ext_control != 0 ||
-                                     s_mosfet_remaining[s_mosfet_idx] == 0U)) {
-            s_mosfet_idx++;
+        /* Safe Wrap-Around Check */
+        if ((now_ms - s_mosfet_start_ms[i]) < duration) {
+            continue;
         }
-        if (s_mosfet_idx >= 2U) {
-            s_mosfet_phase = TEST_SEQ_PHASE_DONE;
-            return;
-        }
-        io_state_t next = *io_get();
-        next.mux[s_mosfet_idx] = MUX_INT;
-        next.mosfet[s_mosfet_idx] = true;
-        io_apply(&next);
-        if (s_mosfet_remaining[s_mosfet_idx] > 0U) {
-            s_mosfet_remaining[s_mosfet_idx]--;
-        }
-        s_mosfet_deadline_ms = now_ms + clamp_delay_ms(s_params.mosfets[s_mosfet_idx].ton_ms);
-        s_mosfet_phase = TEST_SEQ_PHASE_OFF;
-        return;
-    }
 
-    if (s_mosfet_phase == TEST_SEQ_PHASE_OFF) {
-        io_state_t next = *io_get();
-        next.mosfet[s_mosfet_idx] = false;
-        io_apply(&next);
-        s_mosfet_deadline_ms = now_ms + clamp_delay_ms(s_params.mosfets[s_mosfet_idx].toff_ms);
-        if (s_mosfet_remaining[s_mosfet_idx] == 0U) {
-            s_mosfet_idx++;
+        /* Timer Elapsed - Execute Transition */
+        if (s_mosfet_phase[i] == TEST_SEQ_PHASE_ON) {
+            // Check run conditions
+            if (s_params.mosfets[i].enabled == 0 || s_params.mosfets[i].ext_control != 0 ||
+                s_mosfet_remaining[i] == 0U) {
+                s_mosfet_phase[i] = TEST_SEQ_PHASE_DONE;
+                continue;
+            }
+
+            // ACTION: Turn ON
+            io_state_t next = *io_get();
+            next.mux[i] = MUX_INT;
+            next.mosfet[i] = true;
+            io_apply(&next);
+
+            // Decrement
+            if (s_mosfet_remaining[i] > 0U) {
+                s_mosfet_remaining[i]--;
+            }
+
+            // Mark start of ON time (wait for TON)
+            s_mosfet_start_ms[i] = now_ms;
+            s_mosfet_phase[i] = TEST_SEQ_PHASE_OFF;
         }
-        s_mosfet_phase = TEST_SEQ_PHASE_ON;
-        return;
+        else if (s_mosfet_phase[i] == TEST_SEQ_PHASE_OFF) {
+            // ACTION: Turn OFF
+            io_state_t next = *io_get();
+            next.mosfet[i] = false;
+            io_apply(&next);
+
+            // Mark start of OFF time (wait for TOFF)
+            s_mosfet_start_ms[i] = now_ms;
+
+            if (s_mosfet_remaining[i] == 0U) {
+                s_mosfet_phase[i] = TEST_SEQ_PHASE_DONE;
+            } else {
+                s_mosfet_phase[i] = TEST_SEQ_PHASE_ON;
+            }
+        }
     }
+}
+
+static uint8_t test_seq_all_done(void)
+{
+    for (uint8_t i = 0; i < 4U; ++i) {
+        if (s_relay_phase[i] != TEST_SEQ_PHASE_DONE) {
+            return 0U;
+        }
+    }
+    for (uint8_t i = 0; i < 2U; ++i) {
+        if (s_mosfet_phase[i] != TEST_SEQ_PHASE_DONE) {
+            return 0U;
+        }
+    }
+    return 1U;
 }
 
 bool test_seq_tick(uint32_t now_ms)
@@ -220,7 +286,7 @@ bool test_seq_tick(uint32_t now_ms)
     test_seq_step_relays(now_ms);
     test_seq_step_mosfets(now_ms);
 
-    if (s_relay_phase == TEST_SEQ_PHASE_DONE && s_mosfet_phase == TEST_SEQ_PHASE_DONE) {
+    if (test_seq_all_done()) {
         s_state = TEST_SEQ_DONE;
         io_safe_off();
         return true;
