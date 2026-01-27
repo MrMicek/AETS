@@ -11,7 +11,7 @@
 
 extern FDCAN_HandleTypeDef hfdcan2;
 
-#define CFD_SUPERLOOP_TX_PERIOD_MS  500
+#define CFD_SUPERLOOP_TX_PERIOD_MS  1000
 #define CFD_OUTPUT_MSG1_ID  49   // Channel_1_2
 #define CFD_OUTPUT_MSG2_ID  50   // Channel_3_4
 
@@ -34,33 +34,23 @@ uint8_t TxData[8] = {0};
 #define TXDATABITOFFSET_MOSFET1_STATE   55
 #define TXDATABITOFFSET_UP_COUNTER      56
 
-static int16_t CurrentCh1_mA = 1;
-static int16_t CurrentCh2_mA = 2;
-static int16_t CurrentCh3_mA = 3;
-static int16_t CurrentCh4_mA = 4;
-
-static uint16_t Relay1_Count = 5;
-static uint16_t Relay2_Count = 6;
-static uint16_t Relay3_Count = 7;
-static uint16_t Relay4_Count = 8;
-
-static uint8_t Relay1_State = 1;
-static uint8_t Relay2_State = 0;
-static uint8_t Relay3_State = 1;
-static uint8_t Relay4_State = 0;
-
-static uint8_t Relay1_Alive = 0;
-static uint8_t Relay2_Alive = 1;
-static uint8_t Relay3_Alive = 0;
-static uint8_t Relay4_Alive = 1;
-
-static uint8_t MUX1_State = 1;
-static uint8_t MUX2_State = 0;
-
-static uint8_t MOSFET1_State = 0;
-static uint8_t MOSFET2_State = 1;
-
 static uint8_t UpCounter = 0;
+static uint16_t relay_count_k(uint32_t remaining)
+{
+    uint32_t count_k = remaining / 1000U;
+    if (count_k > 0x0FFFU) {
+        count_k = 0x0FFFU;
+    }
+    return (uint16_t)count_k;
+}
+
+static uint16_t clamp_current_ma(uint32_t current_ma)
+{
+    if (current_ma > 0x1FFFU) {
+        current_ma = 0x1FFFU;
+    }
+    return (uint16_t)current_ma;
+}
 
 // Helper: Insert bits into buffer
 static void InsertBits(uint8_t *buf, uint32_t bitOffset, uint32_t bitLength, uint32_t value) {
@@ -90,45 +80,48 @@ void cfd_Init(void) {
     HAL_GPIO_WritePin(CAN_STB_GPIO_Port, CAN_STB_Pin, GPIO_PIN_RESET);
 }
 
-void UpdateTxBufferForCan_Msg1(void) {
+static void UpdateTxBufferForCan_Msg1(const cfd_telemetry_t *telemetry) {
     memset(TxData, 0, sizeof(TxData));
 
-    InsertBits(TxData, TXDATABITOFFSET_CURRENT_CH1, 13, CurrentCh1_mA);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY1_COUNT_k, 12, Relay1_Count);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY1_STATE, 1, Relay1_State);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY1_ALIVE, 1, Relay1_Alive);
-    InsertBits(TxData, TXDATABITOFFSET_CURRENT_CH2, 13, CurrentCh2_mA);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY2_COUNT_k, 12, Relay2_Count);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY2_STATE, 1, Relay2_State);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY2_ALIVE, 1, Relay2_Alive);
-    InsertBits(TxData, TXDATABITOFFSET_MUX1_STATE, 1, MUX1_State);
-    InsertBits(TxData, TXDATABITOFFSET_MOSFET1_STATE, 1, MOSFET1_State);
+    InsertBits(TxData, TXDATABITOFFSET_CURRENT_CH1, 13, clamp_current_ma(telemetry->relay_current_ma[0]));
+    InsertBits(TxData, TXDATABITOFFSET_RELAY1_COUNT_k, 12, relay_count_k(telemetry->relay_remaining[0]));
+    InsertBits(TxData, TXDATABITOFFSET_RELAY1_STATE, 1, telemetry->relay_state[0] ? 1U : 0U);
+    InsertBits(TxData, TXDATABITOFFSET_RELAY1_ALIVE, 1, telemetry->relay_remaining[0] > 0U ? 1U : 0U);
+    InsertBits(TxData, TXDATABITOFFSET_CURRENT_CH2, 13, clamp_current_ma(telemetry->relay_current_ma[1]));
+    InsertBits(TxData, TXDATABITOFFSET_RELAY2_COUNT_k, 12, relay_count_k(telemetry->relay_remaining[1]));
+    InsertBits(TxData, TXDATABITOFFSET_RELAY2_STATE, 1, telemetry->relay_state[1] ? 1U : 0U);
+    InsertBits(TxData, TXDATABITOFFSET_RELAY2_ALIVE, 1, telemetry->relay_remaining[1] > 0U ? 1U : 0U);
+    InsertBits(TxData, TXDATABITOFFSET_MUX1_STATE, 1, telemetry->mux_state[0] ? 1U : 0U);
+    InsertBits(TxData, TXDATABITOFFSET_MOSFET1_STATE, 1, telemetry->mosfet_state[0] ? 1U : 0U);
     InsertBits(TxData, TXDATABITOFFSET_UP_COUNTER, 8, UpCounter);
 
     UpCounter++;
 }
 
-void UpdateTxBufferForCan_Msg2(void) {
+static void UpdateTxBufferForCan_Msg2(const cfd_telemetry_t *telemetry) {
     memset(TxData, 0, sizeof(TxData));
 
-    InsertBits(TxData, TXDATABITOFFSET_CURRENT_CH1, 13, CurrentCh3_mA);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY1_COUNT_k, 12, Relay3_Count);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY1_STATE, 1, Relay3_State);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY1_ALIVE, 1, Relay3_Alive);
-    InsertBits(TxData, TXDATABITOFFSET_CURRENT_CH2, 13, CurrentCh4_mA);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY2_COUNT_k, 12, Relay4_Count);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY2_STATE, 1, Relay4_State);
-    InsertBits(TxData, TXDATABITOFFSET_RELAY2_ALIVE, 1, Relay4_Alive);
-    InsertBits(TxData, TXDATABITOFFSET_MUX1_STATE, 1, MUX2_State);
-    InsertBits(TxData, TXDATABITOFFSET_MOSFET1_STATE, 1, MOSFET2_State);
+    InsertBits(TxData, TXDATABITOFFSET_CURRENT_CH1, 13, clamp_current_ma(telemetry->relay_current_ma[2]));
+    InsertBits(TxData, TXDATABITOFFSET_RELAY1_COUNT_k, 12, relay_count_k(telemetry->relay_remaining[2]));
+    InsertBits(TxData, TXDATABITOFFSET_RELAY1_STATE, 1, telemetry->relay_state[2] ? 1U : 0U);
+    InsertBits(TxData, TXDATABITOFFSET_RELAY1_ALIVE, 1, telemetry->relay_remaining[2] > 0U ? 1U : 0U);
+    InsertBits(TxData, TXDATABITOFFSET_CURRENT_CH2, 13, clamp_current_ma(telemetry->relay_current_ma[3]));
+    InsertBits(TxData, TXDATABITOFFSET_RELAY2_COUNT_k, 12, relay_count_k(telemetry->relay_remaining[3]));
+    InsertBits(TxData, TXDATABITOFFSET_RELAY2_STATE, 1, telemetry->relay_state[3] ? 1U : 0U);
+    InsertBits(TxData, TXDATABITOFFSET_RELAY2_ALIVE, 1, telemetry->relay_remaining[3] > 0U ? 1U : 0U);
+    InsertBits(TxData, TXDATABITOFFSET_MUX1_STATE, 1, telemetry->mux_state[1] ? 1U : 0U);
+    InsertBits(TxData, TXDATABITOFFSET_MOSFET1_STATE, 1, telemetry->mosfet_state[1] ? 1U : 0U);
     InsertBits(TxData, TXDATABITOFFSET_UP_COUNTER, 8, UpCounter);
 
     UpCounter++;
 }
 
-void cfd_HandleCommunication(void) {
-    if (HAL_GetTick() >= LastEvalTimeStamp + CFD_SUPERLOOP_TX_PERIOD_MS) {
-        LastEvalTimeStamp = HAL_GetTick();
+void cfd_HandleCommunication(const cfd_telemetry_t *telemetry, uint32_t now_ms) {
+    if (telemetry == NULL) {
+        return;
+    }
+    if (now_ms >= LastEvalTimeStamp + CFD_SUPERLOOP_TX_PERIOD_MS) {
+        LastEvalTimeStamp = now_ms;
 
         HAL_FDCAN_GetProtocolStatus(&hfdcan2, &CanProtStat);
         HAL_FDCAN_GetErrorCounters(&hfdcan2, &CanErrCntrs);
@@ -138,23 +131,11 @@ void cfd_HandleCommunication(void) {
             HAL_FDCAN_Start(&hfdcan2);
         }
         TxHeader.Identifier = CFD_OUTPUT_MSG1_ID;
-        UpdateTxBufferForCan_Msg1();
+        UpdateTxBufferForCan_Msg1(telemetry);
         HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData);
-
-        comu_SendF("Msg1: ID=%d Data=", TxHeader.Identifier);
-		for (int i = 0; i < 8; i++) {
-			comu_SendF("%02X ", TxData[i]);
-		}
-		comu_SendF("\r\n");
 
         TxHeader.Identifier = CFD_OUTPUT_MSG2_ID;
-        UpdateTxBufferForCan_Msg2();
+        UpdateTxBufferForCan_Msg2(telemetry);
         HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader, TxData);
-
-        comu_SendF("Msg2: ID=%d Data=", TxHeader.Identifier);
-        		for (int i = 0; i < 8; i++) {
-        			comu_SendF("%02X ", TxData[i]);
-        		}
-        		comu_SendF("\r\n");
     }
 }
