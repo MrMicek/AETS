@@ -110,7 +110,8 @@ void oled_init(void){
     oled_set_cursor(1,0); oled_puts("Automated");
     oled_set_cursor(2,0); oled_puts("Electrical");
     oled_set_cursor(3,0); oled_puts("Testing");
-    oled_set_cursor(4,0); oled_puts("System         v0.1");
+    oled_set_cursor(4,0); oled_puts("System         v1.0");
+
     //initial message
 
 }

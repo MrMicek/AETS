@@ -348,7 +348,7 @@ static const MenuItem INFO_ITEMS[] = {
     { "< Return", act_back,        NULL },
 	{ "Automated Electric", NULL, NULL},
 	{ "Testing   System", NULL, NULL},
-	{ "Version:  0.1", NULL, NULL},
+	{ "Version:  1.0", NULL, NULL},
 	{ "Author: V.Micek", NULL, NULL},
 	{ "SCHAEFLER CZ sro", NULL, NULL},
 };

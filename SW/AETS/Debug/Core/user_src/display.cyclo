@@ -15,7 +15,7 @@
 ../Core/user_src/display.c:70:6:oled_cmd	1
 ../Core/user_src/display.c:76:6:oled_dat	1
 ../Core/user_src/display.c:83:6:oled_init	1
-../Core/user_src/display.c:118:6:oled_puts	2
-../Core/user_src/display.c:120:6:oled_clear	1
-../Core/user_src/display.c:122:6:oled_set_cursor	4
-../Core/user_src/display.c:128:6:oled_demo	1
+../Core/user_src/display.c:119:6:oled_puts	2
+../Core/user_src/display.c:121:6:oled_clear	1
+../Core/user_src/display.c:123:6:oled_set_cursor	4
+../Core/user_src/display.c:129:6:oled_demo	1

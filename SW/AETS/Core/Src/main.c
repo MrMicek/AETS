@@ -142,6 +142,7 @@ int main(void)
   Current_Init();
   Power_InitBrownout();
   Buzzer_Init();
+  HAL_Delay(1500); //init screen visible time
   Trigger_Init();
   cfd_Init();
   KV_Init();
