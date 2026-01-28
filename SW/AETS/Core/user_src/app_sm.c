@@ -12,8 +12,8 @@
 #include "app_params.h"
 
 #define APP_EVENT_QUEUE_LEN 16
-#define CURRENT_FAULT_STREAK_LIMIT 10U
-#define CURRENT_SAMPLE_SETTLE_MS 50U
+#define CURRENT_FAULT_STREAK_LIMIT 5U
+#define CURRENT_SAMPLE_SETTLE_MS 100U
 
 /*
  * Developer note: application state machine event flow
@@ -43,6 +43,8 @@ static uint32_t s_current_last_ma[4];
 static uint32_t s_current_pending_at[4];
 static uint8_t s_current_pending[4];
 static uint8_t s_current_last_state[4];
+
+static uint32_t s_prev_current_ma[4];
 
 static void app_handle_event(app_event_t evt, uint32_t now_ms);
 static void app_enter_state(app_state_t new_state, uint32_t now_ms);
@@ -96,8 +98,10 @@ void app_tick(uint32_t now_ms)
         if (test_seq_tick(now_ms)) {
             app_post_event((app_event_t){ .type = APP_EVT_TEST_DONE });
         }
+
         if (s_ctx.status.test_state == APP_TEST_RUNNING) {
             const io_state_t *io = io_get();
+
             for (uint8_t i = 0; i < 4U; ++i) {
                 uint8_t enabled = test_seq_relay_is_enabled(i) ? 1U : 0U;
                 uint8_t relay_on = io->relays[i] ? 1U : 0U;
@@ -111,48 +115,59 @@ void app_tick(uint32_t now_ms)
                     continue;
                 }
 
-                if (relay_on && !s_current_last_state[i]) {
+                // 1. Detect Change
+                if (relay_on != s_current_last_state[i]) {
                     s_current_pending[i] = 1U;
-                    uint32_t ton_ms = test_seq_get_relay_ton_ms(i);
+
                     uint32_t settle_ms = CURRENT_SAMPLE_SETTLE_MS;
-                    if (ton_ms > 0U && ton_ms < settle_ms) {
-                        settle_ms = ton_ms;
+                    if (relay_on) { // Optional: shorter settle if Ton is short
+                         uint32_t ton_ms = test_seq_get_relay_ton_ms(i);
+                         if (ton_ms > 0U && ton_ms < settle_ms) settle_ms = ton_ms;
                     }
                     s_current_pending_at[i] = now_ms + settle_ms;
-                } else if (!relay_on) {
-                    s_current_pending[i] = 0U;
-                    s_current_last_ma[i] = 0U;
+                    s_current_last_state[i] = relay_on;
                 }
 
-                s_current_last_state[i] = relay_on;
-
-                if (relay_on && s_current_pending[i] && now_ms >= s_current_pending_at[i]) {
-                    uint32_t current_ma = Current_Read_mA(i);
-                    uint32_t imax_ma = test_seq_get_relay_imax(i);
-                    s_current_last_ma[i] = current_ma;
+                // 2. Check Logic (Runs on settled state for BOTH ON and OFF)
+                if (s_current_pending[i] && now_ms >= s_current_pending_at[i]) {
                     s_current_pending[i] = 0U;
 
+                    uint32_t current_ma = Current_Read_mA(i);
+                    s_current_last_ma[i] = current_ma; // Update Display
+
+                    // --- CHECK A: OVERCURRENT (Always bad) ---
+                    uint32_t imax_ma = test_seq_get_relay_imax(i);
                     if (imax_ma > 0U && current_ma > imax_ma) {
-                        if (s_current_over_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
+                        if (s_current_over_streak[i] < CURRENT_FAULT_STREAK_LIMIT)
                             s_current_over_streak[i]++;
-                        }
                     } else {
                         s_current_over_streak[i] = 0U;
                     }
-                    if (current_ma == 0U) {
-                        if (s_current_zero_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
+
+                    // --- CHECK B: ZERO CURRENT (Universal Logic) ---
+                    // If Current is 0 NOW, AND it was 0 BEFORE...
+                    // Then it never turned on. That is a failure.
+                    if (current_ma == 0U && s_prev_current_ma[i] == 0U) {
+                        if (s_current_zero_streak[i] < CURRENT_FAULT_STREAK_LIMIT)
                             s_current_zero_streak[i]++;
-                        }
                     } else {
+                        // If current is flowing OR previous was flowing, we are good.
                         s_current_zero_streak[i] = 0U;
                     }
 
+                    // Store this reading for the NEXT comparison
+                    s_prev_current_ma[i] = current_ma;
+
+                    // --- TRIGGER FAULT ---
                     if (s_current_fault_posted == 0U &&
                         (s_current_over_streak[i] >= CURRENT_FAULT_STREAK_LIMIT ||
                          s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT)) {
+
                         s_current_fault_posted = 1U;
-                        app_post_event((app_event_t){ .type = APP_EVT_TEST_FAIL,
-                                                      .a = (s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT) ? 2U : 1U });
+                        app_post_event((app_event_t){
+                            .type = APP_EVT_TEST_FAIL,
+                            .a = (s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT) ? 2U : 1U
+                        });
                         break;
                     }
                 }
@@ -202,6 +217,9 @@ static void app_handle_event(app_event_t evt, uint32_t now_ms)
         	    	        }
         	    	    }
         	    	}
+        	for(int i=0; i<4; i++) {
+        	                s_prev_current_ma[i] = Current_Read_mA(i);
+        	            }
             s_ctx.status.return_state = (s_ctx.status.state == APP_STATE_REMOTE) ? APP_STATE_REMOTE : APP_STATE_MANUAL;
             app_enter_state(APP_STATE_TEST, now_ms);
         }

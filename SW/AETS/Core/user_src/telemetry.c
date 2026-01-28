@@ -13,7 +13,7 @@
 #include "test_seq.h"
 #include "stdio.h"
 
-#define TELEMETRY_USB_PERIOD_MS 2000U
+#define TELEMETRY_USB_PERIOD_MS 1000U
 
 static uint32_t s_last_usb_ms = 0U;
 

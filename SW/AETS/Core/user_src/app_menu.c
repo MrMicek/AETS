@@ -525,19 +525,6 @@ static void format_test_entry_relay(char *line, size_t line_len, char prefix, ui
     }
 }
 
-static void format_test_entry_compact_relay(char *line, size_t line_len, char prefix, uint8_t index,
-                                            bool enabled, uint32_t remaining, bool on, uint32_t current_ma)
-{
-    const char *state = on ? "ON" : "OFF";
-    if (!enabled) {
-        snprintf(line, line_len, "%c%u: ***** ***", prefix, (unsigned)(index + 1U));
-    } else {
-        uint32_t shown = (remaining > 99999U) ? 99999U : remaining;
-        uint32_t shown_current = (current_ma > 9999U) ? 9999U : current_ma;
-        snprintf(line, line_len, "%c%u: %05lu %s I:%4lu", prefix, (unsigned)(index + 1U),
-                 (unsigned long)shown, state, (unsigned long)shown_current);
-    }
-}
 
 
 static void app_menu_draw_test_running(uint8_t page)
@@ -558,16 +545,16 @@ static void app_menu_draw_test_running(uint8_t page)
                                 app_get_relay_current_ma(1U));
         oled_write_line_full(4, line);
     } else {
-        format_test_entry_compact_relay(line, sizeof(line), 'R', 2U, test_seq_relay_is_enabled(2U),
-                                        test_seq_get_relay_remaining(2U), io->relays[2],
-                                        app_get_relay_current_ma(2U));
-        char line1[21];
-        snprintf(line1, sizeof(line1), "%s", line);
-        oled_write_line_full(1, line1);
-        format_test_entry_relay(line, sizeof(line), 'R', 3U, test_seq_relay_is_enabled(3U),
-                                test_seq_get_relay_remaining(3U), io->relays[3],
-                                app_get_relay_current_ma(3U));
-        oled_write_line_full(2, line);
+    	format_test_entry_relay(line, sizeof(line), 'R', 2U, test_seq_relay_is_enabled(2U),
+    	                                        test_seq_get_relay_remaining(2U), io->relays[2],
+    	                                        app_get_relay_current_ma(2U));
+    	        // Removed the unnecessary 'line1' copy
+    	oled_write_line_full(1, line);
+
+    	format_test_entry_relay(line, sizeof(line), 'R', 3U, test_seq_relay_is_enabled(3U),
+    	                                test_seq_get_relay_remaining(3U), io->relays[3],
+    	                                app_get_relay_current_ma(3U));
+    	oled_write_line_full(2, line);
         format_test_entry(line, sizeof(line), 'M', 0U, test_seq_mosfet_is_enabled(0U),
                           test_seq_get_mosfet_remaining(0U), io->mosfet[0]);
         oled_write_line_full(3, line);
@@ -600,6 +587,7 @@ static void app_menu_draw_test_running(uint8_t page)
         oled_write_line_full(2, "Test Finished");
         oled_write_line_full(3, "Successfully");
         oled_write_line_full(4, "");
+        (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_STARTUP) : 0;
         break;
     case APP_TEST_SCREEN_ERROR_MAX_CURRENT:
         oled_clear();
@@ -608,6 +596,7 @@ static void app_menu_draw_test_running(uint8_t page)
         oled_write_line_full(2, "Test Ended");
         oled_write_line_full(3, "Error:");
         oled_write_line_full(4, "Current Exceeded");
+        (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_DANGER) : 0;
         break;
     case APP_TEST_SCREEN_ERROR_ZERO_CURRENT:
         oled_clear();
@@ -616,6 +605,7 @@ static void app_menu_draw_test_running(uint8_t page)
         oled_write_line_full(2, "Test Ended");
         oled_write_line_full(3, "Error:");
         oled_write_line_full(4, "No Current Flow");
+        (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_DANGER) : 0;
         break;
     case APP_TEST_SCREEN_NONE:
     	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
@@ -629,6 +619,7 @@ static void app_menu_draw_test_running(uint8_t page)
     	snprintf(line, sizeof(line), "Relay %u:", (unsigned)s_test_fail_relay);
     	oled_write_line_full(3, line);
     	oled_write_line_full(4, "Not enough switches");
+    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_WARNING) : 0;
     	break;
     default:
     	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
@@ -668,9 +659,8 @@ void app_menu_task(void) {
         if (!s_test_screen_drawn) {
             app_menu_draw_test_screen(s_test_screen);
             s_test_screen_drawn = 1;
-            (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_DANGER) : 0;
             if (st.state == APP_STATE_REMOTE) {
-            	comu_SendF("test blocked. Not enough switches left. Relay: %u\r\n", (unsigned)s_test_fail_relay);
+            	comu_SendF("Test blocked. Not enough switches left. Relay: %u\r\n", (unsigned)s_test_fail_relay);
             }
         }
 
@@ -714,8 +704,13 @@ void app_menu_task(void) {
             for (uint8_t i = 0; i < 4U; ++i) {
                 uint32_t remaining = test_seq_get_relay_remaining(i);
                 uint8_t on = io->relays[i] ? 1U : 0U;
-                if (remaining != s_test_cache.relay_remaining[i] || on != s_test_cache.relay_on[i]) {
-                    needs_redraw = 1;
+
+                uint32_t current = app_get_relay_current_ma(i);
+
+                if (remaining != s_test_cache.relay_remaining[i] ||
+                                    on != s_test_cache.relay_on[i] ||
+                                    current != s_test_cache.relay_current_ma[i]) { // Check Current!
+                   needs_redraw = 1;
                 }
             }
             for (uint8_t i = 0; i < 2U; ++i) {
@@ -737,6 +732,7 @@ void app_menu_task(void) {
                 for (uint8_t i = 0; i < 4U; ++i) {
                     s_test_cache.relay_remaining[i] = test_seq_get_relay_remaining(i);
                     s_test_cache.relay_on[i] = io->relays[i] ? 1U : 0U;
+                    s_test_cache.relay_current_ma[i] = app_get_relay_current_ma(i);
                 }
                 for (uint8_t i = 0; i < 2U; ++i) {
                     s_test_cache.mosfet_remaining[i] = test_seq_get_mosfet_remaining(i);

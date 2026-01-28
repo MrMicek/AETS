@@ -15,7 +15,7 @@
 #define APPINFO_HWVER		"RevA"
 #define APPINFO_FWVER		"0.0"
 #define APPINFO_ID			"1"
-#define APPINFO_CALDATE	"20251017"
+#define APPINFO_CALDATE	"20260128"
 
 
 /*

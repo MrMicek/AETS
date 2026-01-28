@@ -1,7 +1,7 @@
 Core/user_src/encoder_menu.o: ../Core/user_src/encoder_menu.c \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/encoder.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/comuser.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/encoder.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h \
  ../Core/Inc/main.h ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \
@@ -43,15 +43,15 @@ Core/user_src/encoder_menu.o: ../Core/user_src/encoder_menu.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h \
  ../Core/Inc/tim.h ../Core/Inc/main.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/display.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_menu.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/buzzer.h \
- C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_params.h
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/encoder.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/comuser.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h:
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/display.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_menu.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/buzzer.h \
+ C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_params.h
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/encoder.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/comuser.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/error.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -95,9 +95,9 @@ C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/error.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h:
 ../Core/Inc/tim.h:
 ../Core/Inc/main.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/display.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_menu.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/menu.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/buzzer.h:
-C:/Users/user/Desktop/AETS/SW/AETS/Core/user_inc/app_params.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/display.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_menu.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/menu.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/buzzer.h:
+C:/Users/uiv10467/OneDrive\ -\ Vitesco\ Technologies/Plocha/AETS/AETS/SW/AETS/Core/user_inc/app_params.h:

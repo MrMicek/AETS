@@ -31,38 +31,66 @@
 
 
 
-
-#define HELP_LINE_1		"> CanToUsb help.\r\n"
-#define HELP_LINE_2		"> Space or tab interchangeably used as separator for commands, responses and events. Variables are closed in [] brackets.\r\n"
-#define HELP_LINE_3		"> Generic command syntax is: [CRC] [Cmd] [CmdId] [Param1] [Param2] ... [ParamN].\r\n"
-#define HELP_LINE_3_1	">    Example: tx OFF 0A 8 0B 02 00 00 00 00 00 00. Please note that CRC might be optionally omitted.\r\n"
-#define HELP_LINE_3_2	">    When text is used instead of CmdId, it is evaluated as zero. Helpful to tag commands.\r\n"
-#define HELP_LINE_3_3	">    Some commands are followed by synchronous response: [CRC] cmd [Cmd] [CmdId] [Param1] [Param2] ... [ParamN].\r\n"
-#define HELP_LINE_4		">    Each command is acknowledged: [CRC] ack [Cmd] [CmdId] [ErrorCode] [TimeStamp_ms].\r\n"
-#define HELP_LINE_5		"> Events are asynchronous to command reception and acknowledge and may be received any time without any request.\r\n"
-#define HELP_LINE_6		"> Transmit CAN message: [CRC] tx [CmdId] [MsgId_hex] [ByteCnt_hex] [B0_hex] [B1_hex] [B2_hex] [B3_hex] [B4_hex] [B5_hex] [B6_hex] [B7_hex].\r\n"
-#define HELP_LINE_7		"> Received CAN message event: [CRC] evt canrx [TimeStamp_ms] [StdId_hex] [ExtId_hex] [ByteCnt_hex] [B0_hex] [B1_hex] [B2_hex] [B3_hex] [B4_hex] [B5_hex] [B6_hex] [B7_hex].\r\n"
-#define HELP_LINE_7_1	"> Received CAN bus error event: [CRC] evt err [TimeStamp] [REC_hex] [TEC_hex] [LEC_hex] [BOFF_hex] [EPVF_hex] [EWGF_hex].\r\n"
-#define HELP_LINE_7_2	">    REC, TEC: receive, transmit error counters. BOFF: bus off flag, EPVF: error passive flag, EWGF: error warning flag.\r\n"
-#define HELP_LINE_7_3	">    LEC: last error code. 0 = no, 1 = stuff, 2 = form, 3 = ack, 4 = bit recessive, 5 = bit dominant, 6 = CRC, 7 = SW.\r\n"
-#define HELP_LINE_8		"> Byte order might be changed for both tx command and canrx event: [CRC] so [CmdId] [Order: 0 = normal, 1 = inverted].\r\n"
-#define HELP_LINE_9		">    Currently set byte order might be read: [CRC] go [CmdId]. Response: [CRC] go [CmdId] [Order].\r\n"
-#define HELP_LINE_10	"> Baud rate configuration command: [CRC] sr [CmdId] [BR_kbps: 250, 500, 1000].\r\n"
-#define HELP_LINE_11	">    Get current baud rate command: [CRC] gr [CmdId]. Response: [CRC] gr [CmdId] [BR_kbps].\r\n"
-#define HELP_LINE_12	"> Standard or extended CAN ID can be configured for transmission: [CRC] st [CmdId] [isExtended: 0=normal, 1=extended].\r\n"
-#define HELP_LINE_13	">    Get currently used CAN ID type for transmission: [CRC] gt [CmdId]. Response: [CRC] cmd gt [CmdId] [isExtended].\r\n"
-#define HELP_LINE_13_1	"> Silent mode (no dominant bits transmitted) may be enabled (IsSilent = 1) or disabled (IsSilent = 0).\r\n"
-#define HELP_LINE_13_2	">    Set silent mode: [CRC] ss [CmdId] [IsSilent] [ResponseWait_ms].\r\n"
-#define HELP_LINE_13_3	">    If ResponseWait_ms = 0 silent mode is disabled permanently after first requested transmission.\r\n"
-#define HELP_LINE_13_4	">    If ResponseWait_ms = n (1 to 60 000) silent mode is disabled only for n ms after all next requested transmissions.\r\n"
-#define HELP_LINE_13_5  "> Parameter commands: param relay|mosfet|trigger|conn|buzzer [get|set] ...\r\n"
-#define HELP_LINE_13_6  ">    Examples: param relay get 1 | param relay set 1 1 100 100 500 10\r\n"
-#define HELP_LINE_13_7  ">              param mosfet set 2 1 0 100 100 5 | param trigger set 1 2\r\n"
-#define HELP_LINE_13_8  ">              param conn set 1 1 1 | param buzzer set 1\r\n"
-#define HELP_LINE_13_9  "> Test screens: test ok | test errmax | test errzero (in REMOTE mode)\r\n"
-#define HELP_LINE_14	"> Enjoy the tool.\r\n"
+#define HELP_LINE_SPACE "\r\n"
+#define HELP_LINE_SEPARATOR "----------------------------------------\r\n"
+#define HELP_LINE_ERROR "> Error Codes:\r\n> 0 = OK\r\n> 1 = Unknown command\r\n> 2 = Invalid parameters\r\n> 3 = Missing parameters\r\n> 4 = Parameter out of range\r\n> 5 = Internal error\r\n> 18 = Command disabled in current mode\r\n"
 
 
+#define HELP_LINE_1		"> AETS help.\r\n"
+
+#define HELP_LINE_2		"> INPUT COMMANDS:\r\n"
+
+#define HELP_LINE_3		"> 1. HELP/INFO Commands: \r\n"
+#define HELP_LINE_3_1	"> - gh (help)(Expect: multi-line help text, then ""ack gh <cmdId> 0 <timestamp>"".)\r\n"
+#define HELP_LINE_3_2	"> - gi (device info)(Expect: ""cmd gi <cmdId> <device info...>"" then ""ack gi <cmdId> 0 <timestamp>"".)\r\n"
+
+#define HELP_LINE_3_3	"> 2. Remote-mode gating: \r\n"
+#define HELP_LINE_4		"> - When not in REMOTE mode, only the ""mode"" command or ""test stop"" command is accepted. Other commands should return ack error code 18 (disabled).\r\n"
+#define HELP_LINE_5		"> - Use the menu Connectivity -> Remote Mode to enter REMOTE, or ""mode set remote"" if allowed.\r\n"
+
+#define HELP_LINE_6		"> 3. Mode Control Commands: \r\n"
+#define HELP_LINE_7		"> - mode get (return current mode)(Expect: ""cmd mode <cmdId> <state>"" then ack.)\r\n"
+#define HELP_LINE_7_1	"> - mode set [<manual|remote|test>] (set current mode) (params: 1. mode) (Expect: ack with error 0 if transition allowed; a later ""evt state <state>"" event.)\r\n"
+
+#define HELP_LINE_7_2	"> 4. RELAY Commands: \r\n"
+#define HELP_LINE_7_3	"> - relay get (returns current state of relays 1-4)(Expect: ""cmd relay <cmdId> r1 r2 r3 r4"" then ack.)\r\n"
+#define HELP_LINE_8		"> - rcnt get [<1-4>] (params: 1. relay channel) (Expect: counters for all or single relay.)\r\n"
+#define HELP_LINE_9		"> - curr ma  [<1-4>] (return current measurement in mA on selected channel) (params: 1. relay channel) (Expect: ""cmd current <cmdId> <ma>"" (or equivalent) then ack.)\r\n"
+
+#define HELP_LINE_10	"> 5. MOSFET & MUX Commands:\r\n"
+#define HELP_LINE_11	"> - mosfet get (return state of mosfets m1 and m2) (Expect: ""cmd mosfet <cmdId> m1 m2"" then ack.)\r\n"
+#define HELP_LINE_12	"> - mux get (returns state of the multiplexers. Can be in states INTERNAL or EXTERNAL) (Expect: ""cmd mux <cmdId> <mux1> <mux2>"" with 0=INT, 1=EXT.)\r\n"
+#define HELP_LINE_13	"> - mux set [<1|2>] [<0|1>] (params: 1. mux channel, 2. state for mux [0 = INT, 1 = EXT]) (Expect: selected mux channel switches (Indicated by LED).)\r\n"
+
+#define HELP_LINE_13_1	"> 6. TEST CONTROL Commands: \r\n"
+#define HELP_LINE_13_2	"> - test start current (starts test according to current settings) (Expect: ack; ""evt state TEST""; outputs may follow test sequence set by current settings.)\r\n"
+#define HELP_LINE_13_3	"> - test start profile [<1-6>] (starts test according to selected profile settings) (params: 1. profile number) (Expect: ack; ""evt state TEST""; outputs may follow test sequence set by selected profile settings.)\r\n"
+#define HELP_LINE_13_4	"> - test stop (stop running test) (Expect: ack; ""evt state REMOTE"" (if stopped remotely, if stopped manually expect: ""evt state MANUAL"")\r\n"
+
+#define HELP_LINE_13_5  "> 7. PARAMETER SETTING Commands: \r\n"
+#define HELP_LINE_13_6  "> - param relay get [<1-4>] (params: 1. relay channel) (Expect: one line per relay (or single relay) in the form ""cmd param <cmdId> relay <id> <enable> <ton_ms> <toff_ms> <imax_ma> <sw_count_k>"".)\r\n"
+#define HELP_LINE_13_7  "> - param relay set [<1-4>] [<0|1>] [<ton_ms>] [<toff_ms>] [<imax_ma>] [<sw_count_k>] (params: 1. relay channel, 2. enable, 3. On time [ms], 4. Off time [ms], 5. Maximum current [mA], 6. Number of cycles in thousands) (Expect: ack)\r\n"
+#define HELP_LINE_13_8  "> - param mosfet get [<1|2>] (params: 1. relay channel) (Expect: ""cmd param <cmdId> mosfet <id> <enable> <ext> <ton_ms> <toff_ms> <sw_count>"".)\r\n"
+#define HELP_LINE_13_9  "> - param mosfet set [<1-2>] [<0|1>] [<0|1>] [<ton_ms>] [<toff_ms>] [<sw_count>] (params: 1. Mosfet channel, 2. enable, 3. Internal/External Control , 4. On time [ms], 5. Off time [ms], 6. Number of cycles) (Expect: ack; ext=1 forces mux to EXT and MOSFET output off.)\r\n"
+#define HELP_LINE_14	"> - param trigger get (Expect: ""cmd param <cmdId> trigger <enable> <Relay channel>"".)\r\n"
+#define HELP_LINE_15	"> - param trigger set [<0|1>] [<1-4>] (params: 1. Enable, 2. Relay channel) (Expect: ack; channel must be 1-4.)\r\n"
+#define HELP_LINE_16	"> - param conn get (Expect: ""cmd param <cmdId> conn <remote mode> <can_output> <usb_output>"".)\r\n"
+#define HELP_LINE_17	"> - param conn set [<0|1>] [<0|1>] [<0|1>] (params: 1. Enable Remote Mode,, 2. Enable CAN Output, 3. Enable USB Output) (Expect: ack; settings reflected in menu.) \r\n"
+#define HELP_LINE_18	"> - param buzzer get (Expect: ""cmd param <cmdId> buzzer <enable>"".) \r\n"
+#define HELP_LINE_19	"> - param buzzer set [<0|1>] (params: 1. buzzer Enable) (Expect: ack; menu should reflect new value.)\r\n"
+
+#define HELP_LINE_20	"> 7.1 DEFAULT BUZZER/CONN/TRIGGER PARAMETERS: .\r\n"
+#define HELP_LINE_21	"> .buzzer_enable = 1, .connectivity = {.enable = 0,.can_enable = 0,.usb_enable = 0,},.trigger = {.enable = 0,.channel = 1,} .\r\n"
+
+#define HELP_LINE_22	"> USB OUTPUT DESCRIPTION:\r\n"
+#define HELP_LINE_23	"> - Test blocked. Not enough switches left. Relay: x (Relay doesnt have enough available switches for test, x represents the channel number )\r\n"
+#define HELP_LINE_24	"> - out <timestamp> r1 <remaining_k> <state> <current_ma> r2 <remaining_k> <state> <current_ma> r3 <remaining_k> <state> <current_ma> r4 <remaining_k> <state> <current_ma> m1 <state> m2 <state> (Output from Running Test).\r\n"
+#define HELP_LINE_25	"> - Test Stopped (test stopped manually or remotely)\r\n"
+#define HELP_LINE_26	"> - Test Fail: Zero Current (Maximum steps with 0 current measured was exceeded)\r\n"
+#define HELP_LINE_27	"> - Test Fail: OverCurrent (Maximum steps with current above maximum threshold was exceeded)\r\n"
+#define HELP_LINE_28	"> - Test Done (Test finnished succesfully).\r\n"
+
+#define HELP_LINE_29	"> CAN OUTPUT DESCRIPTION:\r\n"
 typedef struct{
         char* Name;
         err_Td (*CallbackFn)(char *cmdName, int32_t cmdId);
@@ -111,34 +139,110 @@ static err_Td GetInfoCb(char *cmdName, int32_t cmdId){
  */
 static err_Td GetHelpCb(char *cmdName, int32_t cmdId){
 	comu_SendF(HELP_LINE_1);
+	comu_SendF(HELP_LINE_SEPARATOR);
 	comu_SendF(HELP_LINE_2);
+	comu_SendF(HELP_LINE_SPACE);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
 	comu_SendF(HELP_LINE_3);
 	comu_SendF(HELP_LINE_3_1);
 	comu_SendF(HELP_LINE_3_2);
+	comu_SendF(HELP_LINE_SPACE);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
 	comu_SendF(HELP_LINE_3_3);
 	comu_SendF(HELP_LINE_4);
 	comu_SendF(HELP_LINE_5);
+
+	comu_HandleCommunication();
+	comu_SendF(HELP_LINE_SPACE);
+
+	comu_SendF(HELP_LINE_ERROR);
+	comu_HandleCommunication();
+	comu_SendF(HELP_LINE_SPACE);
+
+
 	comu_SendF(HELP_LINE_6);
 	comu_SendF(HELP_LINE_7);
 	comu_SendF(HELP_LINE_7_1);
+	comu_SendF(HELP_LINE_SPACE);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
 	comu_SendF(HELP_LINE_7_2);
 	comu_SendF(HELP_LINE_7_3);
 	comu_SendF(HELP_LINE_8);
 	comu_SendF(HELP_LINE_9);
+	comu_SendF(HELP_LINE_SPACE);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
 	comu_SendF(HELP_LINE_10);
 	comu_SendF(HELP_LINE_11);
 	comu_SendF(HELP_LINE_12);
 	comu_SendF(HELP_LINE_13);
+	comu_SendF(HELP_LINE_SPACE);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
 	comu_SendF(HELP_LINE_13_1);
 	comu_SendF(HELP_LINE_13_2);
 	comu_SendF(HELP_LINE_13_3);
 	comu_SendF(HELP_LINE_13_4);
+	comu_SendF(HELP_LINE_SPACE);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
 	comu_SendF(HELP_LINE_13_5);
 	comu_SendF(HELP_LINE_13_6);
 	comu_SendF(HELP_LINE_13_7);
 	comu_SendF(HELP_LINE_13_8);
 	comu_SendF(HELP_LINE_13_9);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
 	comu_SendF(HELP_LINE_14);
+	comu_SendF(HELP_LINE_15);
+	comu_SendF(HELP_LINE_16);
+	comu_SendF(HELP_LINE_17);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
+	comu_SendF(HELP_LINE_18);
+	comu_SendF(HELP_LINE_19);
+	comu_SendF(HELP_LINE_SPACE);
+	comu_SendF(HELP_LINE_20);
+	comu_SendF(HELP_LINE_21);
+	comu_SendF(HELP_LINE_SEPARATOR);
+	comu_SendF(HELP_LINE_SPACE);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
+	comu_SendF(HELP_LINE_22);
+	comu_SendF(HELP_LINE_23);
+	comu_SendF(HELP_LINE_24);
+	comu_SendF(HELP_LINE_25);
+	comu_SendF(HELP_LINE_26);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
+	comu_SendF(HELP_LINE_27);
+	comu_SendF(HELP_LINE_28);
+	comu_SendF(HELP_LINE_SEPARATOR);
+	comu_SendF(HELP_LINE_SPACE);
+	comu_SendF(HELP_LINE_29);
 	return err_Td_Ok;
 }
 
@@ -618,7 +722,9 @@ void cmd_Handle(char *str){
 		app_status_t st = app_get_status();
 		if (st.state != APP_STATE_REMOTE && strcmp(Name, "mode") != 0) {
 			if (st.state != APP_STATE_REMOTE && strcmp(Name, "test") != 0)
-				ErrNo = err_Td_Disabled;
+				if (st.state != APP_STATE_REMOTE && strcmp(Name, "gh") != 0)
+					if (st.state != APP_STATE_REMOTE && strcmp(Name, "gi") != 0)
+						ErrNo = err_Td_Disabled;
 		}
 	}
 
