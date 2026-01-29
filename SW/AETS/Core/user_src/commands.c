@@ -94,6 +94,11 @@
 #define HELP_LINE_28	"> - Test Done (Test finnished succesfully).\r\n"
 
 #define HELP_LINE_29	"> CAN OUTPUT DESCRIPTION:\r\n"
+#define HELP_LINE_30	"> Frame 1 (ID = 49):  \r\n> 0 .. 12 : 	Current CH1 (13 bits) - Relay 1 current in mA clamped to 13 bits.\r\n> 13 .. 24 : 	Relay1 Count-k (12 bits) - Remaining switch count for Relay 1 in kilo-units.\r\n> 25 : 		Relay1 State (1 bit) - Relay 1 output state [ 0 = OFF ; 1 = ON]. \r\n> 26 : 		Relay1 Alive (1 bit) - Relay 1 health monitor [ 0 = remaining count <= 0 ; 1 = remaining count > 0]. \r\n> 27 .. 39 : 	Current CH2 (13 bits) - Relay 2 current in mA clamped to 13 bits.\r\n> 40 .. 51 : 	Relay2 Count-k (12 bits) - Remaining switch count for Relay 2 in kilo-units.\r\n"
+#define HELP_LINE_31	"> 52 : 		Relay2 State (1 bit) - Relay 2 output state [ 0 = OFF ; 1 = ON]. \r\n> 53 : 		Relay2 Alive (1 bit) - Relay 1 health monitor [ 0 = remaining count <= 0 ; 1 = remaining count > 0].\r\n> 54 : 		MUX1 State (1 bit) - [0 = INT, 1 = EXT] \r\n> 55 : 		MOSFET1 State (1 bit) - MOSFET 1 output state [ 0 = OFF ; 1 = ON]. \r\n> 56 .. 63 : 	Up-Counter (8 bit) - 8-bit counter incremented every CAN frame \r\n"
+#define HELP_LINE_32	"> Frame 2 (ID = 50):  \r\n> 0 .. 12 : 	Current CH3 (13 bits) - Relay 3 current in mA clamped to 13 bits.\r\n> 13 .. 24 : 	Relay3 Count-k (12 bits) - Remaining switch count for Relay 3 in kilo-units.\r\n> 25 : 		Relay3 State (1 bit) - Relay 3 output state [ 0 = OFF ; 1 = ON]. \r\n> 26 : 		Relay3 Alive (1 bit) - Relay 3 health monitor [ 0 = remaining count <= 0 ; 1 = remaining count > 0]. \r\n> 27 .. 39 : 	Current CH4 (13 bits) - Relay 4 current in mA clamped to 13 bits.\r\n> 40 .. 51 : 	Relay4 Count-k (12 bits) - Remaining switch count for Relay 4 in kilo-units.\r\n"
+#define HELP_LINE_33	"> 52 : 		Relay4 State (1 bit) - Relay 4 output state [ 0 = OFF ; 1 = ON]. \r\n> 53 : 		Relay4 Alive (1 bit) - Relay 4 health monitor [ 0 = remaining count <= 0 ; 1 = remaining count > 0].\r\n> 54 : 		MUX2 State (1 bit) - [0 = INT, 1 = EXT] \r\n> 55 : 		MOSFET2 State (1 bit) - MOSFET 2 output state [ 0 = OFF ; 1 = ON]. \r\n> 56 .. 63 : 	Up-Counter (8 bit) - 8-bit counter incremented every CAN frame \r\n"
+
 typedef struct{
         char* Name;
         err_Td (*CallbackFn)(char *cmdName, int32_t cmdId);
@@ -252,6 +257,22 @@ static err_Td GetHelpCb(char *cmdName, int32_t cmdId){
 	comu_SendF(HELP_LINE_SEPARATOR);
 	comu_SendF(HELP_LINE_SPACE);
 	comu_SendF(HELP_LINE_29);
+	comu_SendF(HELP_LINE_30);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
+	comu_SendF(HELP_LINE_31);
+	comu_SendF(HELP_LINE_SPACE);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
+
+	comu_SendF(HELP_LINE_32);
+	comu_SendF(HELP_LINE_33);
+
+	comu_HandleCommunication();
+	HAL_Delay(10);
 	return err_Td_Ok;
 }
 
