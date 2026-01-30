@@ -28,6 +28,7 @@
 #include "current.h"
 #include "app_params.h"
 #include "app_menu.h"
+#include "profile_store.h"
 
 
 
@@ -81,6 +82,8 @@
 #define HELP_LINE_17	"> - param conn set [<0|1>] [<0|1>] [<0|1>] (params: 1. Enable Remote Mode,, 2. Enable CAN Output, 3. Enable USB Output) (Expect: ack; settings reflected in menu.) \r\n"
 #define HELP_LINE_18	"> - param buzzer get (Expect: ""cmd param <cmdId> buzzer <enable>"".) \r\n"
 #define HELP_LINE_19	"> - param buzzer set [<0|1>] (params: 1. buzzer Enable) (Expect: ack; menu should reflect new value.)\r\n"
+#define HELP_LINE_19_1	"> - param reset (Resets all the current parameters to their default values) (Expect: ack; menu should reflect new value.)\r\n"
+#define HELP_LINE_19_2	"> - param list profile [<1-6>] (params: 1. profile number) (List every parameter from selected profile) (Expect: ack)\r\n"
 
 #define HELP_LINE_20	"> 9.1 DEFAULT BUZZER/CONN/TRIGGER PARAMETERS: .\r\n"
 #define HELP_LINE_21	"> .buzzer_enable = 1, .connectivity = {.enable = 0,.can_enable = 0,.usb_enable = 0,},.trigger = {.enable = 0,.channel = 1,} .\r\n"
@@ -234,6 +237,8 @@ static err_Td GetHelpCb(char *cmdName, int32_t cmdId){
 
 	comu_SendF(HELP_LINE_18);
 	comu_SendF(HELP_LINE_19);
+	comu_SendF(HELP_LINE_19_1);
+	comu_SendF(HELP_LINE_19_2);
 	comu_SendF(HELP_LINE_SPACE);
 	comu_SendF(HELP_LINE_20);
 	comu_SendF(HELP_LINE_21);
@@ -496,7 +501,15 @@ static err_Td ParamCmdCb(char *cmdName, int32_t cmdId)
     char *group = cmd_next_token();
     char *action = cmd_next_token();
 
-    if (!group || !action) return err_Td_Param;
+    if (!group) return err_Td_Param;
+
+    if(strcmp(group, "reset") == 0){
+		app_params_init();
+		io_apply(io_get());
+		return err_Td_Ok;
+   	}
+
+    if(!action) return err_Td_Param;
 
     if (strcmp(group, "relay") == 0) {
         if (strcmp(action, "get") == 0) {
@@ -629,6 +642,47 @@ static err_Td ParamCmdCb(char *cmdName, int32_t cmdId)
             return err_Td_Ok;
         }
         return err_Td_NotValid;
+    }
+
+
+    if (strcmp(group, "list") == 0) {
+		if (strcmp(action, "profile") == 0) {
+			char *id_s = cmd_next_token(); // expect profile number 1..6
+
+			int id = atoi(id_s);
+			if (id < 1 || id > PROFILE_STORE_COUNT) return err_Td_Range;
+
+			app_profile_t profile;
+			if (!profile_store_load((uint8_t)id, &profile)) {
+			   return err_Td_NotFound;
+			   }
+
+
+			// Print same format as param relay/mosfet/trigger/conn/buzzer get
+				comu_SendF(HELP_LINE_SEPARATOR);
+			    comu_SendF("Connectivity:\r\nRemote Mode Enabled: %d \r\nCAN Output Enabled: %d\r\nUSB Output Enabled: %d\r\n", profile.connectivity.enable, profile.connectivity.can_enable, profile.connectivity.usb_enable);
+			    comu_SendF(HELP_LINE_SPACE);
+			    comu_SendF("Buzzer enabled: %d\r\n",profile.buzzer_enable);
+			    comu_SendF(HELP_LINE_SPACE);
+			    comu_SendF("Trigger Enable: %d \r\nTrigger Channel: %d\r\n", profile.trigger.enable, profile.trigger.channel);
+			    comu_SendF(HELP_LINE_SPACE);
+			    comu_HandleCommunication();
+			    comu_SendF(HELP_LINE_SEPARATOR);
+			    for (int i = 0; i < 4; ++i) {
+			        relay_params_t *p = &profile.relays[i];
+			        comu_SendF("Relay %d:\r\nEnable: %d\r\nT_on: %d ms\r\nT_off: %d ms\r\nMaximum Current: %d mA\r\nSwitch Count: %d k\r\n",
+			                   i + 1, p->enabled, p->ton_ms, p->toff_ms, p->imax_ma, p->sw_count_k);
+			        comu_SendF(HELP_LINE_SPACE);
+			    }
+			    comu_SendF(HELP_LINE_SEPARATOR);
+			    for (int i = 0; i < 2; ++i) {
+			        mosfet_params_t *p = &profile.mosfets[i];
+			        comu_SendF("Mosfet %d:\r\nEnable: %d\r\nExternal control: %d\r\nT_on: %d ms\r\nT_off: %d ms\r\nSwitch Count: %d\r\n",
+			                   i + 1, p->enabled, p->ext_control, p->ton_ms, p->toff_ms, p->sw_count);
+			        comu_SendF(HELP_LINE_SPACE);
+			    }
+			    return err_Td_Ok;
+			}
     }
 
     return err_Td_NotValid;

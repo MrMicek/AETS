@@ -99,6 +99,8 @@ static const buzz_step_t PATTERN_BAD_INPUT[]= { {1000, 100, 0} };
 static const buzz_step_t PATTERN_INFO[]     = { {2500,  50, 0} };
 static const buzz_step_t PATTERN_STARTUP[]  = { {1800, 150, 100}, {1800, 150, 0} };
 static const buzz_step_t PATTERN_SHUTDOWN[] = { {1200, 300, 0} };
+static const buzz_step_t PATTERN_SAVE[] = { {2200, 80, 80}, {2600, 80, 0} };
+static const buzz_step_t PATTERN_LOAD[] = { {1600, 200, 0} };
 
 typedef struct {
     const buzz_step_t *steps;
@@ -113,6 +115,8 @@ static const pattern_desc_t pattern_table[] = {
     [BUZZER_INFO]     = { PATTERN_INFO,      (uint8_t)(sizeof(PATTERN_INFO)/sizeof(buzz_step_t)) },
     [BUZZER_STARTUP]  = { PATTERN_STARTUP,   (uint8_t)(sizeof(PATTERN_STARTUP)/sizeof(buzz_step_t)) },
     [BUZZER_SHUTDOWN] = { PATTERN_SHUTDOWN,  (uint8_t)(sizeof(PATTERN_SHUTDOWN)/sizeof(buzz_step_t)) },
+	[BUZZER_SAVE]  	  = { PATTERN_SAVE,   (uint8_t)(sizeof(PATTERN_SAVE)/sizeof(buzz_step_t)) },
+	[BUZZER_LOAD]     = { PATTERN_LOAD,  (uint8_t)(sizeof(PATTERN_LOAD)/sizeof(buzz_step_t)) },
 };
 
 static buzzer_pattern_t s_pattern = BUZZER_NONE;

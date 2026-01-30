@@ -26,6 +26,7 @@
 // Common back action
 static void saveToProfile(int n) {
     (void)profile_store_save((uint8_t)n, &g_app_params);
+    (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_SAVE) : 0;
 }
 
 // Common back action
@@ -35,6 +36,7 @@ static void loadFromProfile(int n) {
         profile_store_apply(&profile, &g_app_params);
         io_apply(io_get());
         menu_draw_full(menu_get_active());
+        (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_LOAD) : 0;
     }
 }
 
@@ -84,6 +86,13 @@ static void act_back(void) {
     menu_back();
 }
 
+static void reset_params(void) {
+	app_params_init();
+	io_apply(io_get());
+	menu_draw_full(menu_get_active());
+	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_STARTUP) : 0;
+	act_back();
+}
 
 
 // ---------- SUBMENUS_3 ------------------------------------------------------------------------------
@@ -342,6 +351,20 @@ static Menu gSetRelayHealth = {
     .flags = 0,
 };
 
+static const MenuItem RESET_PARAMETERS[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", reset_params, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gResetParameters = {
+    .items = RESET_PARAMETERS,
+    .count = sizeof(RESET_PARAMETERS)/sizeof(RESET_PARAMETERS[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
 
 // ---------- SUBMENUS_1 ----------------------------------------------------------------------------------------
 static const MenuItem INFO_ITEMS[] = {
@@ -364,6 +387,7 @@ static Menu gInfoMenu = {
 static const MenuItem SETTINGS_ITEMS[] = {
     { "< Return", act_back,        NULL },
 	{ "Buzzer enable", NULL, NULL, &g_app_params.buzzer_enable, 0, 1},
+	{ "Reset parameters", NULL, &gResetParameters }
 };
 static Menu gSettingMenu = {
     .items = SETTINGS_ITEMS,

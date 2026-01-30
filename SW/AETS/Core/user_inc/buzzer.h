@@ -23,7 +23,9 @@ typedef enum {
     BUZZER_BAD_INPUT,  // 1× 100ms @ 1kHz
     BUZZER_INFO,       // 1×  50ms @ 2.5kHz
     BUZZER_STARTUP,    // 2× 150ms @ 1.8kHz, 100ms gaps
-    BUZZER_SHUTDOWN    // 1× 300ms @ 1.2kHz
+    BUZZER_SHUTDOWN,    // 1× 300ms @ 1.2kHz
+	BUZZER_SAVE,
+	BUZZER_LOAD
 } buzzer_pattern_t;
 
 // Init / low-level control
