@@ -23,6 +23,13 @@
 #include "relay_health_store.h"
 #include "profile_store.h"
 
+
+// Common back action
+void act_back(void) {
+    menu_back();
+}
+
+
 // Common back action
 static void saveToProfile(int n) {
     (void)profile_store_save((uint8_t)n, &g_app_params);
@@ -40,23 +47,23 @@ static void loadFromProfile(int n) {
     }
 }
 
-static void saveToProfile1(void) { saveToProfile(1); }
-static void loadFromProfile1(void) { loadFromProfile(1); }
+static void saveToProfile1(void) { saveToProfile(1); act_back(); }
+static void loadFromProfile1(void) { loadFromProfile(1); act_back();}
 
-static void saveToProfile2(void) { saveToProfile(2); }
-static void loadFromProfile2(void) { loadFromProfile(2); }
+static void saveToProfile2(void) { saveToProfile(2); act_back();}
+static void loadFromProfile2(void) { loadFromProfile(2); act_back();}
 
-static void saveToProfile3(void) { saveToProfile(3); }
-static void loadFromProfile3(void) { loadFromProfile(3); }
+static void saveToProfile3(void) { saveToProfile(3); act_back();}
+static void loadFromProfile3(void) { loadFromProfile(3); act_back();}
 
-static void saveToProfile4(void) { saveToProfile(4); }
-static void loadFromProfile4(void) { loadFromProfile(4); }
+static void saveToProfile4(void) { saveToProfile(4); act_back();}
+static void loadFromProfile4(void) { loadFromProfile(4); act_back();}
 
-static void saveToProfile5(void) { saveToProfile(5); }
-static void loadFromProfile5(void) { loadFromProfile(5); }
+static void saveToProfile5(void) { saveToProfile(5); act_back();}
+static void loadFromProfile5(void) { loadFromProfile(5); act_back();}
 
-static void saveToProfile6(void) { saveToProfile(6); }
-static void loadFromProfile6(void) { loadFromProfile(6); }
+static void saveToProfile6(void) { saveToProfile(6); act_back();}
+static void loadFromProfile6(void) { loadFromProfile(6); act_back();}
 
 
 static uint8_t s_test_fail_relay = 0;
@@ -81,10 +88,6 @@ static void act_test_profile4(void) { act_test_profile(4U); }
 static void act_test_profile5(void) { act_test_profile(5U); }
 static void act_test_profile6(void) { act_test_profile(6U); }
 
-// Common back action
-static void act_back(void) {
-    menu_back();
-}
 
 static void reset_params(void) {
 	app_params_init();
@@ -164,11 +167,179 @@ static Menu gRelay4Menu = {
     .flags = 0,
 };
 
+static const MenuItem LOAD_PROFILE_1[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", loadFromProfile1, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gLoadProfile1 = {
+    .items = LOAD_PROFILE_1,
+    .count = sizeof(LOAD_PROFILE_1)/sizeof(LOAD_PROFILE_1[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem SAVE_PROFILE_1[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", saveToProfile1, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gSaveProfile1 = {
+    .items = SAVE_PROFILE_1,
+    .count = sizeof(SAVE_PROFILE_1)/sizeof(SAVE_PROFILE_1[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem LOAD_PROFILE_2[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", loadFromProfile2, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gLoadProfile2 = {
+    .items = LOAD_PROFILE_2,
+    .count = sizeof(LOAD_PROFILE_2)/sizeof(LOAD_PROFILE_2[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem SAVE_PROFILE_2[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", saveToProfile2, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gSaveProfile2 = {
+    .items = SAVE_PROFILE_2,
+    .count = sizeof(SAVE_PROFILE_2)/sizeof(SAVE_PROFILE_2[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem LOAD_PROFILE_3[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", loadFromProfile3, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gLoadProfile3 = {
+    .items = LOAD_PROFILE_3,
+    .count = sizeof(LOAD_PROFILE_3)/sizeof(LOAD_PROFILE_3[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem SAVE_PROFILE_3[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", saveToProfile3, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gSaveProfile3 = {
+    .items = SAVE_PROFILE_3,
+    .count = sizeof(SAVE_PROFILE_3)/sizeof(SAVE_PROFILE_3[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem LOAD_PROFILE_4[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", loadFromProfile4, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gLoadProfile4 = {
+    .items = LOAD_PROFILE_4,
+    .count = sizeof(LOAD_PROFILE_4)/sizeof(LOAD_PROFILE_4[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem SAVE_PROFILE_4[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", saveToProfile4, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gSaveProfile4 = {
+    .items = SAVE_PROFILE_4,
+    .count = sizeof(SAVE_PROFILE_4)/sizeof(SAVE_PROFILE_4[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem LOAD_PROFILE_5[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", loadFromProfile5, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gLoadProfile5 = {
+    .items = LOAD_PROFILE_5,
+    .count = sizeof(LOAD_PROFILE_5)/sizeof(LOAD_PROFILE_5[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem SAVE_PROFILE_5[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", saveToProfile5, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gSaveProfile5 = {
+    .items = SAVE_PROFILE_5,
+    .count = sizeof(SAVE_PROFILE_5)/sizeof(SAVE_PROFILE_5[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem LOAD_PROFILE_6[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", loadFromProfile6, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gLoadProfile6 = {
+    .items = LOAD_PROFILE_6,
+    .count = sizeof(LOAD_PROFILE_6)/sizeof(LOAD_PROFILE_6[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
+static const MenuItem SAVE_PROFILE_6[] = {
+	{ "Are you sure?", NULL, NULL },
+	{ "YES", saveToProfile6, NULL },
+	{ "NO", act_back,        NULL },
+};
+static Menu gSaveProfile6 = {
+    .items = SAVE_PROFILE_6,
+    .count = sizeof(SAVE_PROFILE_6)/sizeof(SAVE_PROFILE_6[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
+
 // ---------- SUBMENUS_2 ----------------------------------------------------------------------------------------
 static const MenuItem PROFILE1_ITEMS[] = {
-	{ "< Return", act_back,        NULL },
-	{ "Save to profile", saveToProfile1,        NULL },
-	{ "Load from profile", loadFromProfile1,        NULL },
+	{ "< Return", act_back, NULL },
+	{ "Save to profile", NULL, &gSaveProfile1, NULL },
+	{ "Load from profile", NULL, &gLoadProfile1, NULL },
 };
 static Menu gProfile1Menu = {
     .items = PROFILE1_ITEMS,
@@ -180,9 +351,9 @@ static Menu gProfile1Menu = {
 };
 
 static const MenuItem PROFILE2_ITEMS[] = {
-	{ "< Return", act_back,        NULL },
-	{ "Save to profile", saveToProfile2,        NULL },
-	{ "Load from profile", loadFromProfile2,        NULL },
+	{ "< Return", act_back, NULL },
+	{ "Save to profile", NULL, &gSaveProfile2, NULL },
+	{ "Load from profile", NULL, &gLoadProfile2, NULL },
 };
 static Menu gProfile2Menu = {
     .items = PROFILE2_ITEMS,
@@ -194,9 +365,9 @@ static Menu gProfile2Menu = {
 };
 
 static const MenuItem PROFILE3_ITEMS[] = {
-	{ "< Return", act_back,        NULL },
-	{ "Save to profile", saveToProfile3,        NULL },
-	{ "Load from profile", loadFromProfile3,        NULL },
+	{ "< Return", act_back, NULL },
+	{ "Save to profile", NULL, &gSaveProfile3, NULL },
+	{ "Load from profile", NULL, &gLoadProfile3, NULL },
 };
 static Menu gProfile3Menu = {
     .items = PROFILE3_ITEMS,
@@ -208,9 +379,9 @@ static Menu gProfile3Menu = {
 };
 
 static const MenuItem PROFILE4_ITEMS[] = {
-	{ "< Return", act_back,        NULL },
-	{ "Save to profile", saveToProfile4,        NULL },
-	{ "Load from profile", loadFromProfile4,        NULL },
+	{ "< Return", act_back, NULL },
+	{ "Save to profile", NULL, &gSaveProfile4, NULL },
+	{ "Load from profile", NULL, &gLoadProfile4, NULL },
 };
 static Menu gProfile4Menu = {
     .items = PROFILE4_ITEMS,
@@ -222,9 +393,9 @@ static Menu gProfile4Menu = {
 };
 
 static const MenuItem PROFILE5_ITEMS[] = {
-	{ "< Return", act_back,        NULL },
-	{ "Save to profile", saveToProfile5,        NULL },
-	{ "Load from profile", loadFromProfile5,        NULL },
+	{ "< Return", act_back, NULL },
+	{ "Save to profile", NULL, &gSaveProfile5, NULL },
+	{ "Load from profile", NULL, &gLoadProfile5, NULL },
 };
 static Menu gProfile5Menu = {
     .items = PROFILE5_ITEMS,
@@ -236,9 +407,9 @@ static Menu gProfile5Menu = {
 };
 
 static const MenuItem PROFILE6_ITEMS[] = {
-	{ "< Return", act_back,        NULL },
-	{ "Save to profile", saveToProfile6,        NULL },
-	{ "Load from profile", loadFromProfile6,        NULL },
+	{ "< Return", act_back, NULL },
+	{ "Save to profile", NULL, &gSaveProfile6, NULL },
+	{ "Load from profile", NULL, &gLoadProfile6, NULL },
 };
 static Menu gProfile6Menu = {
     .items = PROFILE6_ITEMS,

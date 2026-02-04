@@ -32,6 +32,7 @@ void app_menu_set_test_fail_relay(uint8_t relay_idx);
 void act_test_current(void);
 void act_test_profile(uint8_t profile_id);
 void app_menu_draw_test_screen(app_test_screen_t screen);
+void act_back(void);
 
 
 #endif /* USER_INC_APP_MENU_H_ */

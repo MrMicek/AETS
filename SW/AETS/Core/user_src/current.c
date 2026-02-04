@@ -9,7 +9,7 @@ extern ADC_HandleTypeDef hadc1;
 #define REFERENCE_VOLTAGE  3300
 #define RESOLUTION 4095
 #define CURRENT_SENSITIVITY 400
-#define MINIMUM_CURRENT 0.009f //this can be adjusted based on needs, leaving it at 7mA -> seems to be the lowest it can detect without failure
+#define MINIMUM_CURRENT 0.01f //this can be adjusted based on needs, leaving it at 11mA -> seems to be the lowest it can detect without failure
 #define DIVIDER_RATIO 2
 #define ZERO_OUTPUT_VOLTAGE_MV 1250
 
