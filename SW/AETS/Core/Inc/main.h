@@ -114,8 +114,6 @@ void Error_Handler(void);
 #define ENCODER_B_GPIO_Port GPIOA
 #define USB_DIS_Pin GPIO_PIN_10
 #define USB_DIS_GPIO_Port GPIOA
-#define PA15_Pin GPIO_PIN_15
-#define PA15_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

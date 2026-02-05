@@ -40,8 +40,8 @@ void oled_cursor_blink_on(void) { oled_cmd(0x0F); }
 
 void CS_L(void){ HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_RESET); }
 void CS_H(void){ HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, GPIO_PIN_SET);  }
-void RST_L(void){ HAL_GPIO_WritePin(PA15_GPIO_Port, PA15_Pin, GPIO_PIN_RESET); }
-void RST_H(void){ HAL_GPIO_WritePin(PA15_GPIO_Port, PA15_Pin, GPIO_PIN_SET);  }
+void RST_L(void){ HAL_GPIO_WritePin(OLED_RST_GPIO_Port, OLED_RST_Pin, GPIO_PIN_RESET); }
+void RST_H(void){ HAL_GPIO_WritePin(OLED_RST_GPIO_Port, OLED_RST_Pin, GPIO_PIN_SET);  }
 
 
 // Send one byte over SPI (8-bit, mode0, MSB first)

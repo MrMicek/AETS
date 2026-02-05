@@ -142,6 +142,7 @@ int main(void)
   Current_Init();
   Power_InitBrownout();
   Buzzer_Init();
+  HAL_Delay(1500); //init screen visible time
   Trigger_Init();
   cfd_Init();
   KV_Init();
@@ -152,17 +153,6 @@ int main(void)
   app_init();
 
 
-  // Relay_TestToggleAll(1000); WORKS
-
-  //MUX_Set(MUX_CH1, MUX_INT); MOSFET_TestToggle(1000); WORKS
-   //MUX_Test(); WORKS
-  //adc_Read_Current_mA(current_ch1); //SOMEWHAT WORKS
-  //Power_TestBrownout(); WORKS
-  //Encoder_Test();
-  //Buzzer_Test();
-  // CAN_TestFrame();
-   //Trigger_TestPulse();
-  // USB_TestEcho();
 
 
 
@@ -193,11 +183,6 @@ int main(void)
     comu_HandleCommunication();
     app_menu_task();
 
-//    uint32_t a_ma[4];
-//    a_ma[0] = Current_Read_mA(current_ch1);
-//    a_ma[1] = Current_Read_mA(current_ch2);
-//    a_ma[2] = Current_Read_mA(current_ch3);
-//    a_ma[3] = Current_Read_mA(current_ch4);
 
     /* USER CODE END WHILE */
 
