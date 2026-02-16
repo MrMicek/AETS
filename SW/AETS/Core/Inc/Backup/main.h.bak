@@ -57,6 +57,9 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define ENCODER_SW_Pin GPIO_PIN_13
+#define ENCODER_SW_GPIO_Port GPIOC
+#define ENCODER_SW_EXTI_IRQn EXTI15_10_IRQn
 #define TRIGGER_OUT_Pin GPIO_PIN_14
 #define TRIGGER_OUT_GPIO_Port GPIOC
 #define ADC_RELAY4_Pin GPIO_PIN_0
@@ -87,9 +90,6 @@ void Error_Handler(void);
 #define GPIO_RELAY3_GPIO_Port GPIOB
 #define GPIO_RELAY4_Pin GPIO_PIN_2
 #define GPIO_RELAY4_GPIO_Port GPIOB
-#define ENCODER_SW_Pin GPIO_PIN_10
-#define ENCODER_SW_GPIO_Port GPIOB
-#define ENCODER_SW_EXTI_IRQn EXTI15_10_IRQn
 #define CAN_STB_Pin GPIO_PIN_11
 #define CAN_STB_GPIO_Port GPIOB
 #define CAN_RXD_Pin GPIO_PIN_12
@@ -114,8 +114,6 @@ void Error_Handler(void);
 #define ENCODER_B_GPIO_Port GPIOA
 #define USB_DIS_Pin GPIO_PIN_10
 #define USB_DIS_GPIO_Port GPIOA
-#define PA15_Pin GPIO_PIN_15
-#define PA15_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

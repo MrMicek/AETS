@@ -49,17 +49,25 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, TRIGGER_OUT_Pin|OLED_RST_Pin|GPIO_RELAY1_Pin|GPIO_MOSFET2_Pin
-                          |GPIO_MUX2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, TRIGGER_OUT_Pin|NOTUSED_Pin|OLED_RST_Pin|GPIO_RELAY1_Pin
+                          |GPIO_MOSFET2_Pin|GPIO_MUX2_Pin|NOTUSEDC10_Pin|NOTUSEDC11_Pin
+                          |NOTUSEDC12_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, OLED_CS_Pin|USB_DIS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, NOTUSEDA1_Pin|NOTUSEDA2_Pin|OLED_CS_Pin|USB_DIS_Pin
+                          |NOTUSEDA15_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_RELAY2_Pin|GPIO_RELAY3_Pin|GPIO_RELAY4_Pin|CAN_STB_Pin
-                          |GPIO_MOSFET1_Pin|GPIO_MUX1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_RELAY2_Pin|GPIO_RELAY3_Pin|GPIO_RELAY4_Pin|NOTUSEDB10_Pin
+                          |CAN_STB_Pin|GPIO_MOSFET1_Pin|GPIO_MUX1_Pin|NOTUSEDB3_Pin
+                          |NOTUSEDB4_Pin|NOTUSEDB5_Pin|NOTUSEDB6_Pin|NOTUSEDB7_Pin
+                          |NOTUSEDB9_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(NOTUSEDD2_GPIO_Port, NOTUSEDD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : ENCODER_SW_Pin */
   GPIO_InitStruct.Pin = ENCODER_SW_Pin;
@@ -67,30 +75,45 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(ENCODER_SW_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : TRIGGER_OUT_Pin OLED_RST_Pin GPIO_RELAY1_Pin GPIO_MOSFET2_Pin
-                           GPIO_MUX2_Pin */
-  GPIO_InitStruct.Pin = TRIGGER_OUT_Pin|OLED_RST_Pin|GPIO_RELAY1_Pin|GPIO_MOSFET2_Pin
-                          |GPIO_MUX2_Pin;
+  /*Configure GPIO pins : TRIGGER_OUT_Pin NOTUSED_Pin OLED_RST_Pin GPIO_RELAY1_Pin
+                           GPIO_MOSFET2_Pin GPIO_MUX2_Pin NOTUSEDC10_Pin NOTUSEDC11_Pin
+                           NOTUSEDC12_Pin */
+  GPIO_InitStruct.Pin = TRIGGER_OUT_Pin|NOTUSED_Pin|OLED_RST_Pin|GPIO_RELAY1_Pin
+                          |GPIO_MOSFET2_Pin|GPIO_MUX2_Pin|NOTUSEDC10_Pin|NOTUSEDC11_Pin
+                          |NOTUSEDC12_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : OLED_CS_Pin USB_DIS_Pin */
-  GPIO_InitStruct.Pin = OLED_CS_Pin|USB_DIS_Pin;
+  /*Configure GPIO pins : NOTUSEDA1_Pin NOTUSEDA2_Pin OLED_CS_Pin USB_DIS_Pin
+                           NOTUSEDA15_Pin */
+  GPIO_InitStruct.Pin = NOTUSEDA1_Pin|NOTUSEDA2_Pin|OLED_CS_Pin|USB_DIS_Pin
+                          |NOTUSEDA15_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : GPIO_RELAY2_Pin GPIO_RELAY3_Pin GPIO_RELAY4_Pin CAN_STB_Pin
-                           GPIO_MOSFET1_Pin GPIO_MUX1_Pin */
-  GPIO_InitStruct.Pin = GPIO_RELAY2_Pin|GPIO_RELAY3_Pin|GPIO_RELAY4_Pin|CAN_STB_Pin
-                          |GPIO_MOSFET1_Pin|GPIO_MUX1_Pin;
+  /*Configure GPIO pins : GPIO_RELAY2_Pin GPIO_RELAY3_Pin GPIO_RELAY4_Pin NOTUSEDB10_Pin
+                           CAN_STB_Pin GPIO_MOSFET1_Pin GPIO_MUX1_Pin NOTUSEDB3_Pin
+                           NOTUSEDB4_Pin NOTUSEDB5_Pin NOTUSEDB6_Pin NOTUSEDB7_Pin
+                           NOTUSEDB9_Pin */
+  GPIO_InitStruct.Pin = GPIO_RELAY2_Pin|GPIO_RELAY3_Pin|GPIO_RELAY4_Pin|NOTUSEDB10_Pin
+                          |CAN_STB_Pin|GPIO_MOSFET1_Pin|GPIO_MUX1_Pin|NOTUSEDB3_Pin
+                          |NOTUSEDB4_Pin|NOTUSEDB5_Pin|NOTUSEDB6_Pin|NOTUSEDB7_Pin
+                          |NOTUSEDB9_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : NOTUSEDD2_Pin */
+  GPIO_InitStruct.Pin = NOTUSEDD2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(NOTUSEDD2_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
