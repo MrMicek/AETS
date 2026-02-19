@@ -4019,8 +4019,8 @@ void MX_TIM1_Init(void)
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
  8001eb2:	2300      	movs	r3, #0
  8001eb4:	61bb      	str	r3, [r7, #24]
-  sConfig.IC1Filter = 8;
- 8001eb6:	2308      	movs	r3, #8
+  sConfig.IC1Filter = 4;
+ 8001eb6:	2304      	movs	r3, #4
  8001eb8:	61fb      	str	r3, [r7, #28]
   sConfig.IC2Polarity = TIM_ICPOLARITY_FALLING;
  8001eba:	2302      	movs	r3, #2
