@@ -276,16 +276,15 @@ void menu_back(void) {
 
 void menu_select(Menu *m) {
     if (m->count == 0) {
-    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_BAD_INPUT) : 0;
-    	return;
+        (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_BAD_INPUT) : 0;
+        return;
     }
 
     const MenuItem *it = &m->items[m->selected];
 
     // Editable value?
-
     if (it->value_ptr) {
-    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
+        (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
         s_edit_mode = 1;
         s_edit_value = *(it->value_ptr);
         s_edit_digit_index = 0;
@@ -304,20 +303,23 @@ void menu_select(Menu *m) {
         return;
     }
 
-
+    // Submenu?
     if (it->submenu) {
-    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
+        (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
         menu_enter(m, it->submenu);
         return;
     }
+
+    // Action?
     if (it->on_select) {
-    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
+        (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_INFO) : 0;
         it->on_select();
         if (menu_get_active() != m) return;
         m->last_drawn_selected = -1;
         oled_clear();
         menu_draw_full(m);
+        return;
     }
-    else
-    	(g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_BAD_INPUT) : 0;
+
+    (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_BAD_INPUT) : 0;
 }
