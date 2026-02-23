@@ -3,7 +3,14 @@
 	(generator "eeschema")
 	(generator_version "9.0")
 	(uuid "3e96dc41-69d1-4865-9593-ddc94f79b0c9")
-	(paper "A4")
+	(paper "A3")
+	(title_block
+		(title "Automated Electrical Testing System")
+		(date "2026-02-23")
+		(rev "AB")
+		(company "Schaeffler CZ s.r.o.")
+		(comment 1 "Author: Vojtech Micek")
+	)
 	(lib_symbols
 		(symbol "Conn_Coaxial_1"
 			(pin_names
@@ -3645,62 +3652,6 @@
 			(embedded_fonts no)
 		)
 	)
-	(bezier
-		(pts
-			(xy 63.5 118.11) (xy 65.405 128.27) (xy 73.025 107.95) (xy 73.025 107.95)
-		)
-		(stroke
-			(width 0.508)
-			(type solid)
-			(color 0 194 0 1)
-		)
-		(fill
-			(type none)
-		)
-		(uuid 0090c881-25c9-4adf-a139-c5de6766b168)
-	)
-	(bezier
-		(pts
-			(xy 78.74 59.69) (xy 80.645 69.85) (xy 88.265 49.53) (xy 88.265 49.53)
-		)
-		(stroke
-			(width 0.508)
-			(type solid)
-			(color 0 194 0 1)
-		)
-		(fill
-			(type none)
-		)
-		(uuid 830da840-ec82-4074-9856-8722494c55c5)
-	)
-	(bezier
-		(pts
-			(xy 222.25 74.93) (xy 224.155 85.09) (xy 231.775 64.77) (xy 231.775 64.77)
-		)
-		(stroke
-			(width 0.508)
-			(type solid)
-			(color 0 194 0 1)
-		)
-		(fill
-			(type none)
-		)
-		(uuid a7b6869a-ff61-4e72-a074-ca7e737e4014)
-	)
-	(bezier
-		(pts
-			(xy 259.08 120.65) (xy 260.985 130.81) (xy 268.605 110.49) (xy 268.605 110.49)
-		)
-		(stroke
-			(width 0.508)
-			(type solid)
-			(color 0 194 0 1)
-		)
-		(fill
-			(type none)
-		)
-		(uuid c71e06f6-27ba-4bd6-8299-5635824173d9)
-	)
 	(text "Programming connector\n"
 		(exclude_from_sim no)
 		(at 35.56 29.21 0)
@@ -3748,16 +3699,6 @@
 			(justify left bottom)
 		)
 		(uuid "dc55d3cd-3054-4c55-ad61-aaddee53daba")
-	)
-	(text "push pull\n"
-		(exclude_from_sim no)
-		(at 188.976 135.636 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "ec7d39d0-ede8-470e-836c-f40c7e3db66e")
 	)
 	(junction
 		(at 252.73 133.35)

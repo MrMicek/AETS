@@ -97,6 +97,18 @@ static void reset_params(void) {
 	act_back();
 }
 
+static void set_trigger_channel(uint8_t ch)
+{
+    g_app_params.trigger.channel = ch;   // 1..4
+    io_apply(io_get());                  // apply immediately
+    menu_back();                         // return to Trigger menu
+}
+
+static void act_trigger_ch1(void) { set_trigger_channel(1); }
+static void act_trigger_ch2(void) { set_trigger_channel(2); }
+static void act_trigger_ch3(void) { set_trigger_channel(3); }
+static void act_trigger_ch4(void) { set_trigger_channel(4); }
+
 
 // ---------- SUBMENUS_3 ------------------------------------------------------------------------------
 static const MenuItem RELAY1_ITEMS[] = {
@@ -508,10 +520,10 @@ static Menu gRelayHealth = {
 
 static const MenuItem SET_RELAY_HEALTH_ITEMS[] = {
 	{ "< Return", act_back,        NULL },
-	{ "Relay1 (k)", NULL, NULL, &g_app_params.relay_health_set_k[0], 0, 100000},
-	{ "Relay2 (k)", NULL, NULL, &g_app_params.relay_health_set_k[1], 0, 100000},
-	{ "Relay3 (k)", NULL, NULL, &g_app_params.relay_health_set_k[2], 0, 100000},
-	{ "Relay4 (k)", NULL, NULL, &g_app_params.relay_health_set_k[3], 0, 100000},
+	{ "Relay1 (k)", NULL, NULL, &g_app_params.relay_health_set_k[0], 0, 30000},
+	{ "Relay2 (k)", NULL, NULL, &g_app_params.relay_health_set_k[1], 0, 30000},
+	{ "Relay3 (k)", NULL, NULL, &g_app_params.relay_health_set_k[2], 0, 30000},
+	{ "Relay4 (k)", NULL, NULL, &g_app_params.relay_health_set_k[3], 0, 30000},
 };
 static Menu gSetRelayHealth = {
     .items = SET_RELAY_HEALTH_ITEMS,
@@ -536,6 +548,22 @@ static Menu gResetParameters = {
     .flags = 0,
 };
 
+static const MenuItem TRIGGER_CH_ITEMS[] = {
+    { "< Return", act_back, NULL },
+    { "Relay 1",  act_trigger_ch1, NULL },
+    { "Relay 2",  act_trigger_ch2, NULL },
+    { "Relay 3",  act_trigger_ch3, NULL },
+    { "Relay 4",  act_trigger_ch4, NULL },
+};
+
+static Menu gTriggerChannelMenu = {
+    .items = TRIGGER_CH_ITEMS,
+    .count = sizeof(TRIGGER_CH_ITEMS)/sizeof(TRIGGER_CH_ITEMS[0]),
+    .selected = 0, .top = 0,
+    .last_drawn_selected = -1, .last_drawn_top = -1,
+    .parent = NULL,
+    .flags = 0,
+};
 
 // ---------- SUBMENUS_1 ----------------------------------------------------------------------------------------
 static const MenuItem INFO_ITEMS[] = {
@@ -603,10 +631,13 @@ static Menu gConectivityMenu = {
 };
 
 static const MenuItem TRIGGER_ITEMS[] = {
-    { "< Return", act_back,        NULL },
-    { "Enable ",NULL, NULL, &g_app_params.trigger.enable, 0, 1},
-	{ "Relay Ch.",NULL, NULL, &g_app_params.trigger.channel, 1, 4},
+    { "< Return", act_back, NULL },
+    { "Enable ",  NULL, NULL, &g_app_params.trigger.enable, 0, 1 },
+
+    // Show current channel value AND enter submenu to change it
+    { "Relay Ch.", NULL, &gTriggerChannelMenu, NULL, 0, 0, &g_app_params.trigger.channel },
 };
+
 static Menu gTriggerMenu = {
     .items = TRIGGER_ITEMS,
     .count = sizeof(TRIGGER_ITEMS)/sizeof(TRIGGER_ITEMS[0]),

@@ -4,6 +4,13 @@
 	(generator_version "9.0")
 	(uuid "a29410a6-d842-4219-b0b1-32d05504d8fc")
 	(paper "A3")
+	(title_block
+		(title "Automated Electrical Testing System")
+		(date "2026-02-23")
+		(rev "AB")
+		(company "Schaeffler CZ s.r.o.")
+		(comment 1 "Author: Vojtech Micek")
+	)
 	(lib_symbols
 		(symbol "AETS:178.6165.0002"
 			(exclude_from_sim no)
