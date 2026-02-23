@@ -140,59 +140,51 @@ static void test_seq_step_relays(uint32_t now_ms)
             continue;
         }
 
-        // --- Determine the duration for the current phase ---
+        // Determine duration for the current phase
         uint32_t duration = 0;
         if (s_relay_phase[i] == TEST_SEQ_PHASE_ON) {
-            duration = clamp_delay_ms(s_params.relays[i].ton_ms);
-        } else {
+            // waiting OFF-time before turning ON
             duration = clamp_delay_ms(s_params.relays[i].toff_ms);
+        } else {
+            // waiting ON-time before turning OFF
+            duration = clamp_delay_ms(s_params.relays[i].ton_ms);
         }
 
-        // --- SAFE WRAP-AROUND CHECK ---
-        // If the elapsed time (now - start) is less than duration, we wait.
+        // Wait until timeout expires
         if ((now_ms - s_relay_start_ms[i]) < duration) {
             continue;
         }
 
-        // --- TIMEOUT EXPIRED, SWITCH STATE ---
+        // Timeout expired -> switch state
         if (s_relay_phase[i] == TEST_SEQ_PHASE_ON) {
             if (s_params.relays[i].enabled == 0 || s_relay_remaining[i] == 0U) {
                 s_relay_phase[i] = TEST_SEQ_PHASE_DONE;
                 continue;
             }
 
-            // Turn Relay ON
             io_state_t next = *io_get();
             next.relays[i] = true;
             io_apply(&next);
 
-            // Decrement counter
             if (s_relay_remaining[i] > 0U) {
                 s_relay_remaining[i]--;
             }
 
-            // Reset timer for the next phase
             s_relay_start_ms[i] = now_ms;
             s_relay_phase[i] = TEST_SEQ_PHASE_OFF;
 
-        }
-        else if (s_relay_phase[i] == TEST_SEQ_PHASE_OFF) {
-            // Turn Relay OFF
+        } else { // OFF phase
             io_state_t next = *io_get();
             next.relays[i] = false;
             io_apply(&next);
 
-            // Reset timer for the next phase
             s_relay_start_ms[i] = now_ms;
-
-            if (s_relay_remaining[i] == 0U) {
-                s_relay_phase[i] = TEST_SEQ_PHASE_DONE;
-            } else {
-                s_relay_phase[i] = TEST_SEQ_PHASE_ON;
-            }
+            s_relay_phase[i] = (s_relay_remaining[i] == 0U) ? TEST_SEQ_PHASE_DONE
+                                                            : TEST_SEQ_PHASE_ON;
         }
     }
 }
+
 
 static void test_seq_step_mosfets(uint32_t now_ms)
 {

@@ -544,7 +544,7 @@ static const MenuItem INFO_ITEMS[] = {
 	{ "Testing   System", NULL, NULL},
 	{ "Version:  1.0", NULL, NULL},
 	{ "Author: V.Micek", NULL, NULL},
-	{ "SCHAEFLER CZ sro", NULL, NULL},
+	{ "SCHAEFFLER CZ sro", NULL, NULL},
 };
 static Menu gInfoMenu = {
     .items = INFO_ITEMS,
