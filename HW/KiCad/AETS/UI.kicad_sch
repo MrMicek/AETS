@@ -466,22 +466,20 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "DS"
-				(at 44.45 7.62 0)
+			(property "Reference" "DS1"
+				(at 24.13 7.62 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left top)
 				)
 			)
 			(property "Value" "NHD-0420CW-AW3"
-				(at 44.45 5.08 0)
+				(at 24.13 5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left top)
 				)
 			)
 			(property "Footprint" "NHD0420CWAW3"
@@ -572,7 +570,8 @@
 						(type default)
 					)
 					(fill
-						(type background)
+						(type color)
+						(color 194 194 194 1)
 					)
 				)
 				(pin passive line
@@ -2874,7 +2873,7 @@
 	)
 	(wire
 		(pts
-			(xy 38.1 74.93) (xy 44.45 74.93)
+			(xy 39.37 74.93) (xy 44.45 74.93)
 		)
 		(stroke
 			(width 0)
@@ -3452,7 +3451,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 38.1 74.93 270)
+		(at 39.37 74.93 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3461,7 +3460,7 @@
 		(fields_autoplaced yes)
 		(uuid "123af774-b412-4ed0-8e36-d56ffc8bef0c")
 		(property "Reference" "#PWR0107"
-			(at 31.75 74.93 0)
+			(at 33.02 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3470,7 +3469,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 34.29 74.9299 90)
+			(at 35.56 74.9299 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3479,7 +3478,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 38.1 74.93 0)
+			(at 39.37 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3488,7 +3487,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 38.1 74.93 0)
+			(at 39.37 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3497,7 +3496,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 38.1 74.93 0)
+			(at 39.37 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3757,8 +3756,8 @@
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board no)
-		(dnp yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "37852c65-8845-41bf-927f-df01874c7fe6")
 		(property "Reference" "DS1"
