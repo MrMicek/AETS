@@ -13,7 +13,6 @@
 #include "test_seq.h"
 #include "stdio.h"
 
-#define TELEMETRY_USB_PERIOD_MS 1000U
 
 static uint32_t s_last_usb_ms = 0U;
 
@@ -45,7 +44,7 @@ void telemetry_tick(uint32_t now_ms)
     }
 
     if (g_app_params.connectivity.usb_enable != 0) {
-        if ((now_ms - s_last_usb_ms) >= TELEMETRY_USB_PERIOD_MS) {
+        if ((now_ms - s_last_usb_ms) >= (uint32_t)g_app_params.connectivity.telemetry_period_ms) {
             s_last_usb_ms = now_ms;
             comu_SendF("out %lu ", (unsigned long)now_ms);
             for (uint8_t i = 0; i < 4U; ++i) {

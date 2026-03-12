@@ -34,6 +34,7 @@ typedef struct {
     int enable;
     int can_enable;
     int usb_enable;
+    int telemetry_period_ms;
 } connectivity_params_t;
 
 typedef struct {

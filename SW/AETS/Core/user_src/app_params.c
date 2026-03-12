@@ -17,6 +17,7 @@ void app_params_init(void)
             .enable = 0,
             .can_enable = 0,
             .usb_enable = 0,
+			.telemetry_period_ms = 1000,
         },
         .trigger = {
             .enable = 0,
