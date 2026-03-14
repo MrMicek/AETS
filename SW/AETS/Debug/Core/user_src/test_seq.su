@@ -2,7 +2,7 @@
 ../Core/user_src/test_seq.c:48:17:relay_count_from_k	16	static
 ../Core/user_src/test_seq.c:56:13:test_seq_reset_remaining	24	static
 ../Core/user_src/test_seq.c:75:6:test_seq_set_params_current	8	static
-../Core/user_src/test_seq.c:84:6:test_seq_set_params_profile	160	static
+../Core/user_src/test_seq.c:84:6:test_seq_set_params_profile	168	static
 ../Core/user_src/test_seq.c:98:6:test_seq_start	24	static
 ../Core/user_src/test_seq.c:124:6:test_seq_stop	16	static
 ../Core/user_src/test_seq.c:136:13:test_seq_step_relays	40	static

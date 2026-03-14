@@ -29,6 +29,7 @@
 #include "app_params.h"
 #include "app_menu.h"
 #include "profile_store.h"
+#include "buzzer.h"
 
 
 
@@ -78,8 +79,8 @@
 #define HELP_LINE_13_9  "> - param mosfet set [<1-2>] [<0|1>] [<0|1>] [<ton_ms>] [<toff_ms>] [<sw_count>] (params: 1. Mosfet channel, 2. enable, 3. Internal/External Control , 4. On time [ms], 5. Off time [ms], 6. Number of cycles) (Expect: ack; ext=1 forces mux to EXT and MOSFET output off.)\r\n"
 #define HELP_LINE_14	"> - param trigger get (Expect: ""cmd param <cmdId> trigger <enable> <Relay channel>"".)\r\n"
 #define HELP_LINE_15	"> - param trigger set [<0|1>] [<1-4>] (params: 1. Enable, 2. Relay channel) (Expect: ack; channel must be 1-4.)\r\n"
-#define HELP_LINE_16	"> - param conn get (Expect: ""cmd param <cmdId> conn <remote mode> <can_output> <usb_output>"".)\r\n"
-#define HELP_LINE_17	"> - param conn set [<0|1>] [<0|1>] [<0|1>] (params: 1. Enable Remote Mode,, 2. Enable CAN Output, 3. Enable USB Output) (Expect: ack; settings reflected in menu.) \r\n"
+#define HELP_LINE_16	"> - param conn get (Expect: ""cmd param <cmdId> conn <remote mode> <can_output> <usb_output> <comm_period>"".)\r\n"
+#define HELP_LINE_17	"> - param conn set [<0|1>] [<0|1>] [<0|1>] [<period_ms>] (params: 1. Enable Remote Mode,, 2. Enable CAN Output, 3. Enable USB Output 4. telemetry output period) (Expect: ack; settings reflected in menu.) \r\n"
 #define HELP_LINE_18	"> - param buzzer get (Expect: ""cmd param <cmdId> buzzer <enable>"".) \r\n"
 #define HELP_LINE_19	"> - param buzzer set [<0|1>] (params: 1. buzzer Enable) (Expect: ack; menu should reflect new value.)\r\n"
 #define HELP_LINE_19_1	"> - param reset (Resets all the current parameters to their default values) (Expect: ack; menu should reflect new value.)\r\n"
@@ -87,6 +88,10 @@
 
 #define HELP_LINE_20	"> 9.1 DEFAULT BUZZER/CONN/TRIGGER PARAMETERS: .\r\n"
 #define HELP_LINE_21	"> .buzzer_enable = 1, .connectivity = {.enable = 0,.can_enable = 0,.usb_enable = 0,},.trigger = {.enable = 0,.channel = 1,} .\r\n"
+
+#define HELP_LINE_34	"> 10. PROFILE MANAGEMENT Commands: \r\n"
+#define HELP_LINE_35	"> - save profile [<1-6>] (Save current parameters to flash profile) (Expect: ack)\r\n"
+#define HELP_LINE_36	"> - load profile [<1-6>] (Load parameters from flash profile and apply) (Expect: ack)\r\n"
 
 #define HELP_LINE_22	"> USB OUTPUT DESCRIPTION:\r\n"
 #define HELP_LINE_23	"> - Test blocked. Not enough switches left. Relay: x (Relay doesnt have enough available switches for test, x represents the channel number )\r\n"
@@ -242,11 +247,17 @@ static err_Td GetHelpCb(char *cmdName, int32_t cmdId){
 	comu_SendF(HELP_LINE_SPACE);
 	comu_SendF(HELP_LINE_20);
 	comu_SendF(HELP_LINE_21);
-	comu_SendF(HELP_LINE_SEPARATOR);
 	comu_SendF(HELP_LINE_SPACE);
 
 	comu_HandleCommunication();
 	HAL_Delay(10);
+
+	comu_SendF(HELP_LINE_34);
+	comu_SendF(HELP_LINE_35);
+	comu_SendF(HELP_LINE_36);
+	comu_SendF(HELP_LINE_SPACE);
+	comu_SendF(HELP_LINE_SEPARATOR);
+	comu_HandleCommunication();
 
 	comu_SendF(HELP_LINE_22);
 	comu_SendF(HELP_LINE_23);
@@ -611,20 +622,23 @@ static err_Td ParamCmdCb(char *cmdName, int32_t cmdId)
 
     if (strcmp(group, "conn") == 0) {
         if (strcmp(action, "get") == 0) {
-            comu_SendF("cmd %s %d conn %d %d %d\r\n", cmdName, cmdId,
+            comu_SendF("cmd %s %d conn %d %d %d %d\r\n", cmdName, cmdId,
                        g_app_params.connectivity.enable,
                        g_app_params.connectivity.can_enable,
-                       g_app_params.connectivity.usb_enable);
+                       g_app_params.connectivity.usb_enable,
+					   g_app_params.connectivity.telemetry_period_ms);
             return err_Td_Ok;
         }
         if (strcmp(action, "set") == 0) {
             char *en_s = cmd_next_token();
             char *can_s = cmd_next_token();
             char *usb_s = cmd_next_token();
-            if (!en_s || !can_s || !usb_s) return err_Td_Param;
+            char *time_s = cmd_next_token();
+            if (!en_s || !can_s || !usb_s || !time_s) return err_Td_Param;
             g_app_params.connectivity.enable = atoi(en_s) ? 1 : 0;
             g_app_params.connectivity.can_enable = atoi(can_s) ? 1 : 0;
             g_app_params.connectivity.usb_enable = atoi(usb_s) ? 1 : 0;
+            g_app_params.connectivity.telemetry_period_ms = atoi(time_s);
             return err_Td_Ok;
         }
         return err_Td_NotValid;
@@ -724,7 +738,50 @@ static err_Td TestCmdCb(char *cmdName, int32_t cmdId)
         return err_Td_NotValid;
 }
 
+static err_Td SaveCmdCb(char *cmdName, int32_t cmdId) {
+    char *sub = cmd_next_token();
+    // Kontrola, zda následuje klíčové slovo "profile"
+    if (!sub || strcmp(sub, "profile") != 0) return err_Td_Param;
 
+    char *idx_s = cmd_next_token();
+    if (!idx_s) return err_Td_Param;
+
+    int idx = atoi(idx_s);
+    // Kontrola rozsahu (podle menu 1-6)
+    if (idx < 1 || idx > 6) return err_Td_Range;
+
+    if (profile_store_save((uint8_t)idx, &g_app_params)) {
+        if (g_app_params.buzzer_enable) Buzzer_PlayPattern(BUZZER_SAVE);
+        return err_Td_Ok;
+    }
+    return err_Td_General;
+}
+
+/**
+ * @brief Command to load parameters from a profile.
+ * Syntax: load profile <index>
+ */
+static err_Td LoadCmdCb(char *cmdName, int32_t cmdId) {
+    char *sub = cmd_next_token();
+    // Kontrola, zda následuje klíčové slovo "profile"
+    if (!sub || strcmp(sub, "profile") != 0) return err_Td_Param;
+
+    char *idx_s = cmd_next_token();
+    if (!idx_s) return err_Td_Param;
+
+    int idx = atoi(idx_s);
+    if (idx < 1 || idx > 6) return err_Td_Range;
+
+    app_profile_t profile;
+    if (profile_store_load((uint8_t)idx, &profile)) {
+        profile_store_apply(&profile, &g_app_params);
+        // Aplikace načteného nastavení na hardware (shodné s app_menu.c)
+        io_apply(io_get());
+        if (g_app_params.buzzer_enable) Buzzer_PlayPattern(BUZZER_LOAD);
+        return err_Td_Ok;
+    }
+    return err_Td_NotExist; // Profil nebyl nalezen
+}
 
 /*
  * List of all available commands. Syntax is specified in each callback function separately (also in toltip).
@@ -740,6 +797,8 @@ static CmdTd CmdList[] = {
         {"rcnt", RelayCountCmdCb},
         {"param", ParamCmdCb},
         {"test", TestCmdCb},
+		{"save", SaveCmdCb},
+		{"load", LoadCmdCb},
         //{"dbg", DbgCb},
         //{"gr", GetBaudRateCb},
 };

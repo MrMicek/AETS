@@ -57,8 +57,8 @@ void MX_GPIO_Init(void)
                           |NOTUSEDC12_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, NOTUSEDA1_Pin|NOTUSEDA2_Pin|OLED_CS_Pin|USB_DIS_Pin
-                          |NOTUSEDA15_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, NOTUSEDA1_Pin|NOTUSEDA2_Pin|NOTUSEDA4_Pin|OLED_CS_Pin
+                          |USB_DIS_Pin|NOTUSEDA15_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_RELAY2_Pin|GPIO_RELAY3_Pin|GPIO_RELAY4_Pin|NOTUSEDB10_Pin
@@ -86,10 +86,10 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : NOTUSEDA1_Pin NOTUSEDA2_Pin OLED_CS_Pin USB_DIS_Pin
-                           NOTUSEDA15_Pin */
-  GPIO_InitStruct.Pin = NOTUSEDA1_Pin|NOTUSEDA2_Pin|OLED_CS_Pin|USB_DIS_Pin
-                          |NOTUSEDA15_Pin;
+  /*Configure GPIO pins : NOTUSEDA1_Pin NOTUSEDA2_Pin NOTUSEDA4_Pin OLED_CS_Pin
+                           USB_DIS_Pin NOTUSEDA15_Pin */
+  GPIO_InitStruct.Pin = NOTUSEDA1_Pin|NOTUSEDA2_Pin|NOTUSEDA4_Pin|OLED_CS_Pin
+                          |USB_DIS_Pin|NOTUSEDA15_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

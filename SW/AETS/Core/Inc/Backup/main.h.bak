@@ -62,6 +62,8 @@ void Error_Handler(void);
 #define ENCODER_SW_EXTI_IRQn EXTI15_10_IRQn
 #define TRIGGER_OUT_Pin GPIO_PIN_14
 #define TRIGGER_OUT_GPIO_Port GPIOC
+#define NOTUSED_Pin GPIO_PIN_15
+#define NOTUSED_GPIO_Port GPIOC
 #define ADC_RELAY4_Pin GPIO_PIN_0
 #define ADC_RELAY4_GPIO_Port GPIOC
 #define ADC_RELAY3_Pin GPIO_PIN_1
@@ -72,6 +74,10 @@ void Error_Handler(void);
 #define ADC_RELAY1_GPIO_Port GPIOC
 #define ADC_VBUS_Pin GPIO_PIN_0
 #define ADC_VBUS_GPIO_Port GPIOA
+#define NOTUSEDA1_Pin GPIO_PIN_1
+#define NOTUSEDA1_GPIO_Port GPIOA
+#define NOTUSEDA2_Pin GPIO_PIN_2
+#define NOTUSEDA2_GPIO_Port GPIOA
 #define BUZZER_Pin GPIO_PIN_3
 #define BUZZER_GPIO_Port GPIOA
 #define OLED_SCK_Pin GPIO_PIN_5
@@ -90,6 +96,8 @@ void Error_Handler(void);
 #define GPIO_RELAY3_GPIO_Port GPIOB
 #define GPIO_RELAY4_Pin GPIO_PIN_2
 #define GPIO_RELAY4_GPIO_Port GPIOB
+#define NOTUSEDB10_Pin GPIO_PIN_10
+#define NOTUSEDB10_GPIO_Port GPIOB
 #define CAN_STB_Pin GPIO_PIN_11
 #define CAN_STB_GPIO_Port GPIOB
 #define CAN_RXD_Pin GPIO_PIN_12
@@ -114,6 +122,28 @@ void Error_Handler(void);
 #define ENCODER_B_GPIO_Port GPIOA
 #define USB_DIS_Pin GPIO_PIN_10
 #define USB_DIS_GPIO_Port GPIOA
+#define NOTUSEDA15_Pin GPIO_PIN_15
+#define NOTUSEDA15_GPIO_Port GPIOA
+#define NOTUSEDC10_Pin GPIO_PIN_10
+#define NOTUSEDC10_GPIO_Port GPIOC
+#define NOTUSEDC11_Pin GPIO_PIN_11
+#define NOTUSEDC11_GPIO_Port GPIOC
+#define NOTUSEDC12_Pin GPIO_PIN_12
+#define NOTUSEDC12_GPIO_Port GPIOC
+#define NOTUSEDD2_Pin GPIO_PIN_2
+#define NOTUSEDD2_GPIO_Port GPIOD
+#define NOTUSEDB3_Pin GPIO_PIN_3
+#define NOTUSEDB3_GPIO_Port GPIOB
+#define NOTUSEDB4_Pin GPIO_PIN_4
+#define NOTUSEDB4_GPIO_Port GPIOB
+#define NOTUSEDB5_Pin GPIO_PIN_5
+#define NOTUSEDB5_GPIO_Port GPIOB
+#define NOTUSEDB6_Pin GPIO_PIN_6
+#define NOTUSEDB6_GPIO_Port GPIOB
+#define NOTUSEDB7_Pin GPIO_PIN_7
+#define NOTUSEDB7_GPIO_Port GPIOB
+#define NOTUSEDB9_Pin GPIO_PIN_9
+#define NOTUSEDB9_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

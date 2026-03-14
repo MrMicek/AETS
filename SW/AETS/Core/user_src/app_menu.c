@@ -620,6 +620,7 @@ static const MenuItem CONNECTIVITY_ITEMS[] = {
     { "Remote Mode ",NULL, NULL, &g_app_params.connectivity.enable, 0, 1},
 	{ "CAN Output ",NULL, NULL, &g_app_params.connectivity.can_enable, 0, 1},
 	{ "USB Output ",NULL, NULL, &g_app_params.connectivity.usb_enable, 0, 1},
+	{ "Period (ms)",NULL, NULL, &g_app_params.connectivity.telemetry_period_ms, 200, 100000},
 };
 static Menu gConectivityMenu = {
     .items = CONNECTIVITY_ITEMS,

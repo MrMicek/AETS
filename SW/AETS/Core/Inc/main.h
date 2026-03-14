@@ -80,6 +80,8 @@ void Error_Handler(void);
 #define NOTUSEDA2_GPIO_Port GPIOA
 #define BUZZER_Pin GPIO_PIN_3
 #define BUZZER_GPIO_Port GPIOA
+#define NOTUSEDA4_Pin GPIO_PIN_4
+#define NOTUSEDA4_GPIO_Port GPIOA
 #define OLED_SCK_Pin GPIO_PIN_5
 #define OLED_SCK_GPIO_Port GPIOA
 #define OLED_CS_Pin GPIO_PIN_6
