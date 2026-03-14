@@ -12,7 +12,7 @@
 #include "app_params.h"
 
 #define APP_EVENT_QUEUE_LEN 16
-#define CURRENT_FAULT_STREAK_LIMIT 5U
+#define CURRENT_FAULT_STREAK_LIMIT 6U
 #define CURRENT_SAMPLE_SETTLE_MS 100U
 
 /*
@@ -137,9 +137,12 @@ void app_tick(uint32_t now_ms)
 
                     // --- CHECK A: OVERCURRENT (Always bad) ---
                     uint32_t imax_ma = test_seq_get_relay_imax(i);
-                    if (imax_ma > 0U && current_ma > imax_ma) {
-                        if (s_current_over_streak[i] < CURRENT_FAULT_STREAK_LIMIT)
+                    if (imax_ma > 0U &&
+                        current_ma > imax_ma ||
+                        s_prev_current_ma[i] > imax_ma) {
+                        if (s_current_over_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
                             s_current_over_streak[i]++;
+                        }
                     } else {
                         s_current_over_streak[i] = 0U;
                     }
