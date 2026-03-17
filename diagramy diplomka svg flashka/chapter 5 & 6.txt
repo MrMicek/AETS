@@ -1,0 +1,147 @@
+\chapter{Realizace a sestavení prototypu testovacího zařízení}
+
+\section{Návrh a výroba plošného spoje}
+
+Na základě návrhu popsaného v předchozí kapitole byl vytvořen plošný spoj testovacího zařízení, který integruje řídicí, komunikační i výkonovou část do jednoho celku. Při návrhu desky bylo nutné zohlednit rozdílné požadavky jednotlivých bloků, zejména oddělení citlivé řídicí elektroniky od výkonových větví relé a MOSFETů, vhodné vedení zemních cest a dimenzování spojů pro proudově zatěžované části zařízení.
+
+Zvláštní pozornost byla věnována výkonovým cestám reléových a MOSFETových větví, u nichž bylo nutné navrhnout dostatečnou šířku vodivých cest a vhodné rozmístění výkonových součástek s ohledem na proudové namáhání. Současně bylo potřeba zajistit přehledné rozložení konektorů, aby bylo zařízení snadno připojitelné v laboratorních podmínkách a zároveň dobře servisovatelné.
+
+Při návrhu plošného spoje byly odděleny části s vyšším rušením od obvodů analogového měření a řídicí logiky. Toto opatření bylo důležité zejména s ohledem na proudové rázy při spínání výkonových větví a na požadavek spolehlivé funkce ADC, komunikačních rozhraní a externí paměti EEPROM. Návrh byl dále přizpůsoben tomu, aby bylo možné jednoduše připojit externí displej, rotační enkodér, BNC konektory i programovací rozhraní.
+
+Po dokončení návrhu byla deska plošných spojů vyrobena a připravena k osazení. Následně proběhla kontrola správnosti výroby, polarity součástek a návaznosti spojů před samotným oživováním zařízení.
+
+\section{Mechanická konstrukce a osazení prototypu}
+
+Po osazení plošného spoje byla řešena mechanická integrace celého zařízení do laboratorně použitelné podoby. Cílem nebylo vytvořit finální průmyslový výrobek, ale funkční a přehledně uspořádaný prototyp, který umožní bezpečné ověření navržených funkcí a snadnou obsluhu při testování.
+
+Hlavní deska zařízení byla umístěna do vhodné mechanické konstrukce tak, aby byly dobře přístupné výkonové konektory, komunikační rozhraní, programovací konektor i pomocné vstupy a výstupy. Z hlediska obsluhy bylo důležité vhodné vyvedení BNC konektorů pro externí řízení a trigger signál, stejně jako přístupnost napájecího vstupu a konektorů testovaných větví.
+
+Zobrazovací a ovládací prvky nebyly umístěny přímo na hlavní desce. OLED displej i rotační enkodér byly připojeny externě prostřednictvím konektorů JST-XH, což umožnilo jejich vhodné mechanické umístění na čelní části zařízení. Toto řešení zjednodušilo nejen návrh samotné hlavní desky, ale i montáž a případnou výměnu těchto prvků.
+
+Při mechanickém uspořádání byla zohledněna i potřeba servisního přístupu k pojistkám, výkonovým prvkům a programovacímu rozhraní. Celkové provedení tak odpovídá požadavku na laboratorní prototyp, který je možné opakovaně používat při ověřování funkce i při dalším vývoji zařízení.
+
+\section{Oživení prototypu}
+
+Oživení prototypu probíhalo po jednotlivých krocích tak, aby bylo možné postupně ověřit správnou funkci základních bloků zařízení a včas odhalit případné chyby v zapojení nebo v implementaci firmware. Tento postup byl zvolen z důvodu bezpečnosti i z důvodu snazší lokalizace případných problémů.
+
+V první fázi byla ověřena napájecí část zařízení. Byla zkontrolována správná funkce jednotlivých napěťových větví a stabilita napájení pro řídicí elektroniku, výkonové prvky i externí periferie. Současně bylo ověřeno, že při běžném provozu nedochází k nežádoucím poklesům napětí nebo k nadměrnému zahřívání napájecích prvků.
+
+Po úspěšné kontrole napájení následovalo oživení mikrokontroléru a základní komunikace. Do zařízení byl nahrán firmware a byla ověřena funkce programovacího a ladicího rozhraní. Následně byla testována komunikace přes USB a základní reakce systému na příkazy odesílané z nadřazeného počítače. Tím bylo potvrzeno, že řídicí část zařízení je schopna správně inicializovat periferie a přejít do základního provozního režimu.
+
+Další krok představovalo ověření jednotlivých výstupních větví. Nejprve byly samostatně zkoušeny reléové kanály, následně MOSFETové větve a jejich vazba na řídicí logiku. Při oživování byla současně ověřena funkce trigger výstupu, proudového snímání reléových větví, lokálního displeje, enkodéru i ukládání dat do EEPROM.
+
+Postupné oživení po jednotlivých blocích se ukázalo jako vhodné, protože umožnilo bezpečně a přehledně přejít od základní kontroly napájení až k ověření kompletní funkce prototypu. Výsledkem této fáze byl plně funkční laboratorní vzorek připravený pro navazující testování a verifikaci.
+
+\section{Finální podoba zařízení}
+
+Po dokončení oživení a základního ověření funkce byl prototyp uveden do finální laboratorní podoby. Ta zahrnuje hlavní řídicí desku, výkonové výstupy, komunikační rozhraní, BNC konektory pro externí řízení a trigger signál a také lokální uživatelské rozhraní tvořené displejem a rotačním enkodérem.
+
+Finální provedení zařízení bylo navrženo tak, aby umožňovalo jak samostatné lokální ovládání, tak i vzdálené řízení z nadřazeného počítače. Zároveň bylo cílem zachovat dostatečnou přehlednost zapojení, dobrou přístupnost konektorů a možnost snadného servisního zásahu.
+
+Do této části je vhodné zařadit fotografii nebo několik fotografií hotového zařízení, na nichž budou patrné hlavní konstrukční části, konektory a ovládací prvky.
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.85\textwidth]{Figures/final_device_photo.png}
+    \caption{Finální podoba prototypu testovacího zařízení}
+    \label{fig:final_device}
+\end{figure}
+
+Výsledný prototyp představuje funkční realizaci navrženého řešení, která umožňuje provádět elektrické testy komponent v laboratorních podmínkách a současně slouží jako základ pro navazující experimentální ověření popsané v následující kapitole.
+
+
+\chapter{Testování a verifikace systému pro provádění elektrických testů}
+
+\section{Metodika testování}
+
+Cílem testování bylo ověřit, že realizovaný prototyp plní základní požadavky stanovené při návrhu hardwarové i softwarové části systému. Testování bylo zaměřeno především na funkci výkonových výstupních větví, časové parametry spínání, správnou činnost komunikačních a obslužných funkcí a na dlouhodobé ověření životnostního testu relé.
+
+Při verifikaci byly využity běžné laboratorní měřicí prostředky, zejména osciloskop, laboratorní napájecí zdroj a externí generátor signálu. Tyto přístroje umožnily sledovat časové průběhy na reléových a MOSFETových větvích, ověřit správnou funkci trigger signálu a vyhodnotit rychlost i stabilitu spínání.
+
+Jednotlivé testy byly voleny tak, aby pokryly jak základní funkčnost zařízení, tak i vybrané specifické vlastnosti důležité pro praktické použití v testovací laboratoři. Hodnocena byla především správnost reakce zařízení, dosažené časové parametry a stabilita provozu při opakovaném spínání.
+
+\section{Ověření spínací funkce výstupních větví}
+
+Základním funkčním testem bylo ověření správné činnosti všech reléových a MOSFETových větví při jejich současné aktivaci. Smyslem tohoto testu bylo prověřit, zda je zařízení schopno bezpečně a spolehlivě řídit všechny výkonové výstupy současně a zda při této zátěži nedochází k nestandardnímu chování řídicí nebo napájecí části.
+
+V průběhu testu byly aktivovány všechny reléové kanály i obě MOSFETové větve současně. Následně bylo sledováno, zda dochází ke správnému sepnutí všech větví, zda se neobjevují chybové stavy a zda zařízení zůstává stabilní po celou dobu testu. Současně bylo ověřeno, že výkonová část ani řídicí elektronika nevykazují známky nespolehlivé funkce při souběžném provozu více větví.
+
+Výsledkem testu bylo potvrzení, že zařízení je schopno správně aktivovat všechny navržené výstupy současně a že navržená struktura napájení i řízení je pro tento provozní stav dostatečná. Tento test zároveň potvrdil správnou vazbu mezi firmwarem a výkonovou částí zařízení.
+
+\section{Měření odezvy reléových větví}
+
+Dalším důležitým testem bylo měření odezvy reléových větví. Cílem bylo stanovit čas mezi generováním trigger signálu a okamžikem úplného sepnutí relé. Tento parametr je důležitý zejména pro posouzení časového chování reléové části a pro ověření, že navržené zařízení odpovídá předpokládaným vlastnostem použitých relé.
+
+Měření bylo provedeno pomocí osciloskopu, který současně sledoval trigger signál a stav reléové větve. Jako počáteční okamžik byl zvolen náběh trigger signálu generovaného mikrokontrolérem a jako koncový okamžik úplné sepnutí relé. Takto bylo možné přímo určit dobu odezvy reléové větve v reálném provozním zapojení zařízení.
+
+Naměřená doba odezvy se pohybovala přibližně kolem 7\,ms. Tato hodnota odpovídá typické \textit{response time} použitých relé a potvrzuje, že reléová část zařízení pracuje v očekávaném časovém rozsahu. Výsledek současně ukazuje, že trigger výstup je vhodně navázán na spínací logiku zařízení a může být využit pro synchronizaci s externí měřicí technikou.
+
+Do této části je vhodné zařadit odpovídající oscilogram zachycující trigger signál a průběh sepnutí reléové větve.
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.85\textwidth]{Figures/relay_response_time.png}
+    \caption{Měření doby odezvy reléové větve}
+    \label{fig:relay_response_time}
+\end{figure}
+
+\section{Ověření dynamiky MOSFETových větví}
+
+MOSFETové větve byly v návrhu určeny pro rychlé spínání a realizaci časově přesně definovaných dějů. Z tohoto důvodu bylo provedeno měření náběžných a sestupných hran, jehož cílem bylo ověřit dosaženou dynamiku spínání a porovnat ji s požadavky stanovenými při návrhu zařízení.
+
+Měření bylo provedeno pomocí osciloskopu na výstupu MOSFETové větve. Byly sledovány průběhy při sepnutí i rozepnutí výstupu a vyhodnoceny odpovídající časové úseky. Tím bylo možné určit, zda je výkonová část schopna realizovat rychlé spínací děje v požadovaném rozsahu.
+
+Naměřené průběhy potvrdily správnou funkci MOSFETových větví a ukázaly, že tato část zařízení je vhodná pro testy vyžadující rychlejší spínání, než jakého lze dosáhnout pomocí elektromechanických relé. Tím bylo ověřeno, že zvolená koncepce kombinující reléové a polovodičové větve je z hlediska praktického použití vhodná.
+
+Do této části je vhodné zařadit oscilogramy náběžné a sestupné hrany MOSFETové větve.
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.85\textwidth]{Figures/mosfet_edges.png}
+    \caption{Náběžná a sestupná hrana MOSFETové větve}
+    \label{fig:mosfet_edges}
+\end{figure}
+
+\section{Doplňkové funkční ověření systému}
+
+Kromě hlavních testů zaměřených na výkonovou část byly ověřeny také doplňkové funkce systému, které jsou důležité pro praktické používání zařízení v laboratorním provozu. Tyto testy nebyly zaměřeny na detailní metrologické vyhodnocení, ale na potvrzení správné funkce jednotlivých částí systému.
+
+\subsection{Ověření komunikačních rozhraní}
+
+Byla ověřena funkce komunikace přes rozhraní USB, které slouží pro vzdálené řízení zařízení z nadřazeného počítače. Testována byla správná reakce na uživatelské příkazy a přenos odpovědí systému. Současně byla ověřena i funkce rozhraní CAN, které bylo použito pro výstup telemetrických a stavových informací.
+
+Výsledky testu potvrdily, že zařízení je schopno spolehlivě komunikovat s externím systémem a předávat požadované informace o svém stavu a průběhu testu.
+
+\subsection{Ověření lokální obsluhy a externího řízení}
+
+Další část testování byla zaměřena na lokální uživatelské rozhraní tvořené displejem a rotačním enkodérem. Byla ověřena správná navigace v menu, zobrazování stavových informací i možnost nastavování parametrů testu bez použití nadřazeného počítače.
+
+Současně byla ověřena možnost řízení MOSFETových větví pomocí externího generátoru signálu. Tento test potvrdil správnou funkci přepínání zdroje řídicího signálu a vhodnost zařízení pro scénáře, kdy je potřeba výkonovou větev řídit externě.
+
+\subsection{Ověření ukládání dat a brownout funkce}
+
+V rámci doplňkového ověření byla testována také správná funkce ukládání provozních údajů do externí paměti EEPROM. Ověřeno bylo, že vybrané provozní informace zůstávají zachovány i po odpojení napájení.
+
+Součástí testování bylo rovněž ověření reakce systému na pokles napájecího napětí. Při detekci této události zařízení provedlo uložení důležitých dat do EEPROM ještě před úplným vypnutím. Tím byla potvrzena správná funkce brownout mechanismu navrženého pro ochranu provozních statistik a servisních údajů.
+
+\subsection{Ověření interní diagnostiky}
+
+Doplňkově byla ověřena také správná funkce proudového snímání reléových větví. Cílem tohoto testu nebylo kalibrované měření proudu testovaného objektu, ale potvrzení, že zařízení dokáže interně vyhodnotit základní stav proudového zatížení a využít tuto informaci pro dohled nad průběhem testu.
+
+Tím bylo potvrzeno, že proudová diagnostika plní zamýšlenou funkci pomocného ochranného a stavového mechanismu.
+
+\section{Životnostní test relé}
+
+Významnou součástí verifikace zařízení je dlouhodobý životnostní test relé. Tento test byl zaměřen na opakované cyklické spínání reléové větve s cílem ověřit, že zařízení dokáže spolehlivě realizovat dlouhodobý test opotřebení a současně evidovat počet vykonaných cyklů.
+
+Test probíhá jako dlouhodobá sekvence opakovaného sepnutí a rozepnutí relé. V rámci jeho vyhodnocení je sledováno, zda relé pracuje stabilně po požadovaný počet cyklů a zda během testu nedochází k poruše zařízení nebo k nestandardnímu chování testované větve. Současně je ověřována správná evidence počtu cyklů a ukládání souvisejících údajů.
+
+V době zpracování této práce test probíhal již přibližně jeden týden. Z tohoto důvodu není tento experiment chápán jako definitivní stanovení konečné životnosti použitého relé, ale jako průběžné ověření, že zařízení je schopno dlouhodobý cyklický test realizovat a spolehlivě zaznamenávat jeho průběh. I tento výsledek má pro praktické použití zařízení význam, protože potvrzuje jeho vhodnost pro zrychlené životnostní a provozní zkoušky.
+
+Do této části je vhodné doplnit aktuální dosažený počet cyklů, délku běhu testu a případně informaci o tom, zda během testu došlo či nedošlo k poruchovému stavu.
+
+\section{Shrnutí výsledků verifikace}
+
+Provedené testy potvrdily správnou funkci hlavních bloků navrženého zařízení. Bylo ověřeno, že reléové i MOSFETové větve lze spolehlivě řídit, že reléová část vykazuje očekávanou dobu odezvy a že MOSFETové větve umožňují realizovat rychlé spínací děje. Současně byla potvrzena funkčnost komunikačních rozhraní, lokální obsluhy, ukládání dat do EEPROM i reakce systému na pokles napájecího napětí.
+
+Dlouhodobý test relé navíc ukázal, že zařízení je použitelné i pro cyklické testy opotřebení, přestože v době zpracování práce ještě nešlo o definitivně ukončený experiment. Celkově lze konstatovat, že realizovaný prototyp splnil základní cíle návrhu a vytvořil funkční platformu pro automatizované elektrické testování komponent v laboratorních podmínkách.

@@ -1,0 +1,106 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.0">
+  <diagram name="Page-1" id="b76vyvKQcRN8VLWlbKXD">
+    <mxGraphModel dx="733" dy="1979" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="640" width="160" x="20" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="TRIGGER" vertex="1">
+          <mxGeometry height="40" width="120" x="40" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="CONNECTIVITY" vertex="1">
+          <mxGeometry height="40" width="120" x="40" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-20" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-4" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="7N-9bBDM_O0izuaH1DWc-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-21" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-4" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="7N-9bBDM_O0izuaH1DWc-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="PROFILE" vertex="1">
+          <mxGeometry height="40" width="120" x="40" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="SETTINGS" vertex="1">
+          <mxGeometry height="40" width="120" x="40" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-23" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="7N-9bBDM_O0izuaH1DWc-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="MOSFETS" vertex="1">
+          <mxGeometry height="40" width="120" x="40" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-25" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="7N-9bBDM_O0izuaH1DWc-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="RELAYS" vertex="1">
+          <mxGeometry height="40" width="120" x="40" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-33" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="7N-9bBDM_O0izuaH1DWc-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="START TEST" vertex="1">
+          <mxGeometry height="40" width="120" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="INFO" vertex="1">
+          <mxGeometry height="40" width="120" x="40" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-12" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;font-size: 15px;&quot;&gt;HLAVNÍ MENU&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="140" x="30" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="SAVE PROFILE 1..6" vertex="1">
+          <mxGeometry height="40" width="120" x="240" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="LOAD PROFILE 1..6" vertex="1">
+          <mxGeometry height="40" width="120" x="240" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-27" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7N-9bBDM_O0izuaH1DWc-26" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="MOSFET 1..2" vertex="1">
+          <mxGeometry height="40" width="120" x="240" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-29" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7N-9bBDM_O0izuaH1DWc-28" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-24" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="RELAY 1..4" vertex="1">
+          <mxGeometry height="40" width="120" x="240" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="MOSFET PARAMETERS" vertex="1">
+          <mxGeometry height="40" width="140" x="400" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-28" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="RELAY PARAMETERS" vertex="1">
+          <mxGeometry height="40" width="140" x="400" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-35" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="7N-9bBDM_O0izuaH1DWc-34" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-32" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="CURRENT SETTING&lt;div&gt;/&lt;/div&gt;&lt;div&gt;PROFILE SETTINGS&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="120" x="240" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-39" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-34" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;" target="7N-9bBDM_O0izuaH1DWc-36" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-41" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-34" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="7N-9bBDM_O0izuaH1DWc-40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rTI-EeMsTEv5rx7FPs4W-3" edge="1" parent="1" source="7N-9bBDM_O0izuaH1DWc-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="rTI-EeMsTEv5rx7FPs4W-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-34" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="TEST RUNNING WINDOW" vertex="1">
+          <mxGeometry height="50" width="120" x="400" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-36" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="TEST DONE&lt;div&gt;WINDOW&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="120" x="600" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="7N-9bBDM_O0izuaH1DWc-40" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="TEST FAIL&lt;div&gt;WINDOW&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="120" x="600" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="rTI-EeMsTEv5rx7FPs4W-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=2" value="TEST STOPPED&lt;div&gt;WINDOW&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="120" x="600" y="75" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,16 @@
+scope 0-3
+MCU driven 1ms ON 1ms OFF
+Load 4,7R Voltage:4V 
+
+yellow: Vgs
+green: Vds
+blue: Load
+
+
+
+Under external control same behaviour
+
+minimum time for external driving: 50us
+
+scope 4: 50us 21%duty
+scope5: 100us 31%duty

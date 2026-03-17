@@ -1,0 +1,138 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.0">
+  <diagram name="Page-1" id="M8YhcEFG8upBDMkLVJIb">
+    <mxGraphModel dx="1426" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="faxqrxp2IDaXecMHOlf0-12" edge="1" parent="1" source="faxqrxp2IDaXecMHOlf0-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;" target="faxqrxp2IDaXecMHOlf0-11">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="390" />
+              <mxPoint x="510" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-21" connectable="0" parent="faxqrxp2IDaXecMHOlf0-12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=2;fontSize=13;" value="GPIO" vertex="1">
+          <mxGeometry relative="1" x="0.4" y="9" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-13" edge="1" parent="1" source="faxqrxp2IDaXecMHOlf0-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" target="faxqrxp2IDaXecMHOlf0-9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-19" connectable="0" parent="faxqrxp2IDaXecMHOlf0-13" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=2;fontSize=13;" value="GPIO" vertex="1">
+          <mxGeometry relative="1" x="-0.0933" y="-4" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-14" edge="1" parent="1" source="faxqrxp2IDaXecMHOlf0-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;" target="faxqrxp2IDaXecMHOlf0-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-20" connectable="0" parent="faxqrxp2IDaXecMHOlf0-14" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=2;fontSize=13;" value="MUX" vertex="1">
+          <mxGeometry relative="1" x="0.0791" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-15" edge="1" parent="1" source="faxqrxp2IDaXecMHOlf0-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;" target="faxqrxp2IDaXecMHOlf0-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-17" connectable="0" parent="faxqrxp2IDaXecMHOlf0-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=2;fontSize=13;" value="GPIO" vertex="1">
+          <mxGeometry relative="1" x="-0.0326" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-16" edge="1" parent="1" source="faxqrxp2IDaXecMHOlf0-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;" target="faxqrxp2IDaXecMHOlf0-7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="330" />
+              <mxPoint x="510" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-18" connectable="0" parent="faxqrxp2IDaXecMHOlf0-16" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=2;fontSize=13;" value="SPI" vertex="1">
+          <mxGeometry relative="1" x="0.35" y="-19" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-22" edge="1" parent="1" source="faxqrxp2IDaXecMHOlf0-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" target="faxqrxp2IDaXecMHOlf0-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-23" connectable="0" parent="faxqrxp2IDaXecMHOlf0-22" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;fontStyle=2" value="I2C" vertex="1">
+          <mxGeometry relative="1" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="AETS FW" vertex="1">
+          <mxGeometry height="60" width="120" x="365" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-24" edge="1" parent="1" source="faxqrxp2IDaXecMHOlf0-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;curved=1;" target="faxqrxp2IDaXecMHOlf0-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="240" />
+              <mxPoint x="300" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-28" connectable="0" parent="faxqrxp2IDaXecMHOlf0-24" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=2;fontSize=13;" value="Enkóder s tlačítkem" vertex="1">
+          <mxGeometry relative="1" x="-0.7255" y="-4" as="geometry">
+            <mxPoint x="17" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="Obsluha" vertex="1">
+          <mxGeometry height="60" width="120" x="40" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-25" edge="1" parent="1" source="faxqrxp2IDaXecMHOlf0-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;" target="faxqrxp2IDaXecMHOlf0-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-29" connectable="0" parent="faxqrxp2IDaXecMHOlf0-25" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;fontStyle=2" value="USB příkazy/odpovědi" vertex="1">
+          <mxGeometry relative="1" x="-0.6089" y="-2" as="geometry">
+            <mxPoint x="22" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="PC aplikace / terminál" vertex="1">
+          <mxGeometry height="60" width="120" x="40" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-26" edge="1" parent="1" source="faxqrxp2IDaXecMHOlf0-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;curved=1;" target="faxqrxp2IDaXecMHOlf0-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-31" connectable="0" parent="faxqrxp2IDaXecMHOlf0-26" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=13;fontStyle=2" value="CAN-FD" vertex="1">
+          <mxGeometry relative="1" x="-0.698" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="CAN síť / logger" vertex="1">
+          <mxGeometry height="60" width="120" x="40" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-27" edge="1" parent="1" source="faxqrxp2IDaXecMHOlf0-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;curved=1;" target="faxqrxp2IDaXecMHOlf0-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-30" connectable="0" parent="faxqrxp2IDaXecMHOlf0-27" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=2;fontSize=13;" value="ADC" vertex="1">
+          <mxGeometry relative="1" x="-0.6258" y="4" as="geometry">
+            <mxPoint x="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="Snímače proudu" vertex="1">
+          <mxGeometry height="60" width="120" x="40" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="EEPROM" vertex="1">
+          <mxGeometry height="60" width="120" x="365" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="OLED Displej" vertex="1">
+          <mxGeometry height="60" width="120" x="635" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="Relé 1..4" vertex="1">
+          <mxGeometry height="60" width="120" x="635" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="MOSFET 1..2" vertex="1">
+          <mxGeometry height="60" width="120" x="635" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="Externí / Interní&lt;div&gt;řízení&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="635" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="faxqrxp2IDaXecMHOlf0-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value="TRIGGER OUT" vertex="1">
+          <mxGeometry height="60" width="120" x="635" y="490" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
