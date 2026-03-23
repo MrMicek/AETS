@@ -13,6 +13,7 @@ void app_params_init(void)
 {
     const app_params_t defaults = {
         .buzzer_enable = 1,
+		.current_monitoring_enabled = 0,
         .connectivity = {
             .enable = 0,
             .can_enable = 0,

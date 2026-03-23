@@ -39,6 +39,7 @@ typedef struct {
 
 typedef struct {
     int buzzer_enable;
+    int current_monitoring_enabled;
     connectivity_params_t connectivity;
     trigger_params_t trigger;
     relay_params_t relays[4];
