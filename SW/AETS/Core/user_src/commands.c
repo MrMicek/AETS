@@ -59,11 +59,13 @@
 
 #define HELP_LINE_7_2	"> 6. RELAY Commands: \r\n"
 #define HELP_LINE_7_3	"> - relay get (returns current state of relays 1-4)(Expect: ""cmd relay <cmdId> r1 r2 r3 r4"" then ack.)\r\n"
+#define HELP_LINE_7_4	"> - relay set [<1-4>] [<0|1>] (params: 1. relay channel, 2. state for relay [0 = OFF, 1 = ON]) (Expect: ""ack relay <cmdId> 0 <timestamp>"")\r\n"
 #define HELP_LINE_8		"> - rcnt get [<1-4>] (params: 1. relay channel) (Expect: counters for all or single relay.)\r\n"
 #define HELP_LINE_9		"> - curr ma  [<1-4>] (return current measurement in mA on selected channel) (params: 1. relay channel) (Expect: ""cmd current <cmdId> <ma>"" (or equivalent) then ack.)\r\n"
 
 #define HELP_LINE_10	"> 7. MOSFET & MUX Commands:\r\n"
 #define HELP_LINE_11	"> - mosfet get (return state of mosfets m1 and m2) (Expect: ""cmd mosfet <cmdId> m1 m2"" then ack.)\r\n"
+#define HELP_LINE_11_1	"> - mosfet set [<1|2>] [<0|1>] (params: 1. FET channel, 2. state for FET [0 = OFF, 1 = ON]) (Expect: ""ack mosfet <cmdId> 0 <timestamp>"")\r\n"
 #define HELP_LINE_12	"> - mux get (returns state of the multiplexers. Can be in states INTERNAL or EXTERNAL) (Expect: ""cmd mux <cmdId> <mux1> <mux2>"" with 0=INT, 1=EXT.)\r\n"
 #define HELP_LINE_13	"> - mux set [<1|2>] [<0|1>] (params: 1. mux channel, 2. state for mux [0 = INT, 1 = EXT]) (Expect: selected mux channel switches (Indicated by LED).)\r\n"
 
@@ -83,6 +85,8 @@
 #define HELP_LINE_17	"> - param conn set [<0|1>] [<0|1>] [<0|1>] [<period_ms>] (params: 1. Enable Remote Mode,, 2. Enable CAN Output, 3. Enable USB Output 4. telemetry output period) (Expect: ack; settings reflected in menu.) \r\n"
 #define HELP_LINE_18	"> - param buzzer get (Expect: ""cmd param <cmdId> buzzer <enable>"".) \r\n"
 #define HELP_LINE_19	"> - param buzzer set [<0|1>] (params: 1. buzzer Enable) (Expect: ack; menu should reflect new value.)\r\n"
+#define HELP_LINE_18_2	"> - param monitor get (Expect: ""cmd param <cmdId> monitor <enable>"".) \r\n"
+#define HELP_LINE_18_3	"> - param monitor set [<0|1>] (params: 1. current monitoring Enable) (Expect: ack; menu should reflect new value.)\r\n"
 #define HELP_LINE_19_1	"> - param reset (Resets all the current parameters to their default values) (Expect: ack; menu should reflect new value.)\r\n"
 #define HELP_LINE_19_2	"> - param list profile [<1-6>] (params: 1. profile number) (List every parameter from selected profile) (Expect: ack)\r\n"
 
@@ -198,6 +202,7 @@ static err_Td GetHelpCb(char *cmdName, int32_t cmdId){
 
 	comu_SendF(HELP_LINE_7_2);
 	comu_SendF(HELP_LINE_7_3);
+	comu_SendF(HELP_LINE_7_4);
 	comu_SendF(HELP_LINE_8);
 	comu_SendF(HELP_LINE_9);
 	comu_SendF(HELP_LINE_SPACE);
@@ -207,6 +212,7 @@ static err_Td GetHelpCb(char *cmdName, int32_t cmdId){
 
 	comu_SendF(HELP_LINE_10);
 	comu_SendF(HELP_LINE_11);
+	comu_SendF(HELP_LINE_11_1);
 	comu_SendF(HELP_LINE_12);
 	comu_SendF(HELP_LINE_13);
 	comu_SendF(HELP_LINE_SPACE);
@@ -241,6 +247,10 @@ static err_Td GetHelpCb(char *cmdName, int32_t cmdId){
 	HAL_Delay(10);
 
 	comu_SendF(HELP_LINE_18);
+	comu_SendF(HELP_LINE_18_2);
+	comu_SendF(HELP_LINE_18_3);
+	comu_HandleCommunication();
+	HAL_Delay(10);
 	comu_SendF(HELP_LINE_19);
 	comu_SendF(HELP_LINE_19_1);
 	comu_SendF(HELP_LINE_19_2);
@@ -350,6 +360,7 @@ char *val_s = cmd_next_token();
 if (!idx_s || !val_s) return err_Td_Param;
 int idx = atoi(idx_s);
 if (idx < 1 || idx > 4) return err_Td_Range;
+g_app_params.relays[idx - 1].enabled = 1;
 next.relays[idx - 1] = (atoi(val_s) != 0);
 io_apply(&next);
 return err_Td_Ok;
@@ -394,6 +405,7 @@ char *val_s = cmd_next_token();
                 if (!idx_s || !val_s) return err_Td_Param;
                 int idx = atoi(idx_s);
                 if (idx < 1 || idx > 2) return err_Td_Range;
+                g_app_params.mosfets[idx - 1].enabled = 1;
                 next.mosfet[idx - 1] = (atoi(val_s) != 0);
                 io_apply(&next);
                 return err_Td_Ok;
@@ -657,6 +669,20 @@ static err_Td ParamCmdCb(char *cmdName, int32_t cmdId)
         }
         return err_Td_NotValid;
     }
+
+    if (strcmp(group, "monitor") == 0) {
+            if (strcmp(action, "get") == 0) {
+                comu_SendF("cmd %s %d monitor %d\r\n", cmdName, cmdId, g_app_params.current_monitoring_enabled);
+                return err_Td_Ok;
+            }
+            if (strcmp(action, "set") == 0) {
+                char *en_s = cmd_next_token();
+                if (!en_s) return err_Td_Param;
+                g_app_params.current_monitoring_enabled = atoi(en_s) ? 1 : 0;
+                return err_Td_Ok;
+            }
+            return err_Td_NotValid;
+        }
 
 
     if (strcmp(group, "list") == 0) {

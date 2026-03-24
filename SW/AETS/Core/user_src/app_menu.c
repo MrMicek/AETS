@@ -586,6 +586,7 @@ static Menu gInfoMenu = {
 static const MenuItem SETTINGS_ITEMS[] = {
     { "< Return", act_back,        NULL },
 	{ "Buzzer enable", NULL, NULL, &g_app_params.buzzer_enable, 0, 1},
+	{ "Curr. monitor", NULL, NULL, &g_app_params.current_monitoring_enabled, 0, 1},
 	{ "Reset parameters", NULL, &gResetParameters }
 };
 static Menu gSettingMenu = {

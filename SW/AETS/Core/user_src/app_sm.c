@@ -43,7 +43,6 @@ static uint32_t s_current_last_ma[4];
 static uint32_t s_current_pending_at[4];
 static uint8_t s_current_pending[4];
 static uint8_t s_current_last_state[4];
-
 static uint32_t s_prev_current_ma[4];
 
 static void app_handle_event(app_event_t evt, uint32_t now_ms);
@@ -134,44 +133,47 @@ void app_tick(uint32_t now_ms)
 
                     uint32_t current_ma = Current_Read_mA(i);
                     s_current_last_ma[i] = current_ma; // Update Display
+					if (g_app_params.current_monitoring_enabled) {
 
-                    // --- CHECK A: OVERCURRENT (Always bad) ---
-                    uint32_t imax_ma = test_seq_get_relay_imax(i);
-                    if (imax_ma > 0U &&
-                        current_ma > imax_ma ||
-                        s_prev_current_ma[i] > imax_ma) {
-                        if (s_current_over_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
-                            s_current_over_streak[i]++;
-                        }
-                    } else {
-                        s_current_over_streak[i] = 0U;
-                    }
 
-                    // --- CHECK B: ZERO CURRENT (Universal Logic) ---
-                    // If Current is 0 NOW, AND it was 0 BEFORE...
-                    // Then it never turned on. That is a failure.
-                    if (current_ma == 0U && s_prev_current_ma[i] == 0U) {
-                        if (s_current_zero_streak[i] < CURRENT_FAULT_STREAK_LIMIT)
-                            s_current_zero_streak[i]++;
-                    } else {
-                        // If current is flowing OR previous was flowing, we are good.
-                        s_current_zero_streak[i] = 0U;
-                    }
+						// --- CHECK A: OVERCURRENT (Always bad) ---
+						uint32_t imax_ma = test_seq_get_relay_imax(i);
+						if (imax_ma > 0U &&
+							current_ma > imax_ma ||
+							s_prev_current_ma[i] > imax_ma) {
+							if (s_current_over_streak[i] < CURRENT_FAULT_STREAK_LIMIT) {
+								s_current_over_streak[i]++;
+							}
+						} else {
+							s_current_over_streak[i] = 0U;
+						}
 
-                    // Store this reading for the NEXT comparison
-                    s_prev_current_ma[i] = current_ma;
+						// --- CHECK B: ZERO CURRENT (Universal Logic) ---
+						// If Current is 0 NOW, AND it was 0 BEFORE...
+						// Then it never turned on. That is a failure.
+						if (current_ma == 0U && s_prev_current_ma[i] == 0U) {
+							if (s_current_zero_streak[i] < CURRENT_FAULT_STREAK_LIMIT)
+								s_current_zero_streak[i]++;
+						} else {
+							// If current is flowing OR previous was flowing, we are good.
+							s_current_zero_streak[i] = 0U;
+						}
 
-                    // --- TRIGGER FAULT ---
-                    if (s_current_fault_posted == 0U &&
-                        (s_current_over_streak[i] >= CURRENT_FAULT_STREAK_LIMIT ||
-                         s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT)) {
+						// Store this reading for the NEXT comparison
+						s_prev_current_ma[i] = current_ma;
 
-                        s_current_fault_posted = 1U;
-                        app_post_event((app_event_t){
-                            .type = APP_EVT_TEST_FAIL,
-                            .a = (s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT) ? 2U : 1U
-                        });
-                        break;
+						// --- TRIGGER FAULT ---
+						if (s_current_fault_posted == 0U &&
+							(s_current_over_streak[i] >= CURRENT_FAULT_STREAK_LIMIT ||
+							 s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT)) {
+
+							s_current_fault_posted = 1U;
+							app_post_event((app_event_t){
+								.type = APP_EVT_TEST_FAIL,
+								.a = (s_current_zero_streak[i] >= CURRENT_FAULT_STREAK_LIMIT) ? 2U : 1U
+							});
+							break;
+						}
                     }
                 }
             }
