@@ -30,6 +30,7 @@
 #include "app_menu.h"
 #include "profile_store.h"
 #include "buzzer.h"
+#include "relay_health_store.h"
 
 
 
@@ -521,16 +522,16 @@ char *idx_s = cmd_next_token();
         else if (strcmp(action, "set") == 0) {
         	char *idx_s = cmd_next_token();
         	char *val_s = cmd_next_token();
+			if (!idx_s || !val_s) return err_Td_Param;
 
-        	if (idx_s) {
         		int idx = atoi(idx_s);
-        		if (idx < 1 || idx > 4) return err_Td_Range;
         		long val = atoi(val_s);
-        		if (val < 0) return err_Td_Param;
-        		g_app_params.relay_health_set_k[idx - 1] = val;
+    			if(val < 0 || val > 300000) return err_Td_Range;
+    			if (idx < 1 || idx > 4) return err_Td_Range;
         		g_app_params.relay_health_remaining_k[idx - 1] = val;
+        		relay_health_request_pending();
         		return err_Td_Ok;
-		}}
+		}
 
 
         else if (strcmp(action, "reset") == 0) {
