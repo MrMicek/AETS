@@ -81,7 +81,7 @@ void KV_IncCounter(void)
     s_counter++;
 }
 
-void KV_SaveCounter(void)
+HAL_StatusTypeDef KV_SaveCounter(void)
 {
     // Prepare next sequence and slot
     uint32_t next_seq = s_seq + 1;
@@ -104,6 +104,7 @@ void KV_SaveCounter(void)
     } else {
         comu_SendF("KV_SaveCounter FAIL st=%d seq=%lu cnt=%lu dt=%lums\r\n", (int)st, (unsigned long)next_seq, (unsigned long)s_counter, (unsigned long)(t1 - t0));
     }
+    return st;
 }
 
 /* Called from main context: handle pending brownout save requested from ISR */

@@ -21,7 +21,7 @@
 void KV_Init(void);
 uint32_t KV_GetCounter(void);
 void KV_IncCounter(void);
-void KV_SaveCounter(void);
+HAL_StatusTypeDef KV_SaveCounter(void);
 
 /* Call from main context: handle pending brownout save requested from ISR */
 void KV_HandlePending(void);

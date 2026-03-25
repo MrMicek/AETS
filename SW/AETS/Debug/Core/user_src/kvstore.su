@@ -3,6 +3,6 @@
 ../Core/user_src/kvstore.c:36:6:KV_Init	56	static
 ../Core/user_src/kvstore.c:74:10:KV_GetCounter	4	static
 ../Core/user_src/kvstore.c:79:6:KV_IncCounter	4	static
-../Core/user_src/kvstore.c:84:6:KV_SaveCounter	64	static
-../Core/user_src/kvstore.c:110:6:KV_HandlePending	64	static,ignoring_inline_asm
-../Core/user_src/kvstore.c:140:6:Power_OnBrownout	40	static,ignoring_inline_asm
+../Core/user_src/kvstore.c:84:19:KV_SaveCounter	64	static
+../Core/user_src/kvstore.c:111:6:KV_HandlePending	64	static,ignoring_inline_asm
+../Core/user_src/kvstore.c:141:6:Power_OnBrownout	40	static,ignoring_inline_asm
