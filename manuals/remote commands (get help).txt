@@ -1,0 +1,120 @@
+> AETS help.
+----------------------------------------
+> INPUT COMMANDS:
+
+> 1. HELP/INFO Commands: 
+> - gh (help)(Expect: multi-line help text, then ack gh <cmdId> 0 <timestamp>.)
+> - gi (device info)(Expect: cmd gi <cmdId> <device info...> then ack gi <cmdId> 0 <timestamp>.)
+
+> 2. Remote-mode gating: 
+> - When not in REMOTE mode, only the mode command or test stop command is accepted. Other commands should return ack error code 18 (disabled).
+> - Use the menu Connectivity -> Remote Mode to enter REMOTE, or mode set remote if allowed.
+
+> 3. Standard Response:
+> ack <cmdName> <cmdId> <errorCode> <timestamp>
+
+> 4. Error Codes:
+> 0 = Success / no error
+> 1 = Generic failure (used e.g., when a low-level call fails).
+> 2 = Missing or invalid parameter (parsing error).
+> 3 = ACK error (defined but not used in command parsing logic).
+> 4 = NACK error (defined but not used in command parsing logic).
+> 5 = Initialization error (defined; not directly returned in command parsing).
+> 6 = Busy / cannot accept command now (e.g., event queue full).
+> 7 = Timeout (defined; not directly returned in command parsing).
+> 8 = Saturation / overflow condition (defined; not directly used).
+> 9 = Parameter out of range (used in index checks).
+> 10 = Command not found (set before dispatch when name not matched).
+> 11 = NULL pointer or invalid pointer (defined; not directly used in command parsing).
+> 12 = Not implemented (defined; not directly used).
+> 13 = Resource not found (used, e.g., load failure).
+> 14 = Not supported (defined; not directly used).
+> 15 = Unsupported/invalid command or action (used in command handlers).
+> 16 = Overflow condition (defined; not directly used).
+> 17 = CRC mismatch in command (set during parsing).
+> 18 = Command disabled (e.g., blocked unless in REMOTE).
+>
+> 5. Mode Control Commands: 
+> - mode get (return current mode)(Expect: cmd mode <cmdId> <state> then ack.)
+> - mode set [<manual|remote|test>] (set current mode) (params: 1. mode) (Expect: ack with error 0 if transition allowed; a later evt state <state> event.)
+
+> 6. RELAY Commands: 
+> - relay get (returns current state of relays 1-4)(Expect: cmd relay <cmdId> r1 r2 r3 r4 then ack.)
+> - relay set [<1-4>] [<0|1>] (params: 1. relay channel, 2. state for relay [0 = OFF, 1 = ON]) (Expect: ack relay <cmdId> 0 <timestamp>)
+> - rcnt get [<1-4>] (params: 1. relay channel [optional]) (Expect: counters for all or single relay.)
+> - rcnt set [<1-4>] [<value>] (params: 1. relay channel, 2. value in k-cycles) (Sets remaining cycles for specific relay.)
+> - rcnt reset (Resets all relay counters to default values.)
+> - rcnt save (Saves current counter values to flash memory.)
+> - curr ma  [<1-4>] (return current measurement in mA on selected channel) (params: 1. relay channel) (Expect: cmd current <cmdId> <ma> (or equivalent) then ack.)
+
+> 7. MOSFET & MUX Commands:
+> - mosfet get (return state of mosfets m1 and m2) (Expect: cmd mosfet <cmdId> m1 m2 then ack.)
+> - mosfet set [<1|2>] [<0|1>] (params: 1. FET channel, 2. state for FET [0 = OFF, 1 = ON]) (Expect: ack mosfet <cmdId> 0 <timestamp>)
+> - mux get (returns state of the multiplexers. Can be in states INTERNAL or EXTERNAL) (Expect: cmd mux <cmdId> <mux1> <mux2> with 0=INT, 1=EXT.)
+> - mux set [<1|2>] [<0|1>] (params: 1. mux channel, 2. state for mux [0 = INT, 1 = EXT]) (Expect: selected mux channel switches (Indicated by LED).)
+
+> 8. TEST CONTROL Commands: 
+> - test start current (starts test according to current settings) (Expect: ack; evt state TEST; outputs may follow test sequence set by current settings.)
+> - test start profile [<1-6>] (starts test according to selected profile settings) (params: 1. profile number) (Expect: ack; evt state TEST; outputs may follow test sequence set by selected profile settings.)
+> - test stop (stop running test) (Expect: ack; evt state REMOTE (if stopped remotely, if stopped manually expect: evt state MANUAL)
+
+> 9. PARAMETER SETTING Commands: 
+> - param relay get [<1-4>] (params: 1. relay channel) (Expect: one line per relay (or single relay) in the form cmd param <cmdId> relay <id> <enable> <ton_ms> <toff_ms> <imax_ma> <sw_count_k>.)
+> - param relay set [<1-4>] [<0|1>] [<ton_ms>] [<toff_ms>] [<imax_ma>] [<sw_count_k>] (params: 1. relay channel, 2. enable, 3. On time [ms], 4. Off time [ms], 5. Maximum current [mA], 6. Number of cycles in thousands) (Expect: ack)
+> - param mosfet get [<1|2>] (params: 1. relay channel) (Expect: cmd param <cmdId> mosfet <id> <enable> <ext> <ton_ms> <toff_ms> <sw_count>.)
+> - param mosfet set [<1-2>] [<0|1>] [<0|1>] [<ton_ms>] [<toff_ms>] [<sw_count>] (params: 1. Mosfet channel, 2. enable, 3. Internal/External Control , 4. On time [ms], 5. Off time [ms], 6. Number of cycles) (Expect: ack; ext=1 forces mux to EXT and MOSFET output off.)
+> - param trigger get (Expect: cmd param <cmdId> trigger <enable> <Relay channel>.)
+> - param trigger set [<0|1>] [<1-4>] (params: 1. Enable, 2. Relay channel) (Expect: ack; channel must be 1-4.)
+> - param conn get (Expect: cmd param <cmdId> conn <remote mode> <can_output> <usb_output> <comm_period>.)
+> - param conn set [<0|1>] [<0|1>] [<0|1>] [<period_ms>] (params: 1. Enable Remote Mode,, 2. Enable CAN Output, 3. Enable USB Output 4. telemetry output period) (Expect: ack; settings reflected in menu.) 
+> - param buzzer get (Expect: cmd param <cmdId> buzzer <enable>.) 
+> - param monitor get (Expect: cmd param <cmdId> monitor <enable>.) 
+> - param monitor set [<0|1>] (params: 1. current monitoring Enable) (Expect: ack; menu should reflect new value.)
+> - param buzzer set [<0|1>] (params: 1. buzzer Enable) (Expect: ack; menu should reflect new value.)
+> - param reset (Resets all the current parameters to their default values) (Expect: ack; menu should reflect new value.)
+> - param list profile [<1-6>] (params: 1. profile number) (List every parameter from selected profile) (Expect: ack)
+
+> 9.1 DEFAULT BUZZER/CONN/TRIGGER PARAMETERS: .
+> .buzzer_enable = 1, .connectivity = {.enable = 0,.can_enable = 0,.usb_enable = 0,},.trigger = {.enable = 0,.channel = 1,} .
+
+> 10. PROFILE MANAGEMENT Commands: 
+> - save profile [<1-6>] (Save current parameters to flash profile) (Expect: ack)
+> - load profile [<1-6>] (Load parameters from flash profile and apply) (Expect: ack)
+
+----------------------------------------
+> USB OUTPUT DESCRIPTION:
+> - Test blocked. Not enough switches left. Relay: x (Relay doesnt have enough available switches for test, x represents the channel number )
+> - out <timestamp> r1 <remaining_k> <state> <current_ma> r2 <remaining_k> <state> <current_ma> r3 <remaining_k> <state> <current_ma> r4 <remaining_k> <state> <current_ma> m1 <state> m2 <state> (Output from Running Test).
+> - Test Stopped (test stopped manually or remotely)
+> - Test Fail: Zero Current (Maximum steps with 0 current measured was exceeded)
+> - Test Fail: OverCurrent (Maximum steps with current above maximum threshold was exceeded)
+> - Test Done (Test finnished succesfully).
+----------------------------------------
+
+> CAN OUTPUT DESCRIPTION:
+> Frame 1 (ID = 49):  
+> 0 .. 12 : 	Current CH1 (13 bits) - Relay 1 current in mA clamped to 13 bits.
+> 13 .. 24 : 	Relay1 Count-k (12 bits) - Remaining switch count for Relay 1 in kilo-units.
+> 25 : 		Relay1 State (1 bit) - Relay 1 output state [ 0 = OFF ; 1 = ON]. 
+> 26 : 		Relay1 Alive (1 bit) - Relay 1 health monitor [ 0 = remaining count <= 0 ; 1 = remaining count > 0]. 
+> 27 .. 39 : 	Current CH2 (13 bits) - Relay 2 current in mA clamped to 13 bits.
+> 40 .. 51 : 	Relay2 Count-k (12 bits) - Remaining switch count for Relay 2 in kilo-units.
+> 52 : 		Relay2 State (1 bit) - Relay 2 output state [ 0 = OFF ; 1 = ON]. 
+> 53 : 		Relay2 Alive (1 bit) - Relay 1 health monitor [ 0 = remaining count <= 0 ; 1 = remaining count > 0].
+> 54 : 		MUX1 State (1 bit) - [0 = INT, 1 = EXT] 
+> 55 : 		MOSFET1 State (1 bit) - MOSFET 1 output state [ 0 = OFF ; 1 = ON]. 
+> 56 .. 63 : 	Up-Counter (8 bit) - 8-bit counter incremented every CAN frame 
+
+> Frame 2 (ID = 50):  
+> 0 .. 12 : 	Current CH3 (13 bits) - Relay 3 current in mA clamped to 13 bits.
+> 13 .. 24 : 	Relay3 Count-k (12 bits) - Remaining switch count for Relay 3 in kilo-units.
+> 25 : 		Relay3 State (1 bit) - Relay 3 output state [ 0 = OFF ; 1 = ON]. 
+> 26 : 		Relay3 Alive (1 bit) - Relay 3 health monitor [ 0 = remaining count <= 0 ; 1 = remaining count > 0]. 
+> 27 .. 39 : 	Current CH4 (13 bits) - Relay 4 current in mA clamped to 13 bits.
+> 40 .. 51 : 	Relay4 Count-k (12 bits) - Remaining switch count for Relay 4 in kilo-units.
+> 52 : 		Relay4 State (1 bit) - Relay 4 output state [ 0 = OFF ; 1 = ON]. 
+> 53 : 		Relay4 Alive (1 bit) - Relay 4 health monitor [ 0 = remaining count <= 0 ; 1 = remaining count > 0].
+> 54 : 		MUX2 State (1 bit) - [0 = INT, 1 = EXT] 
+> 55 : 		MOSFET2 State (1 bit) - MOSFET 2 output state [ 0 = OFF ; 1 = ON]. 
+> 56 .. 63 : 	Up-Counter (8 bit) - 8-bit counter incremented every CAN frame 
+
