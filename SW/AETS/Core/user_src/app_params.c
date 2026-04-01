@@ -34,8 +34,8 @@ void app_params_init(void)
             { .enabled = 0, .ext_control = 0, .ton_ms = 0, .toff_ms = 0, .sw_count = 0 },
             { .enabled = 0, .ext_control = 0, .ton_ms = 0, .toff_ms = 0, .sw_count = 0 },
         },
-        .relay_health_set_k = { 10000, 10000, 10000, 10000 },
-        .relay_health_remaining_k = { 10000, 10000, 10000, 10000 },
+        .relay_health_set_k = { 3000, 3000, 3000, 3000 },
+        .relay_health_remaining_k = { 3000, 3000, 3000, 3000 },
     };
 
     memcpy(&g_app_params, &defaults, sizeof(g_app_params));

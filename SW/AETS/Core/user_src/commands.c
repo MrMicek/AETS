@@ -30,6 +30,7 @@
 #include "app_menu.h"
 #include "profile_store.h"
 #include "buzzer.h"
+#include "relay_health_store.h"
 
 
 
@@ -57,10 +58,14 @@
 #define HELP_LINE_7		"> - mode get (return current mode)(Expect: ""cmd mode <cmdId> <state>"" then ack.)\r\n"
 #define HELP_LINE_7_1	"> - mode set [<manual|remote|test>] (set current mode) (params: 1. mode) (Expect: ack with error 0 if transition allowed; a later ""evt state <state>"" event.)\r\n"
 
+// Upravené a nové řádky pro sekci 7.2 RELAY Commands
 #define HELP_LINE_7_2	"> 6. RELAY Commands: \r\n"
 #define HELP_LINE_7_3	"> - relay get (returns current state of relays 1-4)(Expect: ""cmd relay <cmdId> r1 r2 r3 r4"" then ack.)\r\n"
 #define HELP_LINE_7_4	"> - relay set [<1-4>] [<0|1>] (params: 1. relay channel, 2. state for relay [0 = OFF, 1 = ON]) (Expect: ""ack relay <cmdId> 0 <timestamp>"")\r\n"
-#define HELP_LINE_8		"> - rcnt get [<1-4>] (params: 1. relay channel) (Expect: counters for all or single relay.)\r\n"
+#define HELP_LINE_8		"> - rcnt get [<1-4>] (params: 1. relay channel [optional]) (Expect: counters for all or single relay.)\r\n"
+#define HELP_LINE_8_1	"> - rcnt set [<1-4>] [<value>] (params: 1. relay channel, 2. value in k-cycles) (Sets remaining cycles for specific relay.)\r\n"
+#define HELP_LINE_8_2	"> - rcnt reset (Resets all relay counters to default values.)\r\n"
+#define HELP_LINE_8_3	"> - rcnt save (Saves current counter values to flash memory.)\r\n"
 #define HELP_LINE_9		"> - curr ma  [<1-4>] (return current measurement in mA on selected channel) (params: 1. relay channel) (Expect: ""cmd current <cmdId> <ma>"" (or equivalent) then ack.)\r\n"
 
 #define HELP_LINE_10	"> 7. MOSFET & MUX Commands:\r\n"
@@ -201,11 +206,18 @@ static err_Td GetHelpCb(char *cmdName, int32_t cmdId){
 	HAL_Delay(10);
 
 	comu_SendF(HELP_LINE_7_2);
-	comu_SendF(HELP_LINE_7_3);
-	comu_SendF(HELP_LINE_7_4);
-	comu_SendF(HELP_LINE_8);
-	comu_SendF(HELP_LINE_9);
-	comu_SendF(HELP_LINE_SPACE);
+		comu_SendF(HELP_LINE_7_3);
+		comu_SendF(HELP_LINE_7_4);
+		comu_SendF(HELP_LINE_8);
+		comu_SendF(HELP_LINE_8_1);
+		comu_HandleCommunication();
+		comu_SendF(HELP_LINE_8_2);
+		comu_SendF(HELP_LINE_8_3);
+		comu_SendF(HELP_LINE_9);
+		comu_SendF(HELP_LINE_SPACE);
+
+		comu_HandleCommunication();
+		HAL_Delay(10);
 
 	comu_HandleCommunication();
 	HAL_Delay(10);
@@ -506,16 +518,34 @@ char *idx_s = cmd_next_token();
                                         g_app_params.relay_health_remaining_k[3]);
                 }
                 return err_Td_Ok;
-        } else if (strcmp(action, "reset") == 0) {
+        }
+        else if (strcmp(action, "set") == 0) {
+        	char *idx_s = cmd_next_token();
+        	char *val_s = cmd_next_token();
+			if (!idx_s || !val_s) return err_Td_Param;
+
+        		int idx = atoi(idx_s);
+        		long val = atoi(val_s);
+    			if(val < 0 || val > 300000) return err_Td_Range;
+    			if (idx < 1 || idx > 4) return err_Td_Range;
+        		g_app_params.relay_health_remaining_k[idx - 1] = val;
+        		relay_health_request_pending();
+        		return err_Td_Ok;
+		}
+
+
+        else if (strcmp(action, "reset") == 0) {
                 relay_counter_reset();
                 return err_Td_Ok;
-        } else if (strcmp(action, "save") == 0) {
-                HAL_StatusTypeDef st = relay_counter_save_now(200U);
+        }
+        else if (strcmp(action, "save") == 0) {
+                HAL_StatusTypeDef st = relay_counter_save_now(200U);;
                 return (st == HAL_OK) ? err_Td_Ok : err_Td_General;
-        } else if (strcmp(action, "load") == 0) {
+        }
+        /*else if (strcmp(action, "load") == 0) {
                 HAL_StatusTypeDef st = relay_counter_load();
                 return (st == HAL_OK) ? err_Td_Ok : err_Td_NotFound;
-        }
+        }*/
         return err_Td_NotValid;
 }
 
@@ -817,6 +847,7 @@ static CmdTd CmdList[] = {
         {"gh", GetHelpCb},
         {"mode", ModeCmdCb},
         {"relay", RelayCmdCb},
+		{"health", RelayCountCmdCb},
         {"mosfet", MosfetCmdCb},
         {"mux", MuxCmdCb},
         {"curr", CurrentCmdCb},
