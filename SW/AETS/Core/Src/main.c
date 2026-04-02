@@ -139,7 +139,6 @@ int main(void)
   MOSFET_Init();
   MUX_Init();
   io_init();
-  Current_Init();
   Power_InitBrownout();
   Buzzer_Init();
   HAL_Delay(1500); //init screen visible time
@@ -149,6 +148,8 @@ int main(void)
   app_params_init();
   relay_health_init();
   relay_counter_init();
+  oled_demo();
+  Current_Init();
   app_menu_init();
   app_init();
 

@@ -7,6 +7,11 @@
 #include "display.h"
 #include <string.h>
 #include "main.h" // for GPIO pin definitions
+#include "app_menu.h" // for app_params contrast"
+#include "buzzer.h" // for buzzer patterns
+#include "app_params.h" // for contrast param
+#include "encoder.h" // for encoder state (optional contrast control demo)"
+#include "menu.h" // for menu state (optional contrast control demo)"
 
 extern SPI_HandleTypeDef hspi1; // from main.c
 
@@ -128,10 +133,24 @@ void oled_set_cursor(uint8_t line, uint8_t col){
 
 void oled_demo(void){
     oled_cmd(0x01); HAL_Delay(2);
-    oled_set_cursor(1,5); oled_puts("NHD-0420CW-AW3");
-    oled_set_cursor(2,0); oled_puts("US2066 serial");
-    oled_set_cursor(3,3); oled_puts("SPI mode 0");
-    oled_set_cursor(4,8); oled_puts("Hello!>");
+    oled_set_cursor(1,2); oled_puts("ZERO CURRENT CAL.");
+    oled_set_cursor(2,2); oled_puts("PLEASE DISCONNECT");
+    oled_set_cursor(3,0); oled_puts("ALL CABLES AND LOADS");
+    oled_set_cursor(4,1); oled_puts("PRESS TO CALIBRATE");
+
+
+        // 2. Wait in a blocking loop until the encoder is pressed
+        while (!menu_encoder_take_press()) {
+            // Optional: A small delay prevents the while loop from maxing out
+            // the CPU, though in a bare-metal blocking wait it's not strictly necessary.
+            HAL_Delay(10);
+        }
+
+        // 3. The button was pressed! You can continue with calibration.
+        oled_cmd(0x01); HAL_Delay(2);
+        oled_set_cursor(2,3); oled_puts("CALIBRATING...");
+        HAL_Delay(2000);
+        (g_app_params.buzzer_enable) ? Buzzer_PlayPattern(BUZZER_SAVE) : 0;
 }
 
 
